@@ -1,0 +1,11 @@
+@media (max-width: 1600px) {
+  .priority-low {
+    display: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .priority-medium {
+    display: none;
+  }
+}
