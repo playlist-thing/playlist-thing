@@ -1,6 +1,7 @@
 {
   "name": "playlist-thing",
   "version": "0.0.1",
+  "license": "EUPL-1.2",
   "private": true,
   "scripts": {
     "dev": "vite dev",
