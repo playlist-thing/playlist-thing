@@ -6,7 +6,10 @@ export default class Item {
     album = '',
     released = '',
     seconds = 0,
+
+    pause = false,
     notes = '',
+
     file = '',
     spotifyTrackId = '',
     youtubeId = ''
@@ -17,7 +20,10 @@ export default class Item {
     this.album = album;
     this.released = released;
     this.seconds = seconds;
+
+    this.pause = pause;
     this.notes = notes;
+
     this.file = file;
     this.spotifyTrackId = spotifyTrackId;
     this.youtubeId = youtubeId;

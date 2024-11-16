@@ -109,7 +109,7 @@
   }
 
   function addPause() {
-    addItem(new Item({ title: 'PAUSE', seconds: 90 }));
+    addItem(new Item({ title: 'PAUSE', seconds: 90, pause: true }));
   }
 
   async function addSpotifyTrack(spotifyTrackId) {

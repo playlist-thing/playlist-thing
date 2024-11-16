@@ -94,6 +94,11 @@
       <div class="input-block">
         <label class="label" for="notes">Notes</label>
         <textarea class="input-text" id="notes" rows="10" bind:value={item.notes} />
+
+        <div>
+          <input id="pause" type="checkbox" bind:checked={item.pause} />
+          <label for="pause">Pause</label>
+        </div>
       </div>
     {/if}
 

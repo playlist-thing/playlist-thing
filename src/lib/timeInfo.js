@@ -38,4 +38,4 @@ export function calculateTimeInfo(items, mode) {
 export const calculateTotalDuration = (items) => items.reduce((sum, item) => sum + item.seconds, 0);
 
 export const calculateTotalDurationWithoutPauses = (items) =>
-  calculateTotalDuration(items.filter((item) => item.title !== 'PAUSE'));
+  calculateTotalDuration(items.filter((item) => !item.pause));

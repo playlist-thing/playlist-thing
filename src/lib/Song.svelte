@@ -18,7 +18,7 @@
   }
 
   function rowClass(item) {
-    if (item.title === 'PAUSE') {
+    if (item.pause) {
       return 'pause';
     } else if (!item.artist || !item.title || !item.album || !item.seconds) {
       return 'missing-info';
@@ -107,11 +107,9 @@
   <td>
     <div class="buttons-right">
       <div class="button-group">
-        {#if item.title !== 'PAUSE'}
-          <a class="button" title="Search" href={searchUrl()} target="_blank">
-            <i class="bi-search" />
-          </a>
-        {/if}
+        <a class="button" title="Search" href={searchUrl()} target="_blank">
+          <i class="bi-search" />
+        </a>
         <button class="button" title="Edit" on:click={edit}>
           <i class="bi-pencil" />
         </button>
