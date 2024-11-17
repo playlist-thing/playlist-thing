@@ -41,6 +41,15 @@
   background-color: #bbb;
 }
 
+.button.inverted {
+  background-color: #222;
+  color: #fff;
+}
+
+.button.transparent {
+  background-color: inherit;
+}
+
 .label {
   color: #777;
 

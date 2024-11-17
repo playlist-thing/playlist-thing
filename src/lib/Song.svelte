@@ -3,12 +3,13 @@
 
   import EditableTd from '$lib/EditableTd.svelte';
   import { formatSeconds, parseDuration } from '$lib/format.js';
-  import { editItem } from '$lib/state.js';
+  import { startEdit, finishEdit } from '$lib/state.js';
 
   export let item;
+  export let playlistId;
   export let timeInfo;
 
-  let editItemSubscription;
+  let editingInPanel = false;
 
   const dispatch = createEventDispatcher();
 
@@ -29,25 +30,24 @@
     }
   }
 
-  function edit() {
-    // without clone, edits would be directly reflected even when not saving changes
-    $editItem = structuredClone(item);
-
-    // subscribe for the result (cancel or finish)
-    editItemSubscription = editItem.subscribe(editFinish);
+  function toggleEdit() {
+    if (editingInPanel) {
+      finishEdit();
+    } else {
+      editingInPanel = true;
+      startEdit(item, playlistId, (x) => {
+        item = x;
+        editingInPanel = false;
+      });
+    }
   }
 
-  function editFinish(newItem) {
-    // called from edit
-    if (!editItemSubscription) return;
-
-    if (newItem) {
-      // edit finished, not cancelled
-      item = newItem;
+  function deleteItem() {
+    if (editingInPanel) {
+      finishEdit();
     }
 
-    editItemSubscription(); // unsubscribe
-    editItemSubscription = null;
+    dispatch('delete', item.id);
   }
 
   function searchUrl() {
@@ -110,10 +110,14 @@
         <a class="button" title="Search" href={searchUrl()} target="_blank">
           <i class="bi-search" />
         </a>
-        <button class="button" title="Edit" on:click={edit}>
+        <button
+          class={editingInPanel ? 'button inverted' : 'button'}
+          title="Edit"
+          on:click={toggleEdit}
+        >
           <i class="bi-pencil" />
         </button>
-        <button class="button" title="Delete" on:click={dispatch('delete', item.id)}>
+        <button class="button" title="Delete" on:click={deleteItem}>
           <i class="bi-trash" />
         </button>
       </div>

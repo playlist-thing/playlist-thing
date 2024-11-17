@@ -14,7 +14,7 @@
     calculateTotalDuration,
     calculateTotalDurationWithoutPauses
   } from '$lib/timeInfo.js';
-  import { nextId } from '$lib/state.js';
+  import { nextId, editItem, editItemSource, finishEdit } from '$lib/state.js';
 
   export let id;
 
@@ -60,6 +60,16 @@
 
     // set a new idle callback
     autosaveCallback = requestIdleCallback(autosave);
+  }
+
+  function clear() {
+    // if we are currently editing a song from this playlist, stop
+    // editing
+    if (!!$editItem && $editItemSource === id) {
+      finishEdit();
+    }
+
+    items = [];
   }
 
   async function downloadJson() {
@@ -225,7 +235,7 @@
         </thead>
         <tbody use:dndzone={dndOptions} on:consider={handleSort} on:finalize={handleSort}>
           {#each items as item, idx (item.id)}
-            <Song bind:item timeInfo={timeInfo[idx]} on:delete={deleteHandler} />
+            <Song bind:item timeInfo={timeInfo[idx]} playlistId={id} on:delete={deleteHandler} />
           {:else}
             <tr>
               <td class="empty-cell" />
@@ -246,11 +256,11 @@
           <button class="button" on:click={addDunno}>Add dunno</button>
           <button class="button" on:click={addPause}>Add pause</button>
 
-          <button class="button" on:click={() => (items = [])}><i class="bi-trash" /> Clear</button>
+          <button class="button" on:click={clear}><i class="bi-trash" /> Clear</button>
 
-          <button class="button" on:click={downloadJson}
-            ><i class="bi-download"></i> Download</button
-          >
+          <button class="button" on:click={downloadJson}>
+            <i class="bi-download"></i> Download
+          </button>
           <button class="button" on:click={exportNotes}>Export Notes</button>
         </div>
 
@@ -268,17 +278,7 @@
   @import '$lib/style/forms.css';
   @import '$lib/style/table.css';
   @import '$lib/style/responsive.css';
-
-  .outer-container {
-    width: 100%;
-  }
-
-  .inner-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-  }
+  @import '$lib/style/panel.css';
 
   .controls-top {
     display: flex;

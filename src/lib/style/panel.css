@@ -1,0 +1,9 @@
+.outer-container {
+  width: 100%;
+}
+
+.inner-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

@@ -1,18 +1,28 @@
 <script>
   import Playlist from '$lib/Playlist.svelte';
-  import EditModal from '$lib/EditModal.svelte';
+  import EditPanel from '$lib/EditPanel.svelte';
+  import { editItem, editItemSource } from '$lib/state.js';
+
+  $: showPlaylistA = !$editItem || $editItemSource === 'A';
+  $: showPlaylistB = !$editItem || $editItemSource === 'B';
+  $: showEditPanel = !!$editItem;
 </script>
 
 <div class="app">
   <div class="global-controls"></div>
 
   <div class="playlists">
-    <Playlist id={'A'} />
-    <Playlist id={'B'} />
+    {#if showPlaylistA}
+      <Playlist id={'A'} />
+    {/if}
+    {#if showEditPanel}
+      <EditPanel />
+    {/if}
+    {#if showPlaylistB}
+      <Playlist id={'B'} />
+    {/if}
   </div>
 </div>
-
-<EditModal />
 
 <style>
   .app {
