@@ -256,12 +256,16 @@
           <button class="button" on:click={addDunno}>Add dunno</button>
           <button class="button" on:click={addPause}>Add pause</button>
 
-          <button class="button" on:click={clear}><i class="bi-trash" /> Clear</button>
+          <button class="button" on:click={clear}>
+            <i class="bi-trash" /> Clear
+          </button>
 
           <button class="button" on:click={downloadJson}>
-            <i class="bi-download"></i> Download
+            <i class="bi-download" /> Download
           </button>
-          <button class="button" on:click={exportNotes}>Export Notes</button>
+          <button class="button" on:click={exportNotes}>
+            <i class="bi-list-ul" /> Export Notes
+          </button>
         </div>
 
         <div class="autosave-indicator">
