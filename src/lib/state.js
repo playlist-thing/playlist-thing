@@ -19,6 +19,10 @@ export const editItemSource = writable(null);
 
 /** start editing an item */
 export function startEdit(item, itemSource, callback) {
+  if (get(settingsVisible)) {
+    hideSettings();
+  }
+
   if (get(editItem)) {
     finishEditCallback(get(editItem));
   }
@@ -35,4 +39,18 @@ export function finishEdit() {
   }
 
   editItem.set(null);
+}
+
+export const settingsVisible = writable(false);
+
+export function toggleSettings() {
+  if (get(editItem)) {
+    finishEdit();
+  }
+
+  settingsVisible.set(!get(settingsVisible));
+}
+
+export function hideSettings() {
+  settingsVisible.set(false);
 }

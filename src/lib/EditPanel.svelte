@@ -1,6 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
-
   import { editItem, finishEdit } from '$lib/state.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
 

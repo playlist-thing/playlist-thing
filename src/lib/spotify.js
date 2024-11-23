@@ -1,14 +1,23 @@
 import { get, writable } from 'svelte/store';
 
+import { spotifyClientId, spotifyClientSecret } from '$lib/settings.js';
+
 import Item from '$lib/Item.js';
 
 export const spotifyToken = writable('');
 
-export async function spotifyConnect(spotifyClientId, spotifyClientSecret) {
+export async function spotifyConnectFromSettings() {
+  const clientId = get(spotifyClientId);
+  const clientSecret = get(spotifyClientSecret);
+
+  return await spotifyConnect(clientId, clientSecret);
+}
+
+export async function spotifyConnect(clientId, clientSecret) {
   const params = new URLSearchParams();
   params.append('grant_type', 'client_credentials');
-  params.append('client_id', spotifyClientId);
-  params.append('client_secret', spotifyClientSecret);
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
 
   const response = await fetch(`https://accounts.spotify.com/api/token`, {
     method: 'POST',

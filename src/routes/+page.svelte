@@ -1,12 +1,14 @@
 <script>
   import Playlist from '$lib/Playlist.svelte';
   import EditPanel from '$lib/EditPanel.svelte';
-  import { editItem, editItemSource } from '$lib/state.js';
+  import SettingsPanel from '$lib/SettingsPanel.svelte';
+  import { editItem, editItemSource, settingsVisible, toggleSettings } from '$lib/state.js';
+  import { spotifyToken, spotifyConnectFromSettings } from '$lib/spotify.js';
   import { timeInfoMode } from '$lib/timeInfo.js';
 
-  $: showPlaylistA = !$editItem || $editItemSource === 'A';
-  $: showPlaylistB = !$editItem || $editItemSource === 'B';
-  $: showEditPanel = !!$editItem;
+  $: playlistAVisible = !$editItem || $editItemSource === 'A';
+  $: playlistBVisible = !$settingsVisible && (!$editItem || $editItemSource === 'B');
+  $: editPanelVisible = !!$editItem;
 </script>
 
 <div class="app">
@@ -17,23 +19,33 @@
         <option value="beginsAt">Begins At</option>
         <option value="timeUntilEnd">Time Until End</option>
       </select>
+
+      Spotify
+      {#if $spotifyToken}
+        connected
+      {:else}
+        <button on:click={spotifyConnectFromSettings}>connect</button>
+      {/if}
     </div>
 
     <div>
-    <button class="button transparent">
-      <i class="bi-gear" /> Settings
-    </button>
+      <button class="button transparent" on:click={toggleSettings}>
+        <i class="bi-gear" /> Settings
+      </button>
     </div>
   </div>
 
   <div class="playlists">
-    {#if showPlaylistA}
+    {#if playlistAVisible}
       <Playlist id={'A'} />
     {/if}
-    {#if showEditPanel}
+    {#if editPanelVisible}
       <EditPanel />
     {/if}
-    {#if showPlaylistB}
+    {#if $settingsVisible}
+      <SettingsPanel />
+    {/if}
+    {#if playlistBVisible}
       <Playlist id={'B'} />
     {/if}
   </div>
