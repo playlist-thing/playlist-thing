@@ -1,8 +1,8 @@
 import { writable, get } from 'svelte/store';
 
-export const timeInfoMode = writable('');
+export const timeInfoMode = writable('beginsAt');
 
-export function calculateBeginsAt(items) {
+function calculateBeginsAt(items) {
   let result = [];
   let sum = 0;
 
@@ -14,17 +14,17 @@ export function calculateBeginsAt(items) {
   return result;
 }
 
-export function calculateTimeUntilEnd(items) {
+function calculateTimeUntilEnd(items) {
   let result = [];
   let sum = 0;
 
   for (let i = items.length; i > 0; i--) {
     const item = items[i - 1];
     sum += item.seconds;
-    result = [sum, ...result];
+    result.push(sum);
   }
 
-  return result;
+  return result.reverse();
 }
 
 export function calculateTimeInfo(items, mode) {

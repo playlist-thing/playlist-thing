@@ -10,6 +10,7 @@
   import { formatSeconds } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
   import {
+    timeInfoMode,
     calculateTimeInfo,
     calculateTotalDuration,
     calculateTotalDurationWithoutPauses
@@ -23,15 +24,25 @@
   let autosaveCallback;
   let autosaved = false;
 
-  $: timeInfo = calculateTimeInfo(items, 'beginsAt');
+  $: timeInfo = calculateTimeInfo(items, $timeInfoMode);
   $: totalDuration = calculateTotalDuration(items);
   $: totalDurationWithoutPauses = calculateTotalDurationWithoutPauses(items);
 
   $: browser && modified(items, playlistName);
   $: dndOptions = { items, dragDisabled: items.length === 0 };
 
+  $: timeInfoLabel = timeInfoModeLabel($timeInfoMode);
+
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
+
+  function timeInfoModeLabel(mode) {
+    if (mode === 'beginsAt') {
+      return 'Begins';
+    } else if (mode === 'timeUntilEnd') {
+      return 'Until';
+    }
+  }
 
   function saveLocalStorage() {
     localStorage.setItem(`playlist${id}`, JSON.stringify(items));
@@ -227,7 +238,7 @@
             <th>Artist</th>
             <th>Title</th>
             <th class="priority-low">Album</th>
-            <th class="priority-medium">Begins</th>
+            <th class="priority-medium">{timeInfoLabel}</th>
             <th>Duration</th>
             <th class="priority-low">Sources</th>
             <th></th>
