@@ -12,7 +12,9 @@ export default class Item {
 
     file = '',
     spotifyTrackId = '',
-    youtubeId = ''
+    youtubeId = '',
+    appleMusicTrackId = '',
+    bandcampTrackUrl = ''
   } = {}) {
     this.id = id;
     this.artist = artist;
@@ -27,5 +29,7 @@ export default class Item {
     this.file = file;
     this.spotifyTrackId = spotifyTrackId;
     this.youtubeId = youtubeId;
+    this.appleMusicTrackId = appleMusicTrackId;
+    this.bandcampTrackUrl = bandcampTrackUrl;
   }
 }

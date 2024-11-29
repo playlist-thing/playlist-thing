@@ -57,6 +57,30 @@
           bind:value={$editItem.spotifyTrackId}
         />
 
+        <label class="label" for="youtube-id">YouTube ID</label>
+        <input
+          class="input-text"
+          id="youtube-id"
+          type="text"
+          bind:value={$editItem.youtubeId}
+        />
+
+        <label class="label" for="apple-music-track-id">Apple Music Track ID</label>
+        <input
+          class="input-text"
+          id="apple-music-track-id"
+          type="text"
+          bind:value={$editItem.appleMusicTrackId}
+        />
+
+        <label class="label" for="bandcamp-track-url">Bandcamp Track URL</label>
+        <input
+          class="input-text"
+          id="bandcamp-track-url"
+          type="text"
+          bind:value={$editItem.bandcampTrackUrl}
+        />
+
         <label class="label" for="file">File</label>
         <input class="input-text" id="file" type="text" bind:value={$editItem.file} />
       </div>
