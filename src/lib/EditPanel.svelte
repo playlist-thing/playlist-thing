@@ -102,22 +102,6 @@
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 0.2em;
-  }
-
-  .title {
-    margin: 0px;
-  }
-
-  .button.close {
-    font-size: 2em;
-    padding: 0px;
-  }
-
   .input-block-group {
     display: flex;
   }
