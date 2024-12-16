@@ -42,6 +42,9 @@
         <label class="label" for="released">Released</label>
         <input class="input-text" id="released" type="text" bind:value={$editItem.released} />
 
+        <label class="label" for="label">Label</label>
+        <input class="input-text" id="label" type="text" bind:value={$editItem.label} />
+
         {#if $editItem.spotifyTrackId}
           <button class="button" on:click={fillFromSpotify}>
             Fill missing information from Spotify

@@ -1,11 +1,13 @@
 export default class Item {
   constructor({
     id = -1,
+
     artist = '',
     title = '',
     album = '',
     released = '',
     seconds = 0,
+    label = '',
 
     pause = false,
     notes = '',
@@ -17,11 +19,13 @@ export default class Item {
     bandcampTrackUrl = ''
   } = {}) {
     this.id = id;
+
     this.artist = artist;
     this.title = title;
     this.album = album;
     this.released = released;
     this.seconds = seconds;
+    this.label = label;
 
     this.pause = pause;
     this.notes = notes;
