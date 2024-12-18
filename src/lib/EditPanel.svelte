@@ -13,7 +13,7 @@
   }
 
   async function fillFromSpotify() {
-    const spotifyItem = await getSpotifyTrack(item.spotifyTrackId);
+    const spotifyItem = await getSpotifyTrack($editItem.spotifyTrackId);
     $editItem = overwriteOnlyFalsy($editItem, spotifyItem);
   }
 </script>
