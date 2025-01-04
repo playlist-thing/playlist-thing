@@ -1,7 +1,7 @@
 <script>
-  import Playlist from '$lib/Playlist.svelte';
-  import EditPanel from '$lib/EditPanel.svelte';
-  import SettingsPanel from '$lib/SettingsPanel.svelte';
+  import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
+  import EditPanel from '$lib/panels/EditPanel.svelte';
+  import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
   import { editItem, editItemSource, settingsVisible, toggleSettings } from '$lib/state.js';
   import { spotifyToken, spotifyConnectFromSettings } from '$lib/spotify.js';
   import { timeInfoMode } from '$lib/timeInfo.js';
@@ -37,7 +37,7 @@
 
   <div class="playlists">
     {#if playlistAVisible}
-      <Playlist id={'A'} />
+      <PlaylistPanel id={'A'} />
     {/if}
     {#if editPanelVisible}
       <EditPanel />
@@ -46,7 +46,7 @@
       <SettingsPanel />
     {/if}
     {#if playlistBVisible}
-      <Playlist id={'B'} />
+      <PlaylistPanel id={'B'} />
     {/if}
   </div>
 </div>
