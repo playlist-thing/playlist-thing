@@ -1,6 +1,13 @@
 <script>
-  import { hideSettings } from '$lib/state.js';
+  import { createEventDispatcher } from 'svelte';
+
   import { spotifyClientId, spotifyClientSecret } from '$lib/settings.js';
+
+  const dispatch = createEventDispatcher();
+
+  function close() {
+    dispatch('close');
+  }
 </script>
 
 <div class="outer-container">
@@ -8,7 +15,7 @@
     <div class="header">
       <h1 class="title">Settings</h1>
 
-      <button class="button transparent close" on:click={hideSettings}>
+      <button class="button transparent close" on:click={close}>
         <i class="bi-x-lg" />
       </button>
     </div>

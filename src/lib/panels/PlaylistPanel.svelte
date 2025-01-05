@@ -6,6 +6,7 @@
   import { dndzone } from 'svelte-dnd-action';
 
   import Song from '$lib/Song.svelte';
+  import EditPanel from '$lib/panels/EditPanel.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
   import Item from '$lib/Item.js';
@@ -17,7 +18,7 @@
     calculateTotalDuration,
     calculateTotalDurationWithoutPauses
   } from '$lib/timeInfo.js';
-  import { nextId, editItem, editItemSource, finishEdit } from '$lib/state.js';
+  import { nextId } from '$lib/state.js';
 
   export let id;
 
@@ -26,6 +27,7 @@
   let autosaveCallback;
   let autosaved = false;
   let showConfirmClear = false;
+  let editingItemIdx = null;
 
   $: timeInfo = calculateTimeInfo(items, $timeInfoMode);
   $: totalDuration = calculateTotalDuration(items);
@@ -77,12 +79,6 @@
   }
 
   function clear() {
-    // if we are currently editing a song from this playlist, stop
-    // editing
-    if (!!$editItem && $editItemSource === id) {
-      finishEdit();
-    }
-
     items = [];
     showConfirmClear = false;
   }
@@ -253,7 +249,15 @@
           </thead>
           <tbody use:dndzone={dndOptions} on:consider={handleSort} on:finalize={handleSort}>
             {#each items as item, idx (item.id)}
-              <Song bind:item timeInfo={timeInfo[idx]} playlistId={id} on:delete={deleteHandler} />
+              <Song
+                bind:item
+                editing={editingItemIdx === idx}
+                timeInfo={timeInfo[idx]}
+                playlistId={id}
+                on:delete={deleteHandler}
+                on:edit={() => (editingItemIdx = idx)}
+                on:stopedit={() => (editingItemIdx = null)}
+              />
             {:else}
               <tr>
                 <td class="empty-cell" />
@@ -300,6 +304,10 @@
     {/if}
   </div>
 </div>
+
+{#if editingItemIdx !== null}
+  <EditPanel bind:item={items[editingItemIdx]} on:close={() => (editingItemIdx = null)} />
+{/if}
 
 <style>
   @import '$lib/style/forms.css';

@@ -3,13 +3,10 @@
 
   import EditableTd from '$lib/EditableTd.svelte';
   import { formatSeconds, parseDuration } from '$lib/format.js';
-  import { startEdit, finishEdit } from '$lib/state.js';
 
   export let item;
-  export let playlistId;
   export let timeInfo;
-
-  let editingInPanel = false;
+  export let editing;
 
   const dispatch = createEventDispatcher();
 
@@ -31,22 +28,14 @@
   }
 
   function toggleEdit() {
-    if (editingInPanel) {
-      finishEdit();
+    if (editing) {
+      dispatch('stopedit');
     } else {
-      editingInPanel = true;
-      startEdit(item, playlistId, (x) => {
-        item = x;
-        editingInPanel = false;
-      });
+      dispatch('edit');
     }
   }
 
   function deleteItem() {
-    if (editingInPanel) {
-      finishEdit();
-    }
-
     dispatch('delete', item.id);
   }
 
@@ -110,11 +99,7 @@
         <a class="button" title="Search" href={searchUrl()} target="_blank">
           <i class="bi-search" />
         </a>
-        <button
-          class={editingInPanel ? 'button inverted' : 'button'}
-          title="Edit"
-          on:click={toggleEdit}
-        >
+        <button class="button" class:inverted={editing} title="Edit" on:click={toggleEdit}>
           <i class="bi-pencil" />
         </button>
         <button class="button" title="Delete" on:click={deleteItem}>

@@ -33,11 +33,11 @@
   cursor: pointer;
 }
 
-.button:hover:not(:disabled) {
+.button:hover:not(:disabled):not(.inverted) {
   background-color: #ddd;
 }
 
-.button:active:not(:disabled) {
+.button:active:not(:disabled):not(.inverted) {
   background-color: #bbb;
 }
 
@@ -54,6 +54,11 @@
 
 .button.transparent {
   background-color: inherit;
+}
+
+.button.transparent.inverted {
+  background-color: #222;
+  color: #fff;
 }
 
 .label {

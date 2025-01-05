@@ -1,14 +1,16 @@
 <script>
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
-  import EditPanel from '$lib/panels/EditPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
-  import { editItem, editItemSource, settingsVisible, toggleSettings } from '$lib/state.js';
   import { spotifyToken, spotifyConnectFromSettings } from '$lib/spotify.js';
   import { timeInfoMode } from '$lib/timeInfo.js';
 
-  $: playlistAVisible = !$editItem || $editItemSource === 'A';
-  $: playlistBVisible = !$settingsVisible && (!$editItem || $editItemSource === 'B');
-  $: editPanelVisible = !!$editItem;
+  let playlistAVisible = true;
+  let playlistBVisible = true;
+  let settingsVisible = false;
+
+  function toggleSettings() {
+    settingsVisible = !settingsVisible;
+  }
 </script>
 
 <div class="app">
@@ -29,7 +31,7 @@
     </div>
 
     <div>
-      <button class="button transparent" on:click={toggleSettings}>
+      <button class="button transparent" class:inverted={settingsVisible} on:click={toggleSettings}>
         <i class="bi-gear" /> Settings
       </button>
     </div>
@@ -39,14 +41,11 @@
     {#if playlistAVisible}
       <PlaylistPanel id={'A'} />
     {/if}
-    {#if editPanelVisible}
-      <EditPanel />
-    {/if}
-    {#if $settingsVisible}
-      <SettingsPanel />
-    {/if}
     {#if playlistBVisible}
       <PlaylistPanel id={'B'} />
+    {/if}
+    {#if settingsVisible}
+      <SettingsPanel on:close={toggleSettings} />
     {/if}
   </div>
 </div>
