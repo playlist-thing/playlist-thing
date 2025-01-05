@@ -17,7 +17,7 @@
 
     <h3>Spotify</h3>
 
-    <div>
+    <div class="input-block">
       <label class="label" for="spotify-client-id">Client ID</label>
       <input class="input-text" id="spotify-client-id" type="text" bind:value={$spotifyClientId} />
 
@@ -35,10 +35,6 @@
 <style>
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
-
-  .input-block-group {
-    display: flex;
-  }
 
   .input-block {
     display: flex;

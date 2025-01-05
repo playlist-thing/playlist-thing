@@ -6,6 +6,8 @@
   import { dndzone } from 'svelte-dnd-action';
 
   import Song from '$lib/Song.svelte';
+  import ConfirmClear from './playlist/ConfirmClear.svelte';
+
   import Item from '$lib/Item.js';
   import { formatSeconds } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
@@ -23,6 +25,7 @@
   let playlistName = 'playlist';
   let autosaveCallback;
   let autosaved = false;
+  let showConfirmClear = false;
 
   $: timeInfo = calculateTimeInfo(items, $timeInfoMode);
   $: totalDuration = calculateTotalDuration(items);
@@ -81,6 +84,7 @@
     }
 
     items = [];
+    showConfirmClear = false;
   }
 
   async function downloadJson() {
@@ -231,61 +235,69 @@
       </div>
     </div>
 
-    <div class="playlist-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Artist</th>
-            <th>Title</th>
-            <th class="priority-low">Album</th>
-            <th class="priority-medium">{timeInfoLabel}</th>
-            <th>Duration</th>
-            <th class="priority-low">Sources</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody use:dndzone={dndOptions} on:consider={handleSort} on:finalize={handleSort}>
-          {#each items as item, idx (item.id)}
-            <Song bind:item timeInfo={timeInfo[idx]} playlistId={id} on:delete={deleteHandler} />
-          {:else}
+    {#if showConfirmClear}
+      <ConfirmClear on:clear={clear} on:cancel={() => (showConfirmClear = false)} />
+    {:else}
+      <div class="playlist-container">
+        <table>
+          <thead>
             <tr>
-              <td class="empty-cell" />
+              <th>Artist</th>
+              <th>Title</th>
+              <th class="priority-low">Album</th>
+              <th class="priority-medium">{timeInfoLabel}</th>
+              <th>Duration</th>
+              <th class="priority-low">Sources</th>
+              <th></th>
             </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="controls-bottom">
-      <!-- TODO aria role -->
-      <div on:dragover={dragoverHandler} on:drop={dropHandler} class="drop-zone">
-        Drop new songs or playlists here
+          </thead>
+          <tbody use:dndzone={dndOptions} on:consider={handleSort} on:finalize={handleSort}>
+            {#each items as item, idx (item.id)}
+              <Song bind:item timeInfo={timeInfo[idx]} playlistId={id} on:delete={deleteHandler} />
+            {:else}
+              <tr>
+                <td class="empty-cell" />
+              </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
 
-      <div class="controls-bottom-buttons">
-        <div class="button-group">
-          <button class="button" on:click={addDunno}>Add dunno</button>
-          <button class="button" on:click={addPause}>Add pause</button>
-
-          <button class="button" on:click={clear}>
-            <i class="bi-trash" /> Clear
-          </button>
-
-          <button class="button" on:click={downloadJson}>
-            <i class="bi-download" /> Download
-          </button>
-          <button class="button" on:click={exportNotes}>
-            <i class="bi-list-ul" /> Export Notes
-          </button>
+      <div class="controls-bottom">
+        <!-- TODO aria role -->
+        <div on:dragover={dragoverHandler} on:drop={dropHandler} class="drop-zone">
+          Drop new songs or playlists here
         </div>
 
-        <div class="autosave-indicator">
-          {#if autosaved}
-            autosaved
-          {/if}
+        <div class="controls-bottom-buttons">
+          <div class="button-group">
+            <button class="button" on:click={addDunno}>Add dunno</button>
+            <button class="button" on:click={addPause}>Add pause</button>
+
+            <button
+              class="button"
+              on:click={() => (showConfirmClear = true)}
+              disabled={items.length === 0}
+            >
+              <i class="bi-trash" /> Clear
+            </button>
+
+            <button class="button" on:click={downloadJson} disabled={items.length === 0}>
+              <i class="bi-download" /> Download
+            </button>
+            <button class="button" on:click={exportNotes} disabled={items.length === 0}>
+              <i class="bi-list-ul" /> Export Notes
+            </button>
+          </div>
+
+          <div class="autosave-indicator">
+            {#if autosaved}
+              autosaved
+            {/if}
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
   </div>
 </div>
 

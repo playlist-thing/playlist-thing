@@ -33,12 +33,18 @@
   cursor: pointer;
 }
 
-.button:hover {
+.button:hover:not(:disabled) {
   background-color: #ddd;
 }
 
-.button:active {
+.button:active:not(:disabled) {
   background-color: #bbb;
+}
+
+.button:disabled {
+  color: #777;
+
+  cursor: inherit;
 }
 
 .button.inverted {
