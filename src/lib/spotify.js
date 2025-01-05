@@ -10,7 +10,7 @@ export async function spotifyConnectFromSettings() {
   const clientId = get(spotifyClientId);
   const clientSecret = get(spotifyClientSecret);
 
-  return await spotifyConnect(clientId, clientSecret);
+  await spotifyConnect(clientId, clientSecret);
 }
 
 export async function spotifyConnect(clientId, clientSecret) {

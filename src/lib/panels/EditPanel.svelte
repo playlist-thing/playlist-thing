@@ -61,12 +61,7 @@
         />
 
         <label class="label" for="youtube-id">YouTube ID</label>
-        <input
-          class="input-text"
-          id="youtube-id"
-          type="text"
-          bind:value={$editItem.youtubeId}
-        />
+        <input class="input-text" id="youtube-id" type="text" bind:value={$editItem.youtubeId} />
 
         <label class="label" for="apple-music-track-id">Apple Music Track ID</label>
         <input
