@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <div class="playlists">
+  <div class="panels">
     {#if playlistAVisible}
       <PlaylistPanel id={'A'} />
     {/if}
@@ -63,14 +63,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.3em;
+    padding: 6px;
   }
 
-  .playlists {
+  .panels {
     display: flex;
     min-height: 0;
-    padding-left: 0.3em;
-    padding-right: 0.3em;
-    padding-bottom: 0.3em;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+
+    overflow: auto;
   }
 </style>

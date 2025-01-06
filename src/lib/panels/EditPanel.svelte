@@ -28,7 +28,7 @@
 </script>
 
 <div class="outer-container">
-  <div class="inner-container">
+  <div class="inner-container more-padding overflow">
     <div class="header">
       <h1 class="title">Edit track</h1>
 
