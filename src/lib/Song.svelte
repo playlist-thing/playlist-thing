@@ -39,7 +39,7 @@
     dispatch('delete', item.id);
   }
 
-  function searchUrl() {
+  function searchUrl(item) {
     const searchTerm = `${item.title} ${item.artist}`;
     const searchUrl = `https://music.youtube.com/search?q=`;
     return encodeURI(searchUrl + searchTerm);
@@ -96,7 +96,7 @@
   <td>
     <div class="buttons-right">
       <div class="button-group">
-        <a class="button" title="Search" href={searchUrl()} target="_blank">
+        <a class="button" title="Search" href={searchUrl(item)} target="_blank">
           <i class="bi-search" />
         </a>
         <button class="button" class:inverted={editing} title="Edit" on:click={toggleEdit}>
