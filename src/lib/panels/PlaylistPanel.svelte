@@ -7,17 +7,12 @@
 
   import Song from '$lib/Song.svelte';
   import EditPanel from '$lib/panels/EditPanel.svelte';
+  import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
   import Item from '$lib/Item.js';
-  import { formatSeconds } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
-  import {
-    timeInfoMode,
-    calculateTimeInfo,
-    calculateTotalDuration,
-    calculateTotalDurationWithoutPauses
-  } from '$lib/timeInfo.js';
+  import { timeInfoMode, calculateTimeInfo } from '$lib/timeInfo.js';
   import { nextId } from '$lib/state.js';
 
   export let id;
@@ -30,8 +25,6 @@
   let editingItemIdx = null;
 
   $: timeInfo = calculateTimeInfo(items, $timeInfoMode);
-  $: totalDuration = calculateTotalDuration(items);
-  $: totalDurationWithoutPauses = calculateTotalDurationWithoutPauses(items);
 
   $: browser && modified(items, playlistName);
   $: dndOptions = { items, dragDisabled: items.length === 0 };
@@ -167,11 +160,6 @@
     playlistName = file.name;
   }
 
-  function dragstartHandler(ev) {
-    const json = JSON.stringify(items);
-    ev.dataTransfer.setData('application/x.playlist-json', json);
-  }
-
   function dragoverHandler(ev) {
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'copy';
@@ -216,20 +204,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <div class="controls-top">
-      <div>
-        <span on:dragstart={dragstartHandler} draggable="true" class="playlist-draggable">
-          {id}
-          Playlist
-        </span>
-        <span bind:textContent={playlistName} contenteditable></span>
-      </div>
-
-      <div class="duration">
-        Total duration: {formatSeconds(totalDuration)}
-        Without pauses: {formatSeconds(totalDurationWithoutPauses)}
-      </div>
-    </div>
+    <ControlsTop {items} bind:playlistName />
 
     {#if showConfirmClear}
       <ConfirmClear on:clear={clear} on:cancel={() => (showConfirmClear = false)} />
@@ -315,38 +290,24 @@
   @import '$lib/style/responsive.css';
   @import '$lib/style/panel.css';
 
-  .controls-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 0.2em;
-  }
-
   .playlist-container {
     overflow: auto;
   }
 
-  .playlist-draggable,
   .button-group {
     padding-left: 0.2em;
   }
 
-  .playlist-draggable,
   .drop-zone,
   .autosave-indicator {
     -webkit-user-select: none; /* Safari */
     user-select: none;
   }
 
-  .playlist-draggable {
-    cursor: grab;
-  }
-
   .empty-cell {
     padding-below: 1em;
   }
 
-  .duration,
   .autosave-indicator {
     padding-right: 0.2em;
   }
