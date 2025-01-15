@@ -2,7 +2,6 @@
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
   import { spotifyToken, spotifyConnectFromSettings } from '$lib/spotify.js';
-  import { timeInfoMode } from '$lib/timeInfo.js';
 
   let playlistAVisible = true;
   let playlistBVisible = true;
@@ -16,12 +15,6 @@
 <div class="app">
   <div class="controls-top">
     <div>
-      <label for="time-info-selector">Time info</label>
-      <select id="time-info-selector" bind:value={$timeInfoMode}>
-        <option value="beginsAt">Begins At</option>
-        <option value="timeUntilEnd">Time Until End</option>
-      </select>
-
       Spotify
       {#if $spotifyToken}
         connected

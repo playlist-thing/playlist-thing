@@ -1,7 +1,5 @@
 import { writable, get } from 'svelte/store';
 
-export const timeInfoMode = writable('beginsAt');
-
 function calculateBeginsAt(items) {
   let result = [];
   let sum = 0;
@@ -28,7 +26,9 @@ function calculateTimeUntilEnd(items) {
 }
 
 export function calculateTimeInfo(items, mode) {
-  if (mode === 'beginsAt') {
+  if (mode === 'duration') {
+    return items.map((item) => item.seconds);
+  } else if (mode === 'beginsAt') {
     return calculateBeginsAt(items);
   } else if (mode === 'timeUntilEnd') {
     return calculateTimeUntilEnd(items);

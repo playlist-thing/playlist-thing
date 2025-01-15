@@ -12,7 +12,7 @@
 
   import Item from '$lib/Item.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
-  import { timeInfoMode, calculateTimeInfo } from '$lib/timeInfo.js';
+  import { calculateTimeInfo } from '$lib/timeInfo.js';
   import { nextId } from '$lib/state.js';
 
   export let id;
@@ -23,24 +23,15 @@
   let autosaved = false;
   let showConfirmClear = false;
   let editingItemIdx = null;
+  let timeInfoMode = 'duration';
 
-  $: timeInfo = calculateTimeInfo(items, $timeInfoMode);
+  $: timeInfo = calculateTimeInfo(items, timeInfoMode);
 
   $: browser && modified(items, playlistName);
   $: dndOptions = { items, dragDisabled: items.length === 0 };
 
-  $: timeInfoLabel = timeInfoModeLabel($timeInfoMode);
-
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
-
-  function timeInfoModeLabel(mode) {
-    if (mode === 'beginsAt') {
-      return 'Begins';
-    } else if (mode === 'timeUntilEnd') {
-      return 'Until';
-    }
-  }
 
   function saveLocalStorage() {
     localStorage.setItem(`playlist${id}`, JSON.stringify(items));
@@ -216,7 +207,13 @@
               <th>Artist</th>
               <th>Title</th>
               <th class="priority-low">Album</th>
-              <th class="priority-medium">{timeInfoLabel}</th>
+              <th class="priority-medium">
+                <select id="time-info-selector" bind:value={timeInfoMode}>
+                  <option value="duration">Duration</option>
+                  <option value="beginsAt">Begins At</option>
+                  <option value="timeUntilEnd">Time Until End</option>
+                </select>
+              </th>
               <th>Duration</th>
               <th class="priority-low">Sources</th>
               <th></th>
