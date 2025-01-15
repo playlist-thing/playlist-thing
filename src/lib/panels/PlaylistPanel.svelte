@@ -214,7 +214,6 @@
                   <option value="timeUntilEnd">Time Until End</option>
                 </select>
               </th>
-              <th>Duration</th>
               <th class="priority-low">Sources</th>
               <th></th>
             </tr>
@@ -225,7 +224,6 @@
                 bind:item
                 editing={editingItemIdx === idx}
                 timeInfo={timeInfo[idx]}
-                playlistId={id}
                 on:delete={deleteHandler}
                 on:edit={() => (editingItemIdx = idx)}
                 on:stopedit={() => (editingItemIdx = null)}

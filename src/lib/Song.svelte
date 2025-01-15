@@ -2,18 +2,13 @@
   import { createEventDispatcher } from 'svelte';
 
   import EditableTd from '$lib/EditableTd.svelte';
-  import { formatSeconds, parseDuration } from '$lib/format.js';
+  import { formatSeconds } from '$lib/format.js';
 
   export let item;
   export let timeInfo;
   export let editing;
 
   const dispatch = createEventDispatcher();
-
-  function inputDuration(ev) {
-    const raw = ev.target.textContent;
-    item.seconds = parseDuration(raw);
-  }
 
   function rowClass(item) {
     if (item.pause) {
@@ -84,7 +79,6 @@
   <EditableTd bind:text={item.title} />
   <EditableTd bind:text={item.album} cssClass="priority-low" />
   <td class="priority-medium">{formatSeconds(timeInfo)}</td>
-  <td on:focusout={inputDuration} contenteditable>{formatSeconds(item.seconds)}</td>
   <td class="priority-low" on:dragover={dragoverHandler} on:drop={dropHandler}>
     {#if item.file}
       <i class="bi-file-earmark" />

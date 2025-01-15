@@ -1,11 +1,17 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
+  import { formatSeconds, parseDuration } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
 
   export let item;
 
   const dispatch = createEventDispatcher();
+
+  function inputDuration(ev) {
+    const raw = ev.target.value;
+    item.seconds = parseDuration(raw);
+  }
 
   function close() {
     dispatch('close');
@@ -50,6 +56,9 @@
 
         <label class="label" for="released">Released</label>
         <input class="input-text" id="released" type="text" bind:value={item.released} />
+
+        <label class="label" for="duration">Duration</label>
+        <input class="input-text" id="duration" type="text" value={formatSeconds(item.seconds)} on:focusout={inputDuration} />
 
         <label class="label" for="label">Label</label>
         <input class="input-text" id="label" type="text" bind:value={item.label} />
