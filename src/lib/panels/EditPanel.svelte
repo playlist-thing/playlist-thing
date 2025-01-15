@@ -58,7 +58,13 @@
         <input class="input-text" id="released" type="text" bind:value={item.released} />
 
         <label class="label" for="duration">Duration</label>
-        <input class="input-text" id="duration" type="text" value={formatSeconds(item.seconds)} on:focusout={inputDuration} />
+        <input
+          class="input-text"
+          id="duration"
+          type="text"
+          value={formatSeconds(item.seconds)}
+          on:focusout={inputDuration}
+        />
 
         <label class="label" for="label">Label</label>
         <input class="input-text" id="label" type="text" bind:value={item.label} />

@@ -18,7 +18,7 @@
   export let id;
 
   let items = [];
-  let playlistName = 'playlist';
+  let playlistName = '';
   let autosaveCallback;
   let autosaved = false;
   let showConfirmClear = false;
