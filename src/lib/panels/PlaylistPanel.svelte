@@ -100,6 +100,11 @@
 
   function deleteHandler(event) {
     const id = event.detail;
+
+    if (editingItemIdx !== null && items[editingItemIdx].id === id) {
+      editingItemIdx = null;
+    }
+
     items = items.filter((item) => item.id !== id);
   }
 
