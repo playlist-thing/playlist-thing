@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  import EditableTd from '$lib/EditableTd.svelte';
   import { formatSeconds } from '$lib/format.js';
 
   export let item;
