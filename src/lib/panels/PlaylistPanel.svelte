@@ -19,6 +19,7 @@
 
   let items = [];
   let playlistName = '';
+
   let autosaveCallback;
   let autosaved = false;
   let showConfirmClear = false;
@@ -28,7 +29,6 @@
   $: timeInfo = calculateTimeInfo(items, timeInfoMode);
 
   $: browser && modified(items, playlistName);
-  $: dndOptions = { items, dragDisabled: items.length === 0 };
 
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
@@ -119,7 +119,7 @@
   }
 
   function addPause() {
-    addItem(new Item({ title: 'PAUSE', seconds: 90, pause: true }));
+    addItem(new Item({ seconds: 90, pause: true }));
   }
 
   async function addSpotifyTrack(spotifyTrackId) {
@@ -200,46 +200,30 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop {items} bind:playlistName />
+    <ControlsTop {items} bind:playlistName bind:timeInfoMode />
 
     {#if showConfirmClear}
       <ConfirmClear on:clear={clear} on:cancel={() => (showConfirmClear = false)} />
     {:else}
       <div class="playlist-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Artist</th>
-              <th>Title</th>
-              <th class="priority-low">Album</th>
-              <th class="priority-medium">
-                <select id="time-info-selector" bind:value={timeInfoMode}>
-                  <option value="duration">Duration</option>
-                  <option value="beginsAt">Begins At</option>
-                  <option value="timeUntilEnd">Time Until End</option>
-                </select>
-              </th>
-              <th class="priority-low">Sources</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody use:dndzone={dndOptions} on:consider={handleSort} on:finalize={handleSort}>
-            {#each items as item, idx (item.id)}
-              <Song
-                bind:item
-                editing={editingItemIdx === idx}
-                timeInfo={timeInfo[idx]}
-                on:delete={deleteHandler}
-                on:edit={() => (editingItemIdx = idx)}
-                on:stopedit={() => (editingItemIdx = null)}
-              />
-            {:else}
-              <tr>
-                <td class="empty-cell" />
-              </tr>
-            {/each}
-          </tbody>
-        </table>
+        <div
+          class="playlist"
+          class:padding={items.length === 0}
+          use:dndzone={{ items }}
+          on:consider={handleSort}
+          on:finalize={handleSort}
+        >
+          {#each items as item, idx (item.id)}
+            <Song
+              bind:item
+              editing={editingItemIdx === idx}
+              timeInfo={timeInfo[idx]}
+              on:delete={deleteHandler}
+              on:edit={() => (editingItemIdx = idx)}
+              on:stopedit={() => (editingItemIdx = null)}
+            />
+          {/each}
+        </div>
       </div>
 
       <div class="controls-bottom">
@@ -294,6 +278,15 @@
     overflow: auto;
   }
 
+  .playlist {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .playlist.padding {
+    padding-bottom: 20px;
+  }
+
   .button-group {
     padding-left: 0.2em;
   }
@@ -302,10 +295,6 @@
   .autosave-indicator {
     -webkit-user-select: none; /* Safari */
     user-select: none;
-  }
-
-  .empty-cell {
-    padding-below: 1em;
   }
 
   .autosave-indicator {

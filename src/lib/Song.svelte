@@ -12,13 +12,13 @@
 
   function rowClass(item) {
     if (item.pause) {
-      return 'pause';
+      return 'row pause';
     } else if (!item.artist || !item.title || !item.album || !item.seconds) {
-      return 'missing-info';
+      return 'row missing-info';
     } else if (!item.file) {
-      return 'missing-file';
+      return 'row missing-file';
     } else {
-      return '';
+      return 'row';
     }
   }
 
@@ -74,39 +74,119 @@
   }
 </script>
 
-<tr class={rowClass(item)}>
-  <EditableTd bind:text={item.artist} />
-  <EditableTd bind:text={item.title} />
-  <EditableTd bind:text={item.album} cssClass="priority-low" />
-  <td class="priority-medium">{formatSeconds(timeInfo)}</td>
-  <td class="priority-low" on:dragover={dragoverHandler} on:drop={dropHandler}>
-    {#if item.file}
-      <i class="bi-file-earmark" />
-    {/if}
-    {#if item.spotifyTrackId}
-      <i class="bi-spotify" />
-    {/if}
-  </td>
-  <td>
-    <div class="buttons-right">
-      <div class="button-group">
-        <a class="button" title="Search" href={searchUrl(item)} target="_blank">
-          <i class="bi-search" />
-        </a>
-        <button class="button" class:inverted={editing} title="Edit" on:click={toggleEdit}>
-          <i class="bi-pencil" />
-        </button>
-        <button class="button" title="Delete" on:click={deleteItem}>
-          <i class="bi-trash" />
-        </button>
+<div class={rowClass(item)}>
+  <div class="time-and-metadata">
+    <div class="time-info">
+      <div>
+        {formatSeconds(timeInfo)}
       </div>
     </div>
-  </td>
-</tr>
+
+    {#if item.pause && !item.title}
+      <div>
+        <i class="bi bi-mic" /> <i>Air break</i>
+      </div>
+    {:else}
+      <div>
+        <div class="metadata-row top">
+          <div>
+            <i class="bi bi-music-note" />
+            {#if item.title}
+              {item.title}
+            {:else}
+              <i>No title</i>
+            {/if}
+          </div>
+
+          <div>
+            <i class="bi bi-person" />
+            {#if item.artist}
+              {item.artist}
+            {:else}
+              <i>No artist</i>
+            {/if}
+          </div>
+        </div>
+
+        <div class="metadata-row bottom">
+          <div>
+            <i class="bi bi-vinyl" />
+            {#if item.album}
+              {item.album}
+            {:else}
+              <i>No album</i>
+            {/if}
+          </div>
+
+          <div>
+            {#if item.file}
+              <i class="bi-file-earmark" />
+            {/if}
+            {#if item.spotifyTrackId}
+              <i class="bi-spotify" />
+            {/if}
+          </div>
+        </div>
+      </div>
+    {/if}
+  </div>
+
+  <div class="buttons-right">
+    <div class="button-group">
+      <a class="button" title="Search" href={searchUrl(item)} target="_blank">
+        <i class="bi-search" />
+      </a>
+      <button class="button" class:inverted={editing} title="Edit" on:click={toggleEdit}>
+        <i class="bi-pencil" />
+      </button>
+      <button class="button" title="Delete" on:click={deleteItem}>
+        <i class="bi-trash" />
+      </button>
+    </div>
+  </div>
+</div>
 
 <style>
   @import '$lib/style/table.css';
   @import '$lib/style/forms.css';
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .time-and-metadata {
+    display: flex;
+    align-items: center;
+  }
+
+  .time-info {
+    flex-shrink: 0;
+
+    width: 60px;
+  }
+
+  .metadata-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .metadata-row > :first-child {
+    padding-right: 1em;
+  }
+
+  .metadata-row.top > div {
+    padding-bottom: 6px;
+  }
+
+  .metadata-row.bottom {
+    font-size: 0.85em;
+  }
 
   .pause {
     color: #fff;
@@ -123,7 +203,6 @@
 
   .buttons-right {
     display: flex;
-    justify-content: right;
     align-items: center;
   }
 </style>
