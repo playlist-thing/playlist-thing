@@ -146,7 +146,6 @@
 </div>
 
 <style>
-  @import '$lib/style/table.css';
   @import '$lib/style/forms.css';
 
   .row {

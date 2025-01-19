@@ -270,8 +270,6 @@
 
 <style>
   @import '$lib/style/forms.css';
-  @import '$lib/style/table.css';
-  @import '$lib/style/responsive.css';
   @import '$lib/style/panel.css';
 
   .playlist-container {
