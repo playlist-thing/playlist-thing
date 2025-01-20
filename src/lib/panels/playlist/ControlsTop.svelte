@@ -49,7 +49,7 @@
   </div>
 
   {#if items.length > 0}
-    <div class="row">
+    <div class="row duration-info">
       <div>
         <select bind:value={timeInfoMode}>
           <option value="duration">Duration</option>
@@ -80,6 +80,10 @@
     align-items: center;
 
     padding-bottom: 0.2em;
+  }
+
+  .row.duration-info {
+    flex-wrap: wrap-reverse;
   }
 
   .playlist-name {

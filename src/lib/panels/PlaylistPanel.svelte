@@ -224,6 +224,17 @@
             />
           {/each}
         </div>
+
+        <div class="add-item-buttons">
+          <button class="button" on:click={addDunno}>
+            <i class="bi bi-music-note" />
+            Add empty song
+          </button>
+          <button class="button" on:click={addPause}>
+            <i class="bi bi-mic" />
+            Add air break
+          </button>
+        </div>
       </div>
 
       <div class="controls-bottom">
@@ -234,9 +245,6 @@
 
         <div class="controls-bottom-buttons">
           <div class="button-group">
-            <button class="button" on:click={addDunno}>Add dunno</button>
-            <button class="button" on:click={addPause}>Add pause</button>
-
             <button
               class="button"
               on:click={() => (showConfirmClear = true)}
@@ -273,6 +281,9 @@
   @import '$lib/style/panel.css';
 
   .playlist-container {
+    display: flex;
+    flex-direction: column;
+
     overflow: auto;
   }
 
@@ -287,6 +298,20 @@
 
   .button-group {
     padding-left: 0.2em;
+  }
+
+  .add-item-buttons {
+    display: flex;
+
+    padding: 6px;
+  }
+
+  .add-item-buttons > :not(:last-child) {
+    margin-right: 4px;
+  }
+
+  .add-item-buttons > .button {
+    width: 100%;
   }
 
   .drop-zone,
