@@ -1,14 +1,14 @@
 export default function localStorageStore(key) {
   function set(value) {
-    localStorage.setItem(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
   function subscribe(run) {
-    run(localStorage.getItem(key));
+    run(JSON.parse(localStorage.getItem(key)));
 
     const eventListener = (event) => {
       if (event.key === key) {
-        run(event.newValue);
+        run(JSON.parse(event.newValue));
       }
     };
     window.addEventListener('storage', eventListener);
