@@ -29,6 +29,7 @@
   $: timeInfo = calculateTimeInfo(items, timeInfoMode);
 
   $: browser && modified(items, playlistName);
+  $: dndOptions = { items, dragDisabled: items.length === 0 };
 
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
@@ -114,8 +115,8 @@
     items = [...items, item];
   }
 
-  function addDunno() {
-    addItem(new Item({ title: 'DUNNO' }));
+  function addEmpty() {
+    addItem(new Item());
   }
 
   function addPause() {
@@ -208,8 +209,7 @@
       <div class="playlist-container">
         <div
           class="playlist"
-          class:padding={items.length === 0}
-          use:dndzone={{ items }}
+          use:dndzone={dndOptions}
           on:consider={handleSort}
           on:finalize={handleSort}
         >
@@ -222,11 +222,15 @@
               on:edit={() => (editingItemIdx = idx)}
               on:stopedit={() => (editingItemIdx = null)}
             />
+          {:else}
+            <div class="empty-item">
+              <i>Empty playlist</i>
+            </div>
           {/each}
         </div>
 
         <div class="add-item-buttons">
-          <button class="button" on:click={addDunno}>
+          <button class="button" on:click={addEmpty}>
             <i class="bi bi-music-note" />
             Add empty song
           </button>
@@ -240,6 +244,7 @@
       <div class="controls-bottom">
         <!-- TODO aria role -->
         <div on:dragover={dragoverHandler} on:drop={dropHandler} class="drop-zone">
+          <i class="bi-plus-lg" />
           Drop new songs or playlists here
         </div>
 
@@ -292,8 +297,17 @@
     flex-direction: column;
   }
 
-  .playlist.padding {
-    padding-bottom: 20px;
+  .empty-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    padding: 20px;
+
+    color: #666;
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
   }
 
   .button-group {
