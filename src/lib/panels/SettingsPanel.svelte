@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
+  import SearchProviders from './settings/SearchProviders.svelte';
+
   import { spotifyClientId, spotifyClientSecret } from '$lib/settings.js';
 
   const dispatch = createEventDispatcher();
@@ -20,7 +22,18 @@
       </button>
     </div>
 
+    Settings are stored locally in your browser.
+
+    <h2>Search</h2>
+
+    Search for track title and artist on external services to get links and IDs for tracks.
+
+    <SearchProviders />
+
     <h2>Integrations</h2>
+
+    Integrations fetch track metadata from external sources using IDs of the respective metadata
+    sources. The IDs can be found using search providers.
 
     <h3>Spotify</h3>
 

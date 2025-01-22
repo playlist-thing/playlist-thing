@@ -1,0 +1,6 @@
+export const defaultSearchProviders = [
+  { id: 0, name: 'YouTube Music', url: 'https://music.youtube.com/search?q=' },
+  { id: 1, name: 'Spotify', url: 'https://open.spotify.com/search/' },
+  { id: 2, name: 'Apple Music', url: 'https://music.apple.com/search?term=' },
+  { id: 3, name: 'Deezer', url: 'https://www.deezer.com/search/' }
+];
