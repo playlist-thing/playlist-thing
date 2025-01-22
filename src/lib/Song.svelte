@@ -81,12 +81,20 @@
       </div>
     </div>
 
-    {#if item.pause && !item.title}
-      <div>
-        <i class="bi bi-mic" /> <i>Air break</i>
-      </div>
-    {:else}
-      <div>
+    <div>
+      {#if item.pause}
+        <div class="metadata-row" class:air-break-with-bg={item.title || item.artist || item.album}>
+          <div>
+            <i class="bi bi-mic" />
+            {#if item.title || item.artist || item.album}
+              <i>Air break with background music</i>
+            {:else}
+              <i>Air break</i>
+            {/if}
+          </div>
+        </div>
+      {/if}
+      {#if !item.pause || item.title || item.artist || item.album}
         <div class="metadata-row top">
           <div>
             <i class="bi bi-music-note" />
@@ -126,8 +134,8 @@
             {/if}
           </div>
         </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 
   <div class="buttons-right">
@@ -180,6 +188,10 @@
 
   .metadata-row.top > div {
     padding-bottom: 6px;
+  }
+
+  .metadata-row.air-break-with-bg > div {
+    padding-bottom: 10px;
   }
 
   .metadata-row.bottom {
