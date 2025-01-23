@@ -1,4 +1,6 @@
 <script>
+  import { run } from 'svelte/legacy';
+
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
@@ -15,21 +17,16 @@
   import { calculateTimeInfo } from '$lib/timeInfo.js';
   import { nextId } from '$lib/state.js';
 
-  export let id;
+  let { id } = $props();
 
-  let items = [];
-  let playlistName = '';
+  let items = $state([]);
+  let playlistName = $state('');
 
   let autosaveCallback;
-  let autosaved = false;
-  let showConfirmClear = false;
-  let editingItemIdx = null;
-  let timeInfoMode = 'duration';
-
-  $: timeInfo = calculateTimeInfo(items, timeInfoMode);
-
-  $: browser && modified(items, playlistName);
-  $: dndOptions = { items, dragDisabled: items.length === 0 };
+  let autosaved = $state(false);
+  let showConfirmClear = $state(false);
+  let editingItemIdx = $state(null);
+  let timeInfoMode = $state('duration');
 
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
@@ -197,6 +194,11 @@
       }
     }
   }
+  let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
+  run(() => {
+    browser && modified(items, playlistName);
+  });
+  let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
 </script>
 
 <div class="outer-container">
@@ -210,12 +212,12 @@
         <div
           class="playlist"
           use:dndzone={dndOptions}
-          on:consider={handleSort}
-          on:finalize={handleSort}
+          onconsider={handleSort}
+          onfinalize={handleSort}
         >
           {#each items as item, idx (item.id)}
             <Song
-              bind:item
+              bind:item={items[idx]}
               editing={editingItemIdx === idx}
               timeInfo={timeInfo[idx]}
               on:delete={deleteHandler}
@@ -230,12 +232,12 @@
         </div>
 
         <div class="add-item-buttons">
-          <button class="button" on:click={addEmpty}>
-            <i class="bi bi-music-note" />
+          <button class="button" onclick={addEmpty}>
+            <i class="bi bi-music-note"></i>
             Add empty song
           </button>
-          <button class="button" on:click={addPause}>
-            <i class="bi bi-mic" />
+          <button class="button" onclick={addPause}>
+            <i class="bi bi-mic"></i>
             Add air break
           </button>
         </div>
@@ -243,8 +245,8 @@
 
       <div class="controls-bottom">
         <!-- TODO aria role -->
-        <div on:dragover={dragoverHandler} on:drop={dropHandler} class="drop-zone">
-          <i class="bi-plus-lg" />
+        <div ondragover={dragoverHandler} ondrop={dropHandler} class="drop-zone">
+          <i class="bi-plus-lg"></i>
           Drop new songs or playlists here
         </div>
 
@@ -252,17 +254,17 @@
           <div class="button-group">
             <button
               class="button"
-              on:click={() => (showConfirmClear = true)}
+              onclick={() => (showConfirmClear = true)}
               disabled={items.length === 0}
             >
-              <i class="bi-trash" /> Clear
+              <i class="bi-trash"></i> Clear
             </button>
 
-            <button class="button" on:click={downloadJson} disabled={items.length === 0}>
-              <i class="bi-download" /> Download
+            <button class="button" onclick={downloadJson} disabled={items.length === 0}>
+              <i class="bi-download"></i> Download
             </button>
-            <button class="button" on:click={exportNotes} disabled={items.length === 0}>
-              <i class="bi-list-ul" /> Export Notes
+            <button class="button" onclick={exportNotes} disabled={items.length === 0}>
+              <i class="bi-list-ul"></i> Export Notes
             </button>
           </div>
 

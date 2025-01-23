@@ -17,8 +17,8 @@
     Really clear playlist?
 
     <div class="modal-buttons">
-      <button class="button" on:click={cancel}> Cancel </button>
-      <button class="button" on:click={clear}> Clear </button>
+      <button class="button" onclick={cancel}> Cancel </button>
+      <button class="button" onclick={clear}> Clear </button>
     </div>
   </div>
 </div>

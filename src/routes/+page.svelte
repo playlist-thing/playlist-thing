@@ -5,7 +5,7 @@
 
   let playlistAVisible = true;
   let playlistBVisible = true;
-  let settingsVisible = false;
+  let settingsVisible = $state(false);
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
@@ -19,13 +19,13 @@
       {#if $spotifyToken}
         connected
       {:else}
-        <button on:click={spotifyConnectFromSettings}>connect</button>
+        <button onclick={spotifyConnectFromSettings}>connect</button>
       {/if}
     </div>
 
     <div>
-      <button class="button transparent" class:inverted={settingsVisible} on:click={toggleSettings}>
-        <i class="bi-gear" /> Settings
+      <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
+        <i class="bi-gear"></i> Settings
       </button>
     </div>
   </div>

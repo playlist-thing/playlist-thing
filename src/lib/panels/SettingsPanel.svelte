@@ -17,8 +17,8 @@
     <div class="header">
       <h1 class="title">Settings</h1>
 
-      <button class="button transparent close" on:click={close}>
-        <i class="bi-x-lg" />
+      <button class="button transparent close" onclick={close}>
+        <i class="bi-x-lg"></i>
       </button>
     </div>
 

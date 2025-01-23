@@ -2,14 +2,12 @@
   import { calculateTotalDuration, calculateTotalDurationWithoutPauses } from '$lib/timeInfo.js';
   import { formatSeconds } from '$lib/format.js';
 
-  export let items;
-  export let playlistName;
-  export let timeInfoMode;
+  let { items, playlistName = $bindable(), timeInfoMode = $bindable() } = $props();
 
-  let editingName = false;
+  let editingName = $state(false);
 
-  $: totalDuration = calculateTotalDuration(items);
-  $: totalDurationWithoutPauses = calculateTotalDurationWithoutPauses(items);
+  let totalDuration = $derived(calculateTotalDuration(items));
+  let totalDurationWithoutPauses = $derived(calculateTotalDurationWithoutPauses(items));
 
   function toggleEdit() {
     editingName = !editingName;
@@ -25,24 +23,24 @@
   <div class="row">
     <div>
       {#if editingName}
-        <form on:submit={toggleEdit}>
+        <form onsubmit={toggleEdit}>
           <span class="playlist-name">
             <input class="input-text name" type="text" bind:value={playlistName} />
           </span>
           <button type="submit" class="button transparent edit">
-            <i class="bi bi-floppy" />
+            <i class="bi bi-floppy"></i>
           </button>
         </form>
       {:else}
-        <span on:dragstart={dragstartHandler} draggable="true" class="playlist-name">
+        <span ondragstart={dragstartHandler} draggable="true" class="playlist-name">
           {#if playlistName}
             {playlistName}
           {:else}
             <i>Untitled playlist</i>
           {/if}
         </span>
-        <button class="button transparent edit" on:click={toggleEdit}>
-          <i class="bi bi-pencil" />
+        <button class="button transparent edit" onclick={toggleEdit}>
+          <i class="bi bi-pencil"></i>
         </button>
       {/if}
     </div>

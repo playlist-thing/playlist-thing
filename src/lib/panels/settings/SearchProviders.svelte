@@ -29,19 +29,19 @@
 {#if $searchProviders}
   <div
     use:dragHandleZone={{ items: $searchProviders }}
-    on:consider={handleSort}
-    on:finalize={handleSort}
+    onconsider={handleSort}
+    onfinalize={handleSort}
     class="search-provider-list"
   >
     {#each $searchProviders as searchProvider (searchProvider.id)}
       <div class="search-provider">
         <div use:dragHandle aria-label="drag-handle for {searchProvider.name}" class="drag-handle">
-          <i class="bi-list" />
+          <i class="bi-list"></i>
         </div>
         <div class="search-provider-info">
           <div class="info-item">
             <div class="info-item-label">
-              <i class="bi-search" />
+              <i class="bi-search"></i>
             </div>
             <input
               class="input-text info-item-input"
@@ -51,15 +51,15 @@
           </div>
           <div class="info-item">
             <div class="info-item-label">
-              <i class="bi-link-45deg" />
+              <i class="bi-link-45deg"></i>
             </div>
             <input class="input-text info-item-input" type="text" bind:value={searchProvider.url} />
           </div>
         </div>
 
         <div>
-          <button class="button transparent" on:click={deleteSearchProvider(searchProvider.id)}>
-            <i class="bi-trash" />
+          <button class="button transparent" onclick={deleteSearchProvider(searchProvider.id)}>
+            <i class="bi-trash"></i>
           </button>
         </div>
       </div>
@@ -68,12 +68,12 @@
 {/if}
 
 <div class="controls-bottom">
-  <button class="button" on:click={addSearchProvider}>
-    <i class="bi-plus-lg" />
+  <button class="button" onclick={addSearchProvider}>
+    <i class="bi-plus-lg"></i>
     Add search provider</button
   >
-  <button class="button" on:click={resetSearchProviders}>
-    <i class="bi-arrow-counterclockwise" />
+  <button class="button" onclick={resetSearchProviders}>
+    <i class="bi-arrow-counterclockwise"></i>
     Reset search providers</button
   >
 </div>

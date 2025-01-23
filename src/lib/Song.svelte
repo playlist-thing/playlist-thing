@@ -3,9 +3,7 @@
 
   import { formatSeconds } from '$lib/format.js';
 
-  export let item;
-  export let timeInfo;
-  export let editing;
+  let { item = $bindable(), timeInfo, editing } = $props();
 
   const dispatch = createEventDispatcher();
 
@@ -85,7 +83,7 @@
       {#if item.pause}
         <div class="metadata-row" class:air-break-with-bg={item.title || item.artist || item.album}>
           <div>
-            <i class="bi bi-mic" />
+            <i class="bi bi-mic"></i>
             {#if item.title || item.artist || item.album}
               <i>Air break with background music</i>
             {:else}
@@ -97,7 +95,7 @@
       {#if !item.pause || item.title || item.artist || item.album}
         <div class="metadata-row top">
           <div>
-            <i class="bi bi-music-note" />
+            <i class="bi bi-music-note"></i>
             {#if item.title}
               {item.title}
             {:else}
@@ -106,7 +104,7 @@
           </div>
 
           <div>
-            <i class="bi bi-person" />
+            <i class="bi bi-person"></i>
             {#if item.artist}
               {item.artist}
             {:else}
@@ -117,7 +115,7 @@
 
         <div class="metadata-row bottom">
           <div>
-            <i class="bi bi-vinyl" />
+            <i class="bi bi-vinyl"></i>
             {#if item.album}
               {item.album}
             {:else}
@@ -127,10 +125,10 @@
 
           <div>
             {#if item.file}
-              <i class="bi-file-earmark" />
+              <i class="bi-file-earmark"></i>
             {/if}
             {#if item.spotifyTrackId}
-              <i class="bi-spotify" />
+              <i class="bi-spotify"></i>
             {/if}
           </div>
         </div>
@@ -141,13 +139,13 @@
   <div class="buttons-right">
     <div class="button-group">
       <a class="button" title="Search" href={searchUrl(item)} target="_blank">
-        <i class="bi-search" />
+        <i class="bi-search"></i>
       </a>
-      <button class="button" class:inverted={editing} title="Edit" on:click={toggleEdit}>
-        <i class="bi-pencil" />
+      <button class="button" class:inverted={editing} title="Edit" onclick={toggleEdit}>
+        <i class="bi-pencil"></i>
       </button>
-      <button class="button" title="Delete" on:click={deleteItem}>
-        <i class="bi-trash" />
+      <button class="button" title="Delete" onclick={deleteItem}>
+        <i class="bi-trash"></i>
       </button>
     </div>
   </div>

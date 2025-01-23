@@ -4,7 +4,7 @@
   import { formatSeconds, parseDuration } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
 
-  export let item;
+  let { item = $bindable() } = $props();
 
   const dispatch = createEventDispatcher();
 
@@ -38,8 +38,8 @@
     <div class="header">
       <h1 class="title">Edit track</h1>
 
-      <button class="button transparent close" on:click={close}>
-        <i class="bi-x-lg" />
+      <button class="button transparent close" onclick={close}>
+        <i class="bi-x-lg"></i>
       </button>
     </div>
 
@@ -63,14 +63,14 @@
           id="duration"
           type="text"
           value={formatSeconds(item.seconds)}
-          on:focusout={inputDuration}
+          onfocusout={inputDuration}
         />
 
         <label class="label" for="label">Label</label>
         <input class="input-text" id="label" type="text" bind:value={item.label} />
 
         {#if item.spotifyTrackId}
-          <button class="button" on:click={fillFromSpotify}>
+          <button class="button" onclick={fillFromSpotify}>
             Fill missing information from Spotify
           </button>
         {/if}
@@ -110,7 +110,7 @@
 
     <div class="input-block">
       <label class="label" for="notes">Notes</label>
-      <textarea class="input-text" id="notes" rows="10" bind:value={item.notes} />
+      <textarea class="input-text" id="notes" rows="10" bind:value={item.notes}></textarea>
 
       <div>
         <input id="pause" type="checkbox" bind:checked={item.pause} />
