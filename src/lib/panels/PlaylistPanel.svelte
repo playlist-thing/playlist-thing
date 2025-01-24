@@ -6,6 +6,7 @@
   import { fileSave } from 'browser-fs-access';
   import { parseBlob } from 'music-metadata';
   import { dndzone } from 'svelte-dnd-action';
+  import slug from 'slug';
 
   import Song from '$lib/Song.svelte';
   import EditPanel from '$lib/panels/EditPanel.svelte';
@@ -71,7 +72,7 @@
     });
 
     await fileSave(blob, {
-      fileName: playlistName
+      fileName: slug(playlistName)
     });
   }
 
