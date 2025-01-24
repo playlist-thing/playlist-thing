@@ -1,15 +1,9 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
   import SearchProviders from './settings/SearchProviders.svelte';
 
   import { spotifyClientId, spotifyClientSecret } from '$lib/settings.js';
 
-  const dispatch = createEventDispatcher();
-
-  function close() {
-    dispatch('close');
-  }
+  let { close } = $props();
 </script>
 
 <div class="outer-container">

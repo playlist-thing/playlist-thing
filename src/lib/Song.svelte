@@ -1,11 +1,7 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
   import { formatSeconds } from '$lib/format.js';
 
-  let { item = $bindable(), timeInfo, editing } = $props();
-
-  const dispatch = createEventDispatcher();
+  let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem } = $props();
 
   function rowClass(item) {
     if (item.pause) {
@@ -21,14 +17,10 @@
 
   function toggleEdit() {
     if (editing) {
-      dispatch('stopedit');
+      stopEdit();
     } else {
-      dispatch('edit');
+      startEdit();
     }
-  }
-
-  function deleteItem() {
-    dispatch('delete', item.id);
   }
 
   function searchUrl(item) {

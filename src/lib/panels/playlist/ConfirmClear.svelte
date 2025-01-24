@@ -1,15 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
-
-  function cancel() {
-    dispatch('cancel');
-  }
-
-  function clear() {
-    dispatch('clear');
-  }
+  let { cancel, clear } = $props();
 </script>
 
 <div class="outer-modal">

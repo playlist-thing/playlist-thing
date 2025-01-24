@@ -96,9 +96,7 @@
     items = e.detail.items;
   }
 
-  function deleteHandler(event) {
-    const id = event.detail;
-
+  function deleteItem(id) {
     if (editingItemIdx !== null && items[editingItemIdx].id === id) {
       editingItemIdx = null;
     }
@@ -206,7 +204,7 @@
     <ControlsTop {items} bind:playlistName bind:timeInfoMode />
 
     {#if showConfirmClear}
-      <ConfirmClear on:clear={clear} on:cancel={() => (showConfirmClear = false)} />
+      <ConfirmClear {clear} cancel={() => (showConfirmClear = false)} />
     {:else}
       <div class="playlist-container">
         <div
@@ -220,9 +218,9 @@
               bind:item={items[idx]}
               editing={editingItemIdx === idx}
               timeInfo={timeInfo[idx]}
-              on:delete={deleteHandler}
-              on:edit={() => (editingItemIdx = idx)}
-              on:stopedit={() => (editingItemIdx = null)}
+              deleteItem={() => deleteItem(item.id)}
+              startEdit={() => (editingItemIdx = idx)}
+              stopEdit={() => (editingItemIdx = null)}
             />
           {:else}
             <div class="empty-item">
@@ -280,7 +278,7 @@
 </div>
 
 {#if editingItemIdx !== null}
-  <EditPanel bind:item={items[editingItemIdx]} on:close={() => (editingItemIdx = null)} />
+  <EditPanel bind:item={items[editingItemIdx]} close={() => (editingItemIdx = null)} />
 {/if}
 
 <style>

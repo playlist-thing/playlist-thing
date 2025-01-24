@@ -1,20 +1,12 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
   import { formatSeconds, parseDuration } from '$lib/format.js';
   import { getSpotifyTrack } from '$lib/spotify.js';
 
-  let { item = $bindable() } = $props();
-
-  const dispatch = createEventDispatcher();
+  let { item = $bindable(), close } = $props();
 
   function inputDuration(ev) {
     const raw = ev.target.value;
     item.seconds = parseDuration(raw);
-  }
-
-  function close() {
-    dispatch('close');
   }
 
   function overwriteOnlyFalsy(target, source) {

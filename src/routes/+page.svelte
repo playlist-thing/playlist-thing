@@ -38,7 +38,7 @@
       <PlaylistPanel id={'B'} />
     {/if}
     {#if settingsVisible}
-      <SettingsPanel on:close={toggleSettings} />
+      <SettingsPanel close={toggleSettings} />
     {/if}
   </div>
 </div>
