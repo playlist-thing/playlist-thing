@@ -1,5 +1,10 @@
-<script>
-  let { cancel, clear } = $props();
+<script lang="ts">
+  interface Props {
+    cancel: () => void;
+    clear: () => void;
+  }
+
+  let { cancel, clear }: Props = $props();
 </script>
 
 <div class="outer-modal">

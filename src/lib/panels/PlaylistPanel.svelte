@@ -12,9 +12,9 @@
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
   import Item from '$lib/Item.js';
-  import { getSpotifyTrack } from '$lib/spotify.js';
-  import { calculateTimeInfo } from '$lib/timeInfo.js';
-  import { nextId } from '$lib/state.js';
+  import { getSpotifyTrack } from '$lib/spotify.ts';
+  import { calculateTimeInfo } from '$lib/timeInfo.ts';
+  import { nextId } from '$lib/state.ts';
 
   let { id } = $props();
 

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { formatSeconds, parseDuration } from './format.js';
+import { formatSeconds, parseDuration } from './format.ts';
 
 test('formatSeconds', () => {
   expect(formatSeconds(0)).toEqual('0:00');

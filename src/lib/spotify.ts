@@ -7,13 +7,13 @@ import Item from '$lib/Item.js';
 export const spotifyToken = writable('');
 
 export async function spotifyConnectFromSettings() {
-  const clientId = get(spotifyClientId);
-  const clientSecret = get(spotifyClientSecret);
+  const clientId = get(spotifyClientId) as string;
+  const clientSecret = get(spotifyClientSecret) as string;
 
   await spotifyConnect(clientId, clientSecret);
 }
 
-export async function spotifyConnect(clientId, clientSecret) {
+export async function spotifyConnect(clientId: string, clientSecret: string) {
   const params = new URLSearchParams();
   params.append('grant_type', 'client_credentials');
   params.append('client_id', clientId);
@@ -33,7 +33,7 @@ export async function spotifyConnect(clientId, clientSecret) {
   spotifyToken.set(json.access_token);
 }
 
-export async function getSpotifyTrack(spotifyTrackId) {
+export async function getSpotifyTrack(spotifyTrackId: string) {
   const response = await fetch(`https://api.spotify.com/v1/tracks/${spotifyTrackId}`, {
     headers: {
       Authorization: `Bearer ${get(spotifyToken)}`

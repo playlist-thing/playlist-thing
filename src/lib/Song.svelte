@@ -1,12 +1,14 @@
 <script>
-  import { formatSeconds } from '$lib/format.js';
+  import { formatSeconds } from '$lib/format.ts';
 
   let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem } = $props();
+
+  let missingInfo = $derived(!item.artist || !item.title || !item.seconds);
 
   function rowClass(item) {
     if (item.pause) {
       return 'row pause';
-    } else if (!item.artist || !item.title || !item.album || !item.seconds) {
+    } else if (missingInfo) {
       return 'row missing-info';
     } else if (!item.file) {
       return 'row missing-file';

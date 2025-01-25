@@ -1,6 +1,6 @@
 <script>
-  import { calculateTotalDuration, calculateTotalDurationWithoutPauses } from '$lib/timeInfo.js';
-  import { formatSeconds } from '$lib/format.js';
+  import { calculateTotalDuration, calculateTotalDurationWithoutPauses } from '$lib/timeInfo.ts';
+  import { formatSeconds } from '$lib/format.ts';
 
   let { items, playlistName = $bindable(), timeInfoMode = $bindable() } = $props();
 

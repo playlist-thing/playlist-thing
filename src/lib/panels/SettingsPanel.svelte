@@ -1,7 +1,7 @@
 <script>
   import SearchProviders from './settings/SearchProviders.svelte';
 
-  import { spotifyClientId, spotifyClientSecret } from '$lib/settings.js';
+  import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
 
   let { close } = $props();
 </script>
@@ -16,18 +16,20 @@
       </button>
     </div>
 
-    Settings are stored locally in your browser.
+    <p>Settings are stored locally in your browser.</p>
 
     <h2>Search</h2>
 
-    Search for track title and artist on external services to get links and IDs for tracks.
+    <p>Search for track title and artist on external services to get links and IDs for tracks.</p>
 
     <SearchProviders />
 
     <h2>Integrations</h2>
 
-    Integrations fetch track metadata from external sources using IDs of the respective metadata
-    sources. The IDs can be found using search providers.
+    <p>
+      Integrations fetch track metadata from external sources using IDs of the respective metadata
+      sources. The IDs can be found using search providers.
+    </p>
 
     <h3>Spotify</h3>
 

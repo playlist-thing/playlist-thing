@@ -1,11 +1,11 @@
-export function formatSeconds(seconds) {
+export function formatSeconds(seconds: number) {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   const secsPadded = `${secs}`.padStart(2, '0');
   return `${mins}:${secsPadded}`;
 }
 
-export function parseDuration(raw) {
+export function parseDuration(raw: string) {
   const split = raw.split(':');
   let result = 0;
 

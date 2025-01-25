@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 /**
  * Storage of temporary state (not lasting beyond this browser tab/window)

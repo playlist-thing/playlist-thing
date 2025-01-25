@@ -1,4 +1,4 @@
-import localStorageStore from '$lib/localStorageStore.js';
+import localStorageStore from '$lib/localStorageStore.ts';
 
 export const spotifyClientId = localStorageStore('spotifyClientId');
 export const spotifyClientSecret = localStorageStore('spotifyClientSecret');

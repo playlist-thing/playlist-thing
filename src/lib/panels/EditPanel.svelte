@@ -1,6 +1,6 @@
 <script>
-  import { formatSeconds, parseDuration } from '$lib/format.js';
-  import { getSpotifyTrack } from '$lib/spotify.js';
+  import { formatSeconds, parseDuration } from '$lib/format.ts';
+  import { getSpotifyTrack } from '$lib/spotify.ts';
 
   let { item = $bindable(), close } = $props();
 

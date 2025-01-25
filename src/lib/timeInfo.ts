@@ -1,7 +1,7 @@
-import { writable, get } from 'svelte/store';
+import Item from '$lib/Item.js';
 
-function calculateBeginsAt(items) {
-  let result = [];
+function calculateBeginsAt(items: Item[]) {
+  let result: number[] = [];
   let sum = 0;
 
   for (const item of items) {
@@ -12,8 +12,8 @@ function calculateBeginsAt(items) {
   return result;
 }
 
-function calculateTimeUntilEnd(items) {
-  let result = [];
+function calculateTimeUntilEnd(items: Item[]) {
+  let result: number[] = [];
   let sum = 0;
 
   for (let i = items.length; i > 0; i--) {
@@ -25,7 +25,7 @@ function calculateTimeUntilEnd(items) {
   return result.reverse();
 }
 
-export function calculateTimeInfo(items, mode) {
+export function calculateTimeInfo(items: Item[], mode: string) {
   if (mode === 'duration') {
     return items.map((item) => item.seconds);
   } else if (mode === 'beginsAt') {
@@ -35,7 +35,8 @@ export function calculateTimeInfo(items, mode) {
   }
 }
 
-export const calculateTotalDuration = (items) => items.reduce((sum, item) => sum + item.seconds, 0);
+export const calculateTotalDuration = (items: Item[]) =>
+  items.reduce((sum, item) => sum + item.seconds, 0);
 
-export const calculateTotalDurationWithoutPauses = (items) =>
+export const calculateTotalDurationWithoutPauses = (items: Item[]) =>
   calculateTotalDuration(items.filter((item) => !item.pause));

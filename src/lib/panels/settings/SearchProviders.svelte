@@ -1,8 +1,8 @@
 <script>
   import { dragHandleZone, dragHandle } from 'svelte-dnd-action';
 
-  import { searchProviders } from '$lib/settings.js';
-  import { defaultSearchProviders } from '$lib/search.js';
+  import { searchProviders } from '$lib/settings.ts';
+  import { defaultSearchProviders } from '$lib/search.ts';
 
   function handleSort(e) {
     $searchProviders = e.detail.items;
