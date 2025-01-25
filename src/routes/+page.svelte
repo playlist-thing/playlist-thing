@@ -12,6 +12,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Playlists</title>
+</svelte:head>
+
 <div class="app">
   <div class="controls-top">
     <div>
