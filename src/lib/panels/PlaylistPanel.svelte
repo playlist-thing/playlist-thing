@@ -1,6 +1,4 @@
 <script>
-  import { run } from 'svelte/legacy';
-
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
@@ -28,6 +26,13 @@
   let showConfirmClear = $state(false);
   let editingItemIdx = $state(null);
   let timeInfoMode = $state('duration');
+
+  let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
+  let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
+
+  $effect(() => {
+    modified(items, playlistName);
+  });
 
   onMount(loadLocalStorage);
   // onDestroy(saveLocalStorage);
@@ -193,11 +198,6 @@
       }
     }
   }
-  let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
-  run(() => {
-    browser && modified(items, playlistName);
-  });
-  let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
 </script>
 
 <div class="outer-container">
