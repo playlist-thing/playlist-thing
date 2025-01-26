@@ -28,7 +28,8 @@
             <input class="input-text name" type="text" bind:value={playlistName} />
           </span>
           <button type="submit" class="button transparent edit">
-            <i class="bi bi-floppy"></i>
+            <i class="bi bi-floppy" aria-hidden="true"></i>
+            <span class="visually-hidden">Edit playlist name</span>
           </button>
         </form>
       {:else}
@@ -40,7 +41,8 @@
           {/if}
         </span>
         <button class="button transparent edit" onclick={toggleEdit}>
-          <i class="bi bi-pencil"></i>
+          <i class="bi bi-pencil" aria-hidden="true"></i>
+          <span class="visually-hidden">Save playlist name</span>
         </button>
       {/if}
     </div>
@@ -65,6 +67,7 @@
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
 
   .controls-top {

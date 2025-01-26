@@ -232,11 +232,11 @@
 
         <div class="add-item-buttons">
           <button class="button" onclick={addEmpty}>
-            <i class="bi bi-music-note"></i>
+            <i class="bi bi-music-note" aria-hidden="true"></i>
             Add empty song
           </button>
           <button class="button" onclick={addPause}>
-            <i class="bi bi-mic"></i>
+            <i class="bi bi-mic" aria-hidden="true"></i>
             Add air break
           </button>
         </div>
@@ -256,14 +256,14 @@
               onclick={() => (showConfirmClear = true)}
               disabled={items.length === 0}
             >
-              <i class="bi-trash"></i> Clear
+              <i class="bi-trash" aria-hidden="true"></i> Clear
             </button>
 
             <button class="button" onclick={downloadJson} disabled={items.length === 0}>
-              <i class="bi-download"></i> Download
+              <i class="bi-download" aria-hidden="true"></i> Download
             </button>
             <button class="button" onclick={exportNotes} disabled={items.length === 0}>
-              <i class="bi-list-ul"></i> Export Notes
+              <i class="bi-list-ul" aria-hidden="true"></i> Export Notes
             </button>
           </div>
 

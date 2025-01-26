@@ -133,19 +133,23 @@
   <div class="buttons-right">
     <div class="button-group">
       <a class="button" title="Search" href={searchUrl(item)} target="_blank">
-        <i class="bi-search"></i>
+        <i class="bi-search" aria-hidden="true"></i>
+        <span class="visually-hidden">Search</span>
       </a>
-      <button class="button" class:inverted={editing} title="Edit" onclick={toggleEdit}>
-        <i class="bi-pencil"></i>
+      <button class="button" class:inverted={editing} onclick={toggleEdit}>
+        <i class="bi-pencil" aria-hidden="true"></i>
+        <span class="visually-hidden">Edit</span>
       </button>
-      <button class="button" title="Delete" onclick={deleteItem}>
-        <i class="bi-trash"></i>
+      <button class="button" onclick={deleteItem}>
+        <i class="bi-trash" aria-hidden="true"></i>
+        <span class="visually-hidden">Delete</span>
       </button>
     </div>
   </div>
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
 
   .row {

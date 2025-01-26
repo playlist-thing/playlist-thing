@@ -31,7 +31,8 @@
       <h1 class="title">Edit track</h1>
 
       <button class="button transparent close" onclick={close}>
-        <i class="bi-x-lg"></i>
+        <i class="bi-x-lg" aria-hidden="true"></i>
+        <span class="visually-hidden">Finish editing</span>
       </button>
     </div>
 

@@ -59,7 +59,8 @@
 
         <div>
           <button class="button transparent" onclick={deleteSearchProvider(searchProvider.id)}>
-            <i class="bi-trash"></i>
+            <i class="bi-trash" aria-hidden="true"></i>
+            <span class="visually-hidden">Delete search provider</span>
           </button>
         </div>
       </div>
@@ -69,16 +70,17 @@
 
 <div class="controls-bottom">
   <button class="button" onclick={addSearchProvider}>
-    <i class="bi-plus-lg"></i>
-    Add search provider</button
-  >
+    <i class="bi-plus-lg" aria-hidden="true"></i>
+    Add search provider
+  </button>
   <button class="button" onclick={resetSearchProviders}>
-    <i class="bi-arrow-counterclockwise"></i>
-    Reset search providers</button
-  >
+    <i class="bi-arrow-counterclockwise" aria-hidden="true"></i>
+    Reset search providers
+  </button>
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
 
   .search-provider-list {

@@ -12,7 +12,8 @@
       <h1 class="title">Settings</h1>
 
       <button class="button transparent close" onclick={close}>
-        <i class="bi-x-lg"></i>
+        <i class="bi-x-lg" aria-hidden="true"></i>
+        <span class="visually-hidden">Close settings</span>
       </button>
     </div>
 
@@ -49,6 +50,7 @@
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
 

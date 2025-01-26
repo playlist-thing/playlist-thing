@@ -29,7 +29,7 @@
 
     <div>
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
-        <i class="bi-gear"></i> Settings
+        <i class="bi-gear" aria-hidden="true"></i> Settings
       </button>
     </div>
   </div>
