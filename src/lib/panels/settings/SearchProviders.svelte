@@ -26,7 +26,7 @@
   }
 </script>
 
-{#if $searchProviders}
+{#if $searchProviders.length > 0}
   <div
     use:dragHandleZone={{ items: $searchProviders }}
     onconsider={handleSort}

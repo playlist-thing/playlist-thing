@@ -46,7 +46,7 @@ export async function getSpotifyTrack(spotifyTrackId: string) {
 
   const json = await response.json();
 
-  const artist = json.artists.map((x) => x.name).join(', ');
+  const artist = json.artists.map((x: any) => x.name).join(', ');
   const title = json.name;
   const album = json.album.name;
   const seconds = Math.ceil(json.duration_ms / 1000);

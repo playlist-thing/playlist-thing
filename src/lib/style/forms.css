@@ -42,8 +42,6 @@
 }
 
 .button:disabled {
-  color: #777;
-
   cursor: inherit;
 }
 

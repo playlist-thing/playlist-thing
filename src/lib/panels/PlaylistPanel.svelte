@@ -210,6 +210,7 @@
       <div class="playlist-container">
         <div
           class="playlist"
+          role="list"
           use:dndzone={dndOptions}
           onconsider={handleSort}
           onfinalize={handleSort}

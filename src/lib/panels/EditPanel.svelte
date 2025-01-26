@@ -4,8 +4,10 @@
 
   let { item = $bindable(), close } = $props();
 
-  function inputDuration(ev) {
-    const raw = ev.target.value;
+  let durationInputElement;
+
+  function inputDuration() {
+    const raw = durationInputElement.value;
     item.seconds = parseDuration(raw);
   }
 
@@ -55,6 +57,7 @@
           class="input-text"
           id="duration"
           type="text"
+          bind:this={durationInputElement}
           value={formatSeconds(item.seconds)}
           onfocusout={inputDuration}
         />

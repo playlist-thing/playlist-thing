@@ -1,5 +1,6 @@
 <script>
   import { formatSeconds } from '$lib/format.ts';
+  import { quickSearchUrl } from '$lib/settings.ts';
 
   let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem } = $props();
 
@@ -25,9 +26,8 @@
     }
   }
 
-  function searchUrl(item) {
+  function searchUrl(item, searchUrl) {
     const searchTerm = `${item.title} ${item.artist}`;
-    const searchUrl = `https://music.youtube.com/search?q=`;
     return encodeURI(searchUrl + searchTerm);
   }
 
@@ -65,7 +65,7 @@
   }
 </script>
 
-<div class={rowClass(item)}>
+<div role="listitem" class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
   <div class="time-and-metadata">
     <div class="time-info">
       <div>
@@ -124,6 +124,12 @@
             {#if item.spotifyTrackId}
               <i class="bi-spotify"></i>
             {/if}
+            {#if item.appleMusicTrackId}
+              <i class="bi-apple"></i>
+            {/if}
+            {#if item.youtubeId}
+              <i class="bi-youtube"></i>
+            {/if}
           </div>
         </div>
       {/if}
@@ -132,10 +138,18 @@
 
   <div class="buttons-right">
     <div class="button-group">
-      <a class="button" title="Search" href={searchUrl(item)} target="_blank">
-        <i class="bi-search" aria-hidden="true"></i>
-        <span class="visually-hidden">Search</span>
-      </a>
+      {#if $quickSearchUrl}
+        <a
+          class="button"
+          title="Search"
+          href={searchUrl(item, $quickSearchUrl)}
+          target="_blank"
+          rel="external"
+        >
+          <i class="bi-search" aria-hidden="true"></i>
+          <span class="visually-hidden">Search</span>
+        </a>
+      {/if}
       <button class="button" class:inverted={editing} onclick={toggleEdit}>
         <i class="bi-pencil" aria-hidden="true"></i>
         <span class="visually-hidden">Edit</span>
