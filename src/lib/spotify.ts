@@ -7,8 +7,16 @@ import Item from '$lib/Item.js';
 export const spotifyToken = writable('');
 
 export async function spotifyConnectFromSettings() {
-  const clientId = get(spotifyClientId) as string;
-  const clientSecret = get(spotifyClientSecret) as string;
+  const clientId = get(spotifyClientId);
+  const clientSecret = get(spotifyClientSecret);
+
+  if (typeof clientId !== 'string' || clientId === '') {
+    throw new Error('Invalid Spotify client ID');
+  }
+
+  if (typeof clientSecret !== 'string' || clientSecret === '') {
+    throw new Error('Invalid Spotify client secret');
+  }
 
   await spotifyConnect(clientId, clientSecret);
 }
@@ -34,6 +42,10 @@ export async function spotifyConnect(clientId: string, clientSecret: string) {
 }
 
 export async function getSpotifyTrack(spotifyTrackId: string) {
+  if (!get(spotifyToken)) {
+    await spotifyConnectFromSettings();
+  }
+
   const response = await fetch(`https://api.spotify.com/v1/tracks/${spotifyTrackId}`, {
     headers: {
       Authorization: `Bearer ${get(spotifyToken)}`

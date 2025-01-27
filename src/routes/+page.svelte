@@ -1,7 +1,6 @@
 <script>
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
-  import { spotifyToken, spotifyConnectFromSettings } from '$lib/spotify.ts';
 
   let playlistAVisible = true;
   let playlistBVisible = true;
@@ -13,18 +12,14 @@
 </script>
 
 <svelte:head>
-  <title>Playlists</title>
+  <title>Playlist Editor</title>
 </svelte:head>
 
 <div class="app">
   <div class="controls-top">
     <div>
-      Spotify
-      {#if $spotifyToken}
-        connected
-      {:else}
-        <button onclick={spotifyConnectFromSettings}>connect</button>
-      {/if}
+      <!-- TODO logo -->
+      Playlist Editor
     </div>
 
     <div>
