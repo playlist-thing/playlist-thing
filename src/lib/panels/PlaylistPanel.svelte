@@ -38,16 +38,14 @@
   // onDestroy(saveLocalStorage);
 
   function saveLocalStorage() {
-    localStorage.setItem(`playlist${id}`, JSON.stringify(items));
-    localStorage.setItem(`playlistName${id}`, playlistName);
+    localStorage.setItem(`playlist${id}`, toJson());
   }
 
   function loadLocalStorage() {
     const restoredPlaylist = localStorage.getItem(`playlist${id}`);
-    if (restoredPlaylist) openPlaylistJson(restoredPlaylist);
-
-    const restoredPlaylistName = localStorage.getItem(`playlistName${id}`);
-    if (restoredPlaylistName) playlistName = restoredPlaylistName;
+    if (restoredPlaylist !== null) {
+      fromJson(restoredPlaylist, false);
+    }
   }
 
   function autosave() {
@@ -71,8 +69,36 @@
     showConfirmClear = false;
   }
 
+  function fromJson(json, append) {
+    const parsed = JSON.parse(json);
+
+    // clear items
+    if (!append) {
+      items = [];
+    }
+
+    // if we are starting from scratch, also adopt name
+    if (items.length === 0) {
+      playlistName = parsed.name;
+    }
+
+    for (let item of parsed.tracks) {
+      // TODO optimize
+      addItem(new Item(item));
+    }
+  }
+
+  function toJson() {
+    const data = {
+      name: playlistName,
+      tracks: items
+    };
+
+    return JSON.stringify(data);
+  }
+
   async function downloadJson() {
-    const blob = new Blob([JSON.stringify(items)], {
+    const blob = new Blob([toJson()], {
       type: 'application/json'
     });
 
@@ -144,18 +170,9 @@
     addItem(new Item({ artist, title, album, seconds, file: file.name }));
   }
 
-  function openPlaylistJson(text) {
-    const parsed = JSON.parse(text);
-    for (let item of parsed) {
-      // TODO optimize
-      addItem(new Item(item));
-    }
-  }
-
   async function openPlaylistFile(file) {
-    const text = await file.text();
-    openPlaylistJson(text);
-    playlistName = file.name;
+    const json = await file.text();
+    fromJson(json, true);
   }
 
   function dragoverHandler(ev) {
