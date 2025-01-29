@@ -27,7 +27,7 @@ export default function localStorageStore<T>(key: string, defaultValue: T) {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  function subscribe(run: (value: T | null) => void) {
+  function subscribe(run: (value: T) => void) {
     // subscribe for changes in this browsing context
     //
     // this will already call run, so we don't have to do that

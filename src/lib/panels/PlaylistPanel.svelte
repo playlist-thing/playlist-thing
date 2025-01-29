@@ -19,7 +19,7 @@
   let { id } = $props();
 
   let items = $state([]);
-  let playlistName = $state('');
+  let name = $state('');
 
   let autosaveCallback;
   let autosaved = $state(false);
@@ -31,7 +31,7 @@
   let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
 
   $effect(() => {
-    modified(items, playlistName);
+    modified(items, name);
   });
 
   onMount(loadLocalStorage);
@@ -54,7 +54,7 @@
     autosaveCallback = null;
   }
 
-  function modified(items, playlistName) {
+  function modified(items, name) {
     autosaved = false;
 
     // cancel callback if it exists
@@ -79,10 +79,10 @@
 
     // if we are starting from scratch, also adopt name
     if (items.length === 0) {
-      playlistName = parsed.name;
+      name = parsed.name;
     }
 
-    for (let item of parsed.tracks) {
+    for (let item of parsed.items) {
       // TODO optimize
       addItem(new Item(item));
     }
@@ -90,8 +90,8 @@
 
   function toJson() {
     const data = {
-      name: playlistName,
-      tracks: items
+      name: name,
+      items: items
     };
 
     return JSON.stringify(data);
@@ -103,7 +103,7 @@
     });
 
     await fileSave(blob, {
-      fileName: slug(playlistName)
+      fileName: slug(name)
     });
   }
 
@@ -120,7 +120,7 @@
 
     const blob = new Blob(output);
     await fileSave(blob, {
-      fileName: `${playlistName}_notes.txt`
+      fileName: `${name}_notes.txt`
     });
   }
 
@@ -209,7 +209,7 @@
               });
             });
           } else if (item.type === 'application/x.playlist-json') {
-            item.getAsString(openPlaylistJson);
+            item.getAsString(fromJson);
           }
         }
       }
@@ -219,7 +219,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop {items} bind:playlistName bind:timeInfoMode />
+    <ControlsTop {items} bind:name bind:timeInfoMode />
 
     {#if showConfirmClear}
       <ConfirmClear {clear} cancel={() => (showConfirmClear = false)} />

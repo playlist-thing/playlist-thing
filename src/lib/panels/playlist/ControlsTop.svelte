@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { calculateTotalDuration, calculateTotalDurationWithoutPauses } from '$lib/timeInfo.ts';
   import { formatSeconds } from '$lib/format.ts';
 
-  let { items, playlistName = $bindable(), timeInfoMode = $bindable() } = $props();
+  let { items, name = $bindable(), timeInfoMode = $bindable() } = $props();
 
   let editingName = $state(false);
 
@@ -13,9 +13,17 @@
     editingName = !editingName;
   }
 
-  function dragstartHandler(ev) {
-    const json = JSON.stringify(items);
-    ev.dataTransfer.setData('application/x.playlist-json', json);
+  function dragstartHandler(ev: DragEvent) {
+    const json = JSON.stringify({
+      name: name,
+      items: items,
+    });
+
+    // The property can be null when the event is created using the
+    // constructor. It is never null when dispatched by the browser.
+    //
+    // https://developer.mozilla.org/en-US/docs/Web/API/DragEvent/dataTransfer
+    ev.dataTransfer!.setData('application/x.playlist-json', json);
   }
 </script>
 
@@ -25,7 +33,7 @@
       {#if editingName}
         <form onsubmit={toggleEdit}>
           <span class="playlist-name">
-            <input class="input-text name" type="text" bind:value={playlistName} />
+            <input class="input-text name" type="text" bind:value={name} />
           </span>
           <button type="submit" class="button transparent edit">
             <i class="bi bi-floppy" aria-hidden="true"></i>
@@ -34,8 +42,8 @@
         </form>
       {:else}
         <span ondragstart={dragstartHandler} draggable="true" class="playlist-name">
-          {#if playlistName}
-            {playlistName}
+          {#if name}
+            {name}
           {:else}
             <i>Untitled playlist</i>
           {/if}

@@ -1,17 +1,23 @@
-<script>
+<script lang="ts">
+  import Item from '$lib/Item.js';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
   import { getSpotifyTrack } from '$lib/spotify.ts';
 
-  let { item = $bindable(), close } = $props();
+  interface Props {
+    item: Item;
+    close: () => void;
+  }
 
-  let durationInputElement;
+  let { item = $bindable(), close }: Props = $props();
+
+  let durationInputElement: HTMLInputElement;
 
   function inputDuration() {
     const raw = durationInputElement.value;
     item.seconds = parseDuration(raw);
   }
 
-  function overwriteOnlyFalsy(target, source) {
+  function overwriteOnlyFalsy(target: any, source: any) {
     Object.keys(source).forEach((key) => {
       if (!target[key]) {
         target[key] = source[key];

@@ -1,10 +1,14 @@
-<script>
+<script lang="ts">
   import SearchProviders from './settings/SearchProviders.svelte';
   import QuickSearchProvider from './settings/QuickSearchProvider.svelte';
 
   import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
 
-  let { close } = $props();
+  interface Props {
+    close: () => void;
+  }
+
+  let { close }: Props = $props();
 </script>
 
 <div class="outer-container">
