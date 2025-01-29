@@ -16,7 +16,7 @@
   function dragstartHandler(ev: DragEvent) {
     const json = JSON.stringify({
       name: name,
-      items: items,
+      items: items
     });
 
     // The property can be null when the event is created using the
