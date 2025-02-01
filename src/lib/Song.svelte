@@ -1,6 +1,10 @@
 <script>
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/settings.ts';
+  import { spotifyTrackIdFromUrl } from '$lib/external/spotify.ts';
+  import { youtubeIdFromUrl } from '$lib/external/youtube.ts';
+  import { appleMusicTrackIdFromUrl } from '$lib/external/appleMusic.ts';
+  import { validBandcampUrl } from '$lib/external/bandcamp.ts';
 
   let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem } = $props();
 
@@ -45,16 +49,29 @@
           const file = dataTransferItem.getAsFile();
           item.file = file.name;
         } else if (dataTransferItem.kind === 'string') {
-          const spotifyUrlPrefix = 'https://open.spotify.com/track/';
-
           if (dataTransferItem.type === 'text/plain') {
             // when dragging from spotify, multiple lines in
             // text/plain gets mangled into one single line in
             // text/uri-list
             dataTransferItem.getAsString((lines) => {
               lines.split('\n').forEach((line) => {
-                if (line.startsWith(spotifyUrlPrefix)) {
-                  item.spotifyTrackId = line.substring(spotifyUrlPrefix.length);
+                const spotifyTrackId = spotifyTrackIdFromUrl(line);
+                if (spotifyTrackId !== null) {
+                  item.spotifyTrackId = spotifyTrackId;
+                }
+
+                const youtubeId = youtubeIdFromUrl(line);
+                if (youtubeId !== null) {
+                  item.youtubeId = youtubeId;
+                }
+
+                const appleMusicTrackId = appleMusicTrackIdFromUrl(line);
+                if (appleMusicTrackId !== null) {
+                  item.appleMusicTrackId = appleMusicTrackId;
+                }
+
+                if (validBandcampUrl(line)) {
+                  item.bandcampTrackUrl = line;
                 }
               });
             });

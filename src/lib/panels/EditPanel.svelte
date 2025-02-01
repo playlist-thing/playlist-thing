@@ -1,7 +1,7 @@
 <script lang="ts">
   import Item from '$lib/Item.js';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
-  import { getSpotifyTrack } from '$lib/spotify.ts';
+  import { getSpotifyTrack } from '$lib/external/spotify.ts';
 
   interface Props {
     item: Item;
@@ -123,6 +123,7 @@
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
 

@@ -6,6 +6,14 @@ import Item from '$lib/Item.js';
 
 export const spotifyToken = writable('');
 
+export function spotifyTrackIdFromUrl(url: string) {
+  const pattern = /https:\/\/(open|play).spotify.com\/track\/([a-zA-Z0-9]+)/;
+  const matches = url.match(pattern);
+  if (matches === null || matches.length !== 3) return null;
+
+  return matches[2];
+}
+
 export async function spotifyConnectFromSettings() {
   const clientId = get(spotifyClientId);
   const clientSecret = get(spotifyClientSecret);

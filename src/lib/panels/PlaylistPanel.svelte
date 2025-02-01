@@ -12,7 +12,7 @@
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
   import Item from '$lib/Item.js';
-  import { getSpotifyTrack } from '$lib/spotify.ts';
+  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
   import { calculateTimeInfo } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';
 
@@ -194,16 +194,14 @@
             addFile(file);
           }
         } else if (item.kind === 'string') {
-          const spotifyUrlPrefix = 'https://open.spotify.com/track/';
-
           if (item.type === 'text/plain') {
             // when dragging from spotify, multiple lines in
             // text/plain gets mangled into one single line in
             // text/uri-list
             item.getAsString(async (lines) => {
               lines.split('\n').forEach(async (line) => {
-                if (line.startsWith(spotifyUrlPrefix)) {
-                  const spotifyTrackId = line.substring(spotifyUrlPrefix.length);
+                const spotifyTrackId = spotifyTrackIdFromUrl(line);
+                if (spotifyTrackId) {
                   await addSpotifyTrack(spotifyTrackId);
                 }
               });
