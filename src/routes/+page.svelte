@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
 

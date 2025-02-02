@@ -2,7 +2,7 @@ import { get, writable } from 'svelte/store';
 
 import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
 
-import Item from '$lib/Item.js';
+import Item from '$lib/Item.svelte.ts';
 
 export const spotifyToken = writable('');
 

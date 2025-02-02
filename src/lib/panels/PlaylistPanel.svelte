@@ -11,7 +11,7 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
-  import Item from '$lib/Item.js';
+  import Item from '$lib/Item.svelte.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
   import { calculateTimeInfo } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';

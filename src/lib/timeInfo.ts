@@ -1,4 +1,4 @@
-import Item from '$lib/Item.js';
+import Item from '$lib/Item.svelte.ts';
 
 function calculateBeginsAt(items: Item[]) {
   let result: number[] = [];

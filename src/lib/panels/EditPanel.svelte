@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Item from '$lib/Item.js';
+  import Item from '$lib/Item.svelte.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
   import { getSpotifyTrack } from '$lib/external/spotify.ts';
 
