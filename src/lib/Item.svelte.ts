@@ -73,7 +73,7 @@ export default class Item {
       spotifyTrackId: this.spotifyTrackId,
       youtubeId: this.youtubeId,
       appleMusicTrackId: this.appleMusicTrackId,
-      bandcampTrackUrl: this.bandcampTrackUrl,
+      bandcampTrackUrl: this.bandcampTrackUrl
     };
   }
 }
