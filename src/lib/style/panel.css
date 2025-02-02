@@ -12,7 +12,7 @@
   height: 100%;
 }
 
-.inner-container.more-padding {
+.padding-container {
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;

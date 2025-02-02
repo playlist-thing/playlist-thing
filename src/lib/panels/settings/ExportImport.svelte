@@ -1,0 +1,32 @@
+<script lang="ts">
+  import { exportSettings, importSettings } from '$lib/settings.ts';
+
+  let files: FileList | undefined = $state();
+
+  $effect(() => {
+    if (files !== undefined && files.length === 1) {
+      importSettings(files[0]);
+    }
+  });
+</script>
+
+<h3>Export</h3>
+<div>
+  <button class="button" onclick={exportSettings}>
+    <i class="bi-box-arrow-up-right" aria-hidden="true"></i>
+    Export settings
+  </button>
+</div>
+
+<h3>Import</h3>
+
+<p>Warning: this will overwrite all current settings.</p>
+
+<div>
+  <label for="import-file">Settings file</label>
+  <input accept="application/json" id="import-file" type="file" bind:files />
+</div>
+
+<style>
+  @import '$lib/style/forms.css';
+</style>
