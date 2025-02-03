@@ -20,7 +20,7 @@
 
 <h3>Import</h3>
 
-<p>Warning: this will overwrite all current settings.</p>
+<p><strong>Warning: this will overwrite all current settings.</strong></p>
 
 <div>
   <label for="import-file">Settings file</label>

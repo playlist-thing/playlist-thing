@@ -1,10 +1,16 @@
 <script lang="ts">
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
+  import AboutPanel from '$lib/panels/AboutPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
 
   let playlistAVisible = true;
   let playlistBVisible = true;
+  let aboutVisible = $state(false);
   let settingsVisible = $state(false);
+
+  function toggleAbout() {
+    aboutVisible = !aboutVisible;
+  }
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
@@ -18,8 +24,10 @@
 <div class="app">
   <div class="controls-top">
     <div>
-      <!-- TODO logo -->
-      Playlist Editor
+      <button class="button transparent" class:inverted={aboutVisible} onclick={toggleAbout}>
+        <!-- TODO logo -->
+        Playlist Editor
+      </button>
     </div>
 
     <div>
@@ -30,6 +38,9 @@
   </div>
 
   <div class="panels">
+    {#if aboutVisible}
+      <AboutPanel />
+    {/if}
     {#if playlistAVisible}
       <PlaylistPanel id={'A'} />
     {/if}
