@@ -15,6 +15,7 @@
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
   import { calculateTimeInfo } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';
+  import { exportNotes } from '$lib/export.ts';
 
   let { id } = $props();
 
@@ -104,23 +105,6 @@
 
     await fileSave(blob, {
       fileName: slug(name)
-    });
-  }
-
-  async function exportNotes() {
-    let output = [];
-
-    for (const item of items) {
-      output.push(`Title: ${item.title}\n`);
-      output.push(`Artist: ${item.artist}\n`);
-      output.push(`Album: ${item.album}\n`);
-      output.push(`Released: ${item.released}\n`);
-      output.push(`Notes:\n${item.notes}\n\n`);
-    }
-
-    const blob = new Blob(output);
-    await fileSave(blob, {
-      fileName: `${name}_notes.txt`
     });
   }
 
@@ -278,7 +262,11 @@
             <button class="button" onclick={downloadJson} disabled={items.length === 0}>
               <i class="bi-download" aria-hidden="true"></i> Download
             </button>
-            <button class="button" onclick={exportNotes} disabled={items.length === 0}>
+            <button
+              class="button"
+              onclick={() => exportNotes(items, name)}
+              disabled={items.length === 0}
+            >
               <i class="bi-list-ul" aria-hidden="true"></i> Export Notes
             </button>
           </div>
