@@ -253,17 +253,24 @@
           <div class="button-group">
             <button
               class="button"
+              class:disabled={items.length === 0}
               onclick={() => (showConfirmClear = true)}
               disabled={items.length === 0}
             >
               <i class="bi-trash" aria-hidden="true"></i> Clear
             </button>
 
-            <button class="button" onclick={downloadJson} disabled={items.length === 0}>
+            <button
+              class="button"
+              class:disabled={items.length === 0}
+              onclick={downloadJson}
+              disabled={items.length === 0}
+            >
               <i class="bi-download" aria-hidden="true"></i> Download
             </button>
             <button
               class="button"
+              class:disabled={items.length === 0}
               onclick={() => exportNotes(items, name)}
               disabled={items.length === 0}
             >

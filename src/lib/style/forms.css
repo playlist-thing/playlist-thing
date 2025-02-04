@@ -45,6 +45,12 @@
   cursor: inherit;
 }
 
+/* extra visual cues */
+.button.disabled {
+  background-color: #fff;
+  color: #666;
+}
+
 .button.inverted {
   background-color: #222;
   color: #fff;
