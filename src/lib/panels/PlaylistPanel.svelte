@@ -191,7 +191,7 @@
               });
             });
           } else if (item.type === 'application/x.playlist-json') {
-            item.getAsString(fromJson);
+            item.getAsString((json) => fromJson(json, true));
           }
         }
       }
