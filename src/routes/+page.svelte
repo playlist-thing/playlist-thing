@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
+
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
   import AboutPanel from '$lib/panels/AboutPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
@@ -29,6 +31,12 @@
         Playlist Editor
       </button>
     </div>
+
+    {#if dev}
+      <div class="dev-mode">
+        <strong>DEV MODE</strong>
+      </div>
+    {/if}
 
     <div>
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
@@ -77,5 +85,17 @@
     padding-bottom: 6px;
 
     overflow: auto;
+  }
+
+  .dev-mode {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    background-color: #000;
+    color: #fff;
+
+    border-radius: 3px;
   }
 </style>
