@@ -1,16 +1,26 @@
-<script>
+<script lang="ts">
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/settings.ts';
   import { spotifyTrackIdFromUrl } from '$lib/external/spotify.ts';
   import { youtubeIdFromUrl } from '$lib/external/youtube.ts';
   import { appleMusicTrackIdFromUrl } from '$lib/external/appleMusic.ts';
   import { validBandcampUrl } from '$lib/external/bandcamp.ts';
+  import Item from '$lib/Item.svelte.ts';
 
-  let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem } = $props();
+  interface Props {
+    item: Item;
+    timeInfo: number;
+    editing: boolean;
+    startEdit: () => void;
+    stopEdit: () => void;
+    deleteItem: () => void;
+  }
+
+  let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem }: Props = $props();
 
   let missingInfo = $derived(!item.artist || !item.title || !item.seconds);
 
-  function rowClass(item) {
+  function rowClass(item: Item) {
     if (item.pause) {
       return 'row pause';
     } else if (missingInfo) {
@@ -30,23 +40,24 @@
     }
   }
 
-  function searchUrl(item, searchUrl) {
+  function searchUrl(item: Item, searchUrl: string) {
     const searchTerm = `${item.title} ${item.artist}`;
     return encodeURI(searchUrl + searchTerm);
   }
 
-  function dragoverHandler(ev) {
+  function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'copy';
+    ev.dataTransfer!.dropEffect = 'copy';
   }
 
-  function dropHandler(ev) {
+  function dropHandler(ev: DragEvent) {
     ev.preventDefault();
 
-    if (ev.dataTransfer.items) {
-      for (const dataTransferItem of ev.dataTransfer.items) {
+    const dataTransferItems = ev.dataTransfer!.items;
+    if (dataTransferItems) {
+      for (const dataTransferItem of dataTransferItems) {
         if (dataTransferItem.kind === 'file') {
-          const file = dataTransferItem.getAsFile();
+          const file = dataTransferItem.getAsFile()!;
           item.file = file.name;
         } else if (dataTransferItem.kind === 'string') {
           if (dataTransferItem.type === 'text/plain') {
@@ -54,7 +65,8 @@
             // text/plain gets mangled into one single line in
             // text/uri-list
             dataTransferItem.getAsString((lines) => {
-              lines.split('\n').forEach((line) => {
+              const split = lines.split('\n');
+              for (const line of split) {
                 const spotifyTrackId = spotifyTrackIdFromUrl(line);
                 if (spotifyTrackId !== null) {
                   item.spotifyTrackId = spotifyTrackId;
@@ -73,7 +85,7 @@
                 if (validBandcampUrl(line)) {
                   item.bandcampTrackUrl = line;
                 }
-              });
+              }
             });
           }
         }

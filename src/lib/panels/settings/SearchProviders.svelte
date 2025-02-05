@@ -1,11 +1,13 @@
-<script>
+<script lang="ts">
+  import type { DndEvent } from 'svelte-dnd-action';
   import { dragHandleZone, dragHandle } from 'svelte-dnd-action';
 
   import { searchProviders } from '$lib/settings.ts';
+  import type { SearchProvider } from '$lib/search.ts';
   import { defaultSearchProviders } from '$lib/search.ts';
 
-  function handleSort(e) {
-    $searchProviders = e.detail.items;
+  function handleSort(e: CustomEvent<DndEvent>) {
+    $searchProviders = e.detail.items as SearchProvider[];
   }
 
   function resetSearchProviders() {
@@ -19,10 +21,8 @@
     $searchProviders = [...$searchProviders, { id: nextId, name: '', url: '' }];
   }
 
-  function deleteSearchProvider(id) {
-    return () => {
-      $searchProviders = $searchProviders.filter((item) => item.id !== id);
-    };
+  function deleteSearchProvider(id: number) {
+    $searchProviders = $searchProviders.filter((item) => item.id !== id);
   }
 </script>
 
@@ -58,7 +58,10 @@
         </div>
 
         <div>
-          <button class="button transparent" onclick={deleteSearchProvider(searchProvider.id)}>
+          <button
+            class="button transparent"
+            onclick={() => deleteSearchProvider(searchProvider.id)}
+          >
             <i class="bi-trash" aria-hidden="true"></i>
             <span class="visually-hidden">Delete search provider</span>
           </button>

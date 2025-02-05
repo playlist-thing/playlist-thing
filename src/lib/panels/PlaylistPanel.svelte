@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
   import { parseBlob } from 'music-metadata';
+  import type { DndEvent } from 'svelte-dnd-action';
   import { dndzone } from 'svelte-dnd-action';
   import slug from 'slug';
 
@@ -17,15 +18,19 @@
   import { nextId } from '$lib/state.ts';
   import { exportNotes } from '$lib/export.ts';
 
-  let { id } = $props();
+  interface Props {
+    id: number;
+  }
 
-  let items = $state([]);
+  let { id }: Props = $props();
+
+  let items: Item[] = $state([]);
   let name = $state('');
 
-  let autosaveCallback;
+  let autosaveCallback: number | null;
   let autosaved = $state(false);
   let showConfirmClear = $state(false);
-  let editingItemIdx = $state(null);
+  let editingItemIdx: number | null = $state(null);
   let timeInfoMode = $state('duration');
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
@@ -70,7 +75,7 @@
     showConfirmClear = false;
   }
 
-  function fromJson(json, append) {
+  function fromJson(json: string, append: boolean) {
     const parsed = JSON.parse(json);
 
     // clear items
@@ -108,11 +113,11 @@
     });
   }
 
-  function handleSort(e) {
-    items = e.detail.items;
+  function handleSort(e: CustomEvent<DndEvent>) {
+    items = e.detail.items as Item[];
   }
 
-  function deleteItem(id) {
+  function deleteItem(id: number) {
     if (editingItemIdx !== null && items[editingItemIdx].id === id) {
       editingItemIdx = null;
     }
@@ -120,7 +125,7 @@
     items = items.filter((item) => item.id !== id);
   }
 
-  function addItem(item) {
+  function addItem(item: Item) {
     item.id = $nextId;
     $nextId += 1;
     items = [...items, item];
@@ -134,13 +139,13 @@
     addItem(new Item({ seconds: 90, pause: true }));
   }
 
-  async function addSpotifyTrack(spotifyTrackId) {
+  async function addSpotifyTrack(spotifyTrackId: string) {
     await getSpotifyTrack(spotifyTrackId)
       .then(addItem)
       .catch((error) => console.log(error));
   }
 
-  async function addFile(file) {
+  async function addFile(file: File) {
     const metadata = await parseBlob(file, {
       duration: true,
       skipCovers: true
@@ -154,23 +159,24 @@
     addItem(new Item({ artist, title, album, seconds, file: file.name }));
   }
 
-  async function openPlaylistFile(file) {
+  async function openPlaylistFile(file: File) {
     const json = await file.text();
     fromJson(json, true);
   }
 
-  function dragoverHandler(ev) {
+  function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'copy';
+    ev.dataTransfer!.dropEffect = 'copy';
   }
 
-  async function dropHandler(ev) {
+  async function dropHandler(ev: DragEvent) {
     ev.preventDefault();
 
-    if (ev.dataTransfer.items) {
-      for (const item of ev.dataTransfer.items) {
+    const dataTransferItems = ev.dataTransfer!.items;
+    if (dataTransferItems) {
+      for (const item of dataTransferItems) {
         if (item.kind === 'file') {
-          const file = item.getAsFile();
+          const file = item.getAsFile()!;
 
           if (file.name.endsWith('.json')) {
             openPlaylistFile(file);
@@ -183,12 +189,13 @@
             // text/plain gets mangled into one single line in
             // text/uri-list
             item.getAsString(async (lines) => {
-              lines.split('\n').forEach(async (line) => {
+              const split = lines.split('\n');
+              for (const line of split) {
                 const spotifyTrackId = spotifyTrackIdFromUrl(line);
                 if (spotifyTrackId) {
                   await addSpotifyTrack(spotifyTrackId);
                 }
-              });
+              }
             });
           } else if (item.type === 'application/x.playlist-json') {
             item.getAsString((json) => fromJson(json, true));
