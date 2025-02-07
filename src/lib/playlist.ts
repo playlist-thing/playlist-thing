@@ -11,8 +11,7 @@ export interface SongMetadata {
   released: string;
   label: string;
 
-  file: string;
-  links: Record<string, string>;
+  attributes: Record<string, string>;
 }
 
 interface Song extends BasePlaylistItem {
@@ -38,8 +37,7 @@ export const emptySongMetadata: SongMetadata = {
   released: '',
   label: '',
 
-  file: '',
-  links: {}
+  attributes: {}
 };
 
 export const emptySong: Song = {

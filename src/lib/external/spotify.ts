@@ -85,8 +85,7 @@ export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistI
       released,
       label: '',
 
-      file: '',
-      links: {
+      attributes: {
         'spotify.com': spotifyTrackId
       }
     }

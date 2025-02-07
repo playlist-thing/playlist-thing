@@ -55,7 +55,7 @@
 
   async function fillFromSpotify() {
     if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
-      const spotifyItem = await getSpotifyTrack(item.content.links['spotify.com']);
+      const spotifyItem = await getSpotifyTrack(item.content.attributes['spotify.com']);
       item = { ...item, ...spotifyItem, id: item.id };
     }
   }
@@ -73,7 +73,7 @@
         </button>
       </div>
 
-      <div class="tag-switch-buttons">
+      <div class="button-group tag-switch-buttons">
         <button class="button" class:inverted={item.tag === 'Song'} onclick={convertToSong}>
           <i class="bi-music-note" aria-hidden="true"></i>
           Song
@@ -155,7 +155,7 @@
           </div>
 
           {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
-            {#if 'spotify.com' in item.content.links}
+            {#if 'spotify.com' in item.content.attributes}
               <div class="input-block-item">
                 <button class="button" onclick={fillFromSpotify}>
                   <i class="bi-spotify" aria-hidden="true"></i>
@@ -179,16 +179,6 @@
   @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
-
-  .tag-switch-buttons {
-    display: flex;
-
-    padding: 6px;
-  }
-
-  .tag-switch-buttons > :not(:last-child) {
-    margin-right: 4px;
-  }
 
   .tag-switch-buttons > .button {
     width: 100%;

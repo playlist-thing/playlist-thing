@@ -170,8 +170,9 @@
         released: '',
         label: '',
 
-        file: file.name,
-        links: {}
+        attributes: {
+          file: file.name
+        }
       }
     });
   }

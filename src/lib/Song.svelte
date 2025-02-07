@@ -27,8 +27,6 @@
       } else {
         if (!item.content.artist || !item.content.title) {
           return 'row missing-info';
-        } else if (!item.content.file) {
-          return 'row missing-file';
         } else {
           if (item.tag === 'AirBreakWithBackgroundMusic') {
             return 'row pause';
@@ -67,7 +65,7 @@
         if (dataTransferItem.kind === 'file') {
           if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
             const file = dataTransferItem.getAsFile()!;
-            item.content.file = file.name;
+            item.content.attributes.file = file.name;
           }
         } else if (dataTransferItem.kind === 'string') {
           if (dataTransferItem.type === 'text/plain') {
@@ -80,21 +78,21 @@
                 if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
                   const spotifyTrackId = spotifyTrackIdFromUrl(line);
                   if (spotifyTrackId !== null) {
-                    item.content.links['spotify.com'] = spotifyTrackId;
+                    item.content.attributes['spotify.com'] = spotifyTrackId;
                   }
 
                   const youtubeId = youtubeIdFromUrl(line);
                   if (youtubeId !== null) {
-                    item.content.links['youtube.com'] = youtubeId;
+                    item.content.attributes['youtube.com'] = youtubeId;
                   }
 
                   const appleMusicTrackId = appleMusicTrackIdFromUrl(line);
                   if (appleMusicTrackId !== null) {
-                    item.content.links['music.apple.com'] = appleMusicTrackId;
+                    item.content.attributes['music.apple.com'] = appleMusicTrackId;
                   }
 
                   if (validBandcampUrl(line)) {
-                    item.content.links['bandcamp.com'] = line;
+                    item.content.attributes['bandcamp.com'] = line;
                   }
                 }
               }
@@ -162,16 +160,16 @@
           </div>
 
           <div>
-            {#if item.content.file}
+            {#if 'file' in item.content.attributes}
               <i class="bi-file-earmark"></i>
             {/if}
-            {#if 'spotify.com' in item.content.links}
+            {#if 'spotify.com' in item.content.attributes}
               <i class="bi-spotify"></i>
             {/if}
-            {#if 'music.apple.com' in item.content.links}
+            {#if 'music.apple.com' in item.content.attributes}
               <i class="bi-apple"></i>
             {/if}
-            {#if 'youtube.com' in item.content.links}
+            {#if 'youtube.com' in item.content.attributes}
               <i class="bi-youtube"></i>
             {/if}
           </div>
