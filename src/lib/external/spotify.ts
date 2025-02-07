@@ -2,7 +2,7 @@ import { get, writable } from 'svelte/store';
 
 import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
 
-import Item from '$lib/Item.svelte.ts';
+import type { PlaylistItem } from '$lib/playlist.ts';
 
 export const spotifyToken = writable('');
 
@@ -49,7 +49,7 @@ export async function spotifyConnect(clientId: string, clientSecret: string) {
   spotifyToken.set(json.access_token);
 }
 
-export async function getSpotifyTrack(spotifyTrackId: string) {
+export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistItem> {
   if (!get(spotifyToken)) {
     await spotifyConnectFromSettings();
   }
@@ -72,12 +72,23 @@ export async function getSpotifyTrack(spotifyTrackId: string) {
   const seconds = Math.ceil(json.duration_ms / 1000);
   const released = json.album.release_date;
 
-  return new Item({
-    artist,
-    title,
-    album,
-    seconds,
-    released,
-    spotifyTrackId
-  });
+  return {
+    id: 0,
+    seconds: seconds,
+    notes: '',
+
+    tag: 'Song',
+    content: {
+      artist,
+      title,
+      album,
+      released,
+      label: '',
+
+      file: '',
+      links: {
+        'spotify.com': spotifyTrackId
+      }
+    }
+  };
 }

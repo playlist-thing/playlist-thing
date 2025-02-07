@@ -1,16 +1,24 @@
 import { fileSave } from 'browser-fs-access';
 import slug from 'slug';
 
-import Item from '$lib/Item.svelte.ts';
+import type { PlaylistItem } from '$lib/playlist.ts';
 
-export async function exportNotes(items: Item[], name: string) {
+export async function exportNotes(items: PlaylistItem[], name: string) {
   let output: string[] = [];
 
   for (const item of items) {
-    output.push(`Title: ${item.title}\n`);
-    output.push(`Artist: ${item.artist}\n`);
-    output.push(`Album: ${item.album}\n`);
-    output.push(`Released: ${item.released}\n`);
+    if (item.tag === 'AirBreak') {
+      output.push('--- AIR BREAK ---');
+    } else {
+      if (item.tag === 'AirBreakWithBackgroundMusic') {
+        output.push('--- AIR BREAK WITH BACKGROUND MUSIC ---');
+      }
+      output.push(`Title: ${item.content.title}\n`);
+      output.push(`Artist: ${item.content.artist}\n`);
+      output.push(`Album: ${item.content.album}\n`);
+      output.push(`Released: ${item.content.released}\n`);
+    }
+
     output.push(`Notes:\n${item.notes}\n\n`);
   }
 
@@ -20,16 +28,18 @@ export async function exportNotes(items: Item[], name: string) {
   });
 }
 
-export async function exportCollectionScript(items: Item[], name: string) {
+export async function exportCollectionScript(items: PlaylistItem[], name: string) {
   let output: string[] = [];
 
   let i = 1;
   for (const item of items) {
-    const orig = JSON.stringify(item.file);
-    const number = `${i}`.padStart(2, '0');
-    const newName = `${number} - ${item.artist} - ${item.title}.mp3`;
-    output.push(`collect ${orig} "${newName}"\n`);
-    i += 1;
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      const orig = JSON.stringify(item.content.file);
+      const number = `${i}`.padStart(2, '0');
+      const newName = `${number} - ${item.content.artist} - ${item.content.title}.mp3`;
+      output.push(`collect ${orig} "${newName}"\n`);
+      i += 1;
+    }
   }
 
   const blob = new Blob(output);

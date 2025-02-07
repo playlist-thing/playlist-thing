@@ -1,6 +1,6 @@
-import Item from '$lib/Item.svelte.ts';
+import type { PlaylistItem } from '$lib/playlist.ts';
 
-function calculateBeginsAt(items: Item[]) {
+function calculateBeginsAt(items: PlaylistItem[]) {
   let result: number[] = [];
   let sum = 0;
 
@@ -12,7 +12,7 @@ function calculateBeginsAt(items: Item[]) {
   return result;
 }
 
-function calculateTimeUntilEnd(items: Item[]) {
+function calculateTimeUntilEnd(items: PlaylistItem[]) {
   let result: number[] = [];
   let sum = 0;
 
@@ -25,7 +25,7 @@ function calculateTimeUntilEnd(items: Item[]) {
   return result.reverse();
 }
 
-export function calculateTimeInfo(items: Item[], mode: string) {
+export function calculateTimeInfo(items: PlaylistItem[], mode: string) {
   if (mode === 'duration') {
     return items.map((item) => item.seconds);
   } else if (mode === 'beginsAt') {
@@ -35,8 +35,8 @@ export function calculateTimeInfo(items: Item[], mode: string) {
   }
 }
 
-export const calculateTotalDuration = (items: Item[]) =>
+export const calculateTotalDuration = (items: PlaylistItem[]) =>
   items.reduce((sum, item) => sum + item.seconds, 0);
 
-export const calculateTotalDurationWithoutPauses = (items: Item[]) =>
-  calculateTotalDuration(items.filter((item) => !item.pause));
+export const calculateTotalDurationWithoutPauses = (items: PlaylistItem[]) =>
+  calculateTotalDuration(items.filter((item) => item.tag === 'Song'));

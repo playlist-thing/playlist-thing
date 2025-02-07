@@ -12,7 +12,8 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
-  import Item from '$lib/Item.svelte.ts';
+  import type { PlaylistItem } from '$lib/playlist.ts';
+  import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
   import { calculateTimeInfo } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';
@@ -24,7 +25,7 @@
 
   let { id }: Props = $props();
 
-  let items: Item[] = $state([]);
+  let items: PlaylistItem[] = $state([]);
   let name = $state('');
 
   let autosaveCallback: number | null;
@@ -90,7 +91,7 @@
 
     for (let item of parsed.items) {
       // TODO optimize
-      addItem(new Item(item));
+      addItem(item);
     }
   }
 
@@ -114,7 +115,7 @@
   }
 
   function handleSort(e: CustomEvent<DndEvent>) {
-    items = e.detail.items as Item[];
+    items = e.detail.items as PlaylistItem[];
   }
 
   function deleteItem(id: number) {
@@ -125,18 +126,18 @@
     items = items.filter((item) => item.id !== id);
   }
 
-  function addItem(item: Item) {
+  function addItem(item: PlaylistItem) {
     item.id = $nextId;
     $nextId += 1;
     items = [...items, item];
   }
 
   function addEmpty() {
-    addItem(new Item());
+    addItem(emptySong);
   }
 
   function addPause() {
-    addItem(new Item({ seconds: 90, pause: true }));
+    addItem(emptyAirBreak);
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
@@ -151,12 +152,28 @@
       skipCovers: true
     });
 
-    const seconds = Math.ceil(metadata.format.duration);
+    const seconds = Math.ceil(metadata.format.duration ? metadata.format.duration : 0);
     const artist = metadata.common.artist;
     const title = metadata.common.title;
     const album = metadata.common.album;
 
-    addItem(new Item({ artist, title, album, seconds, file: file.name }));
+    addItem({
+      id: 0,
+      seconds: seconds,
+      notes: '',
+
+      tag: 'Song',
+      content: {
+        artist: artist ? artist : '',
+        title: title ? title : '',
+        album: album ? album : '',
+        released: '',
+        label: '',
+
+        file: file.name,
+        links: {}
+      }
+    });
   }
 
   async function openPlaylistFile(file: File) {

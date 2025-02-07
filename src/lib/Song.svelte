@@ -5,10 +5,10 @@
   import { youtubeIdFromUrl } from '$lib/external/youtube.ts';
   import { appleMusicTrackIdFromUrl } from '$lib/external/appleMusic.ts';
   import { validBandcampUrl } from '$lib/external/bandcamp.ts';
-  import Item from '$lib/Item.svelte.ts';
+  import type { PlaylistItem, SongMetadata } from '$lib/playlist.ts';
 
   interface Props {
-    item: Item;
+    item: PlaylistItem;
     timeInfo: number;
     editing: boolean;
     startEdit: () => void;
@@ -18,17 +18,25 @@
 
   let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem }: Props = $props();
 
-  let missingInfo = $derived(!item.artist || !item.title || !item.seconds);
-
-  function rowClass(item: Item) {
-    if (item.pause) {
-      return 'row pause';
-    } else if (missingInfo) {
+  function rowClass(item: PlaylistItem) {
+    if (!item.seconds) {
       return 'row missing-info';
-    } else if (!item.file) {
-      return 'row missing-file';
     } else {
-      return 'row';
+      if (item.tag === 'AirBreak') {
+        return 'row pause';
+      } else {
+        if (!item.content.artist || !item.content.title) {
+          return 'row missing-info';
+        } else if (!item.content.file) {
+          return 'row missing-file';
+        } else {
+          if (item.tag === 'AirBreakWithBackgroundMusic') {
+            return 'row pause';
+          } else if (item.tag === 'Song') {
+            return 'row';
+          }
+        }
+      }
     }
   }
 
@@ -40,8 +48,8 @@
     }
   }
 
-  function searchUrl(item: Item, searchUrl: string) {
-    const searchTerm = `${item.title} ${item.artist}`;
+  function searchUrl(song: SongMetadata, searchUrl: string) {
+    const searchTerm = `${song.title} ${song.artist}`;
     return encodeURI(searchUrl + searchTerm);
   }
 
@@ -57,8 +65,10 @@
     if (dataTransferItems) {
       for (const dataTransferItem of dataTransferItems) {
         if (dataTransferItem.kind === 'file') {
-          const file = dataTransferItem.getAsFile()!;
-          item.file = file.name;
+          if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+            const file = dataTransferItem.getAsFile()!;
+            item.content.file = file.name;
+          }
         } else if (dataTransferItem.kind === 'string') {
           if (dataTransferItem.type === 'text/plain') {
             // when dragging from spotify, multiple lines in
@@ -67,23 +77,25 @@
             dataTransferItem.getAsString((lines) => {
               const split = lines.split('\n');
               for (const line of split) {
-                const spotifyTrackId = spotifyTrackIdFromUrl(line);
-                if (spotifyTrackId !== null) {
-                  item.spotifyTrackId = spotifyTrackId;
-                }
+                if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+                  const spotifyTrackId = spotifyTrackIdFromUrl(line);
+                  if (spotifyTrackId !== null) {
+                    item.content.links['spotify.com'] = spotifyTrackId;
+                  }
 
-                const youtubeId = youtubeIdFromUrl(line);
-                if (youtubeId !== null) {
-                  item.youtubeId = youtubeId;
-                }
+                  const youtubeId = youtubeIdFromUrl(line);
+                  if (youtubeId !== null) {
+                    item.content.links['youtube.com'] = youtubeId;
+                  }
 
-                const appleMusicTrackId = appleMusicTrackIdFromUrl(line);
-                if (appleMusicTrackId !== null) {
-                  item.appleMusicTrackId = appleMusicTrackId;
-                }
+                  const appleMusicTrackId = appleMusicTrackIdFromUrl(line);
+                  if (appleMusicTrackId !== null) {
+                    item.content.links['music.apple.com'] = appleMusicTrackId;
+                  }
 
-                if (validBandcampUrl(line)) {
-                  item.bandcampTrackUrl = line;
+                  if (validBandcampUrl(line)) {
+                    item.content.links['bandcamp.com'] = line;
+                  }
                 }
               }
             });
@@ -103,11 +115,14 @@
     </div>
 
     <div>
-      {#if item.pause}
-        <div class="metadata-row" class:air-break-with-bg={item.title || item.artist || item.album}>
+      {#if item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
+        <div
+          class="metadata-row"
+          class:air-break-with-bg={item.tag === 'AirBreakWithBackgroundMusic'}
+        >
           <div>
             <i class="bi bi-mic"></i>
-            {#if item.title || item.artist || item.album}
+            {#if item.tag === 'AirBreakWithBackgroundMusic'}
               <i>Air break with background music</i>
             {:else}
               <i>Air break</i>
@@ -115,12 +130,12 @@
           </div>
         </div>
       {/if}
-      {#if !item.pause || item.title || item.artist || item.album}
+      {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
         <div class="metadata-row top">
           <div>
             <i class="bi bi-music-note"></i>
-            {#if item.title}
-              {item.title}
+            {#if item.content.title}
+              {item.content.title}
             {:else}
               <i>No title</i>
             {/if}
@@ -128,8 +143,8 @@
 
           <div>
             <i class="bi bi-person"></i>
-            {#if item.artist}
-              {item.artist}
+            {#if item.content.artist}
+              {item.content.artist}
             {:else}
               <i>No artist</i>
             {/if}
@@ -139,24 +154,24 @@
         <div class="metadata-row bottom">
           <div>
             <i class="bi bi-vinyl"></i>
-            {#if item.album}
-              {item.album}
+            {#if item.content.album}
+              {item.content.album}
             {:else}
               <i>No album</i>
             {/if}
           </div>
 
           <div>
-            {#if item.file}
+            {#if item.content.file}
               <i class="bi-file-earmark"></i>
             {/if}
-            {#if item.spotifyTrackId}
+            {#if 'spotify.com' in item.content.links}
               <i class="bi-spotify"></i>
             {/if}
-            {#if item.appleMusicTrackId}
+            {#if 'music.apple.com' in item.content.links}
               <i class="bi-apple"></i>
             {/if}
-            {#if item.youtubeId}
+            {#if 'youtube.com' in item.content.links}
               <i class="bi-youtube"></i>
             {/if}
           </div>
@@ -167,11 +182,11 @@
 
   <div class="buttons-right">
     <div class="button-group">
-      {#if $quickSearchUrl}
+      {#if $quickSearchUrl && (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic')}
         <a
           class="button"
           title="Search"
-          href={searchUrl(item, $quickSearchUrl)}
+          href={searchUrl(item.content, $quickSearchUrl)}
           target="_blank"
           rel="external"
         >
