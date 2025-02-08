@@ -13,19 +13,19 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^5.2.12",
-    "@sveltejs/kit": "^2.16.0",
-    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@sveltejs/kit": "^2.17.1",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/slug": "^5.0.9",
     "bootstrap-icons": "^1.11.3",
     "browser-fs-access": "^0.35.0",
-    "music-metadata": "^10.5.1",
-    "prettier": "^3.1.1",
-    "prettier-plugin-svelte": "^3.2.6",
+    "music-metadata": "^10.8.3",
+    "prettier": "^3.4.2",
+    "prettier-plugin-svelte": "^3.3.3",
     "slug": "^10.0.0",
-    "svelte": "^5.0.0",
-    "svelte-dnd-action": "^0.9.51",
-    "vite": "^6.0.0",
-    "vitest": "^2.1.8"
+    "svelte": "^5.19.9",
+    "svelte-dnd-action": "^0.9.57",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5"
   },
   "type": "module"
 }
