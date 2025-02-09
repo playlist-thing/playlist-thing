@@ -12,6 +12,10 @@ export function spotifyTrackIdFromUrl(url: string) {
   return matches[2];
 }
 
+export function urlFromSpotifyTrackId(spotifyTrackId: string) {
+  return `https://open.spotify.com/track/${spotifyTrackId}`;
+}
+
 export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistItem> {
   if (tokenNeedsRefresh()) {
     await refreshToken();

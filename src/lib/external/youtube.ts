@@ -8,3 +8,7 @@ export function youtubeIdFromUrl(url: string) {
 
   return null;
 }
+
+export function urlFromYoutubeId(youtubeId: string) {
+  return `https://www.youtube.com/watch?v=${youtubeId}`;
+}

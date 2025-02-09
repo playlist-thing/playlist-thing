@@ -1,8 +1,21 @@
 <script lang="ts">
+  import Attribute from './edit/Attribute.svelte';
+
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
-  import { getSpotifyTrack } from '$lib/external/spotify.ts';
+
+  import { searchProviders } from '$lib/settings.ts';
+  import { searchUrl } from '$lib/search.ts';
+
+  import {
+    spotifyTrackIdFromUrl,
+    urlFromSpotifyTrackId,
+    getSpotifyTrack
+  } from '$lib/external/spotify.ts';
+  import { youtubeIdFromUrl, urlFromYoutubeId } from '$lib/external/youtube.ts';
+  import { appleMusicTrackIdFromUrl, urlFromAppleMusicId } from '$lib/external/appleMusic.ts';
+  import { validBandcampUrl } from '$lib/external/bandcamp.ts';
 
   interface Props {
     item: PlaylistItem;
@@ -10,6 +23,8 @@
   }
 
   let { item = $bindable(), close }: Props = $props();
+
+  let audioFiles: FileList | undefined = $state();
 
   let durationInputElement: HTMLInputElement;
 
@@ -57,6 +72,79 @@
     if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
       const spotifyItem = await getSpotifyTrack(item.content.attributes['spotify.com']);
       item = { ...item, ...spotifyItem, id: item.id };
+    }
+  }
+
+  function addFile() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      if (audioFiles !== undefined && audioFiles.length === 1) {
+        item.content.attributes.file = audioFiles[0].name;
+      }
+    }
+  }
+
+  function removeFile() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      delete item.content.attributes.file;
+    }
+  }
+
+  function addSpotify(spotifyTrackLink: string) {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      const spotifyTrackId = spotifyTrackIdFromUrl(spotifyTrackLink);
+      if (spotifyTrackId) {
+        item.content.attributes['spotify.com'] = spotifyTrackId;
+      }
+    }
+  }
+
+  function removeSpotify() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      delete item.content.attributes['spotify.com'];
+    }
+  }
+
+  function addAppleMusic(appleMusicTrackLink: string) {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      const appleMusicTrackId = appleMusicTrackIdFromUrl(appleMusicTrackLink);
+      if (appleMusicTrackId) {
+        item.content.attributes['music.apple.com'] = appleMusicTrackId;
+      }
+    }
+  }
+
+  function removeAppleMusic() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      delete item.content.attributes['music.apple.com'];
+    }
+  }
+
+  function addYoutube(youtubeLink: string) {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      const youtubeId = youtubeIdFromUrl(youtubeLink);
+      if (youtubeId) {
+        item.content.attributes['youtube.com'] = youtubeId;
+      }
+    }
+  }
+
+  function removeYoutube() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      delete item.content.attributes['youtube.com'];
+    }
+  }
+
+  function addBandcamp(bandcampLink: string) {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      if (validBandcampUrl(bandcampLink)) {
+        item.content.attributes['bandcamp.com'] = bandcampLink;
+      }
+    }
+  }
+
+  function removeBandcamp() {
+    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      delete item.content.attributes['bandcamp.com'];
     }
   }
 </script>
@@ -155,20 +243,121 @@
           </div>
 
           {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
-            {#if 'spotify.com' in item.content.attributes}
-              <div class="input-block-item">
-                <button class="button" onclick={fillFromSpotify}>
-                  <i class="bi-spotify" aria-hidden="true"></i>
-                  Get metadata from Spotify
-                </button>
-              </div>
-            {/if}
+            <div class="input-block-item">
+              <button
+                class="button"
+                class:disabled={!('spotify.com' in item.content.attributes)}
+                disabled={!('spotify.com' in item.content.attributes)}
+                onclick={fillFromSpotify}
+              >
+                <i class="bi-spotify" aria-hidden="true"></i>
+                Get metadata from Spotify
+              </button>
+
+              {#if !('spotify.com' in item.content.attributes)}
+                <div class="hint">Add a Spotify track link below to enable</div>
+              {/if}
+            </div>
+
+            <div class="padding-between-metadata-and-notes"></div>
           {/if}
 
           <div class="input-block-item">
             <label class="label" for="notes">Notes</label>
             <textarea class="input-text" id="notes" rows="10" bind:value={item.notes}></textarea>
           </div>
+
+          {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
+            <div class="input-block-header">Attributes</div>
+            <div class="input-block-item">
+              <div>
+                {#if 'file' in item.content.attributes}
+                  <div>
+                    <i class="bi-file-earmark" aria-hidden="true"></i>
+                    Audio file:
+                    <span>{item.content.attributes.file}</span>
+
+                    <button class="button transparent" onclick={removeFile}>
+                      <i class="bi-trash" aria-hidden="true"></i>
+                      <span class="visually-hidden">Delete</span>
+                    </button>
+                  </div>
+                {:else}
+                  <div>
+                    <form>
+                      <label for="audio-file">
+                        <i class="bi-file-earmark" aria-hidden="true"></i>
+                        Audio file
+                      </label>
+                      <input type="file" id="audio-file" bind:files={audioFiles} />
+
+                      <button type="submit" class="button" onclick={addFile}>
+                        <i class="bi-plus-lg" aria-hidden="true"></i>
+                        Add
+                      </button>
+                    </form>
+                  </div>
+                {/if}
+              </div>
+
+              <Attribute
+                attribute={item.content.attributes['spotify.com']}
+                urlFromAttribute={urlFromSpotifyTrackId}
+                onadd={addSpotify}
+                onremove={removeSpotify}
+              >
+                <i class="bi-spotify" aria-hidden="true"></i>
+                Spotify track link
+              </Attribute>
+
+              <Attribute
+                attribute={item.content.attributes['music.apple.com']}
+                urlFromAttribute={urlFromAppleMusicId}
+                onadd={addAppleMusic}
+                onremove={removeAppleMusic}
+              >
+                <i class="bi-apple" aria-hidden="true"></i>
+                Apple Music track link
+              </Attribute>
+
+              <Attribute
+                attribute={item.content.attributes['youtube.com']}
+                urlFromAttribute={urlFromYoutubeId}
+                onadd={addYoutube}
+                onremove={removeYoutube}
+              >
+                <i class="bi-youtube" aria-hidden="true"></i>
+                YouTube link
+              </Attribute>
+
+              <Attribute
+                attribute={item.content.attributes['bandcamp.com']}
+                urlFromAttribute={(x: string) => x}
+                onadd={addBandcamp}
+                onremove={removeBandcamp}
+              >
+                Bandcamp link
+              </Attribute>
+            </div>
+
+            <div class="input-block-header">Search</div>
+            <div class="input-block-item">
+              <ul class="search-list">
+                {#each $searchProviders as searchProvider (searchProvider.id)}
+                  <li class="search-list-item">
+                    <a
+                      href={searchUrl(item.content, searchProvider.url)}
+                      target="_blank"
+                      rel="external"
+                    >
+                      <i class="bi-search" aria-hidden="true"></i>
+                      Search with {searchProvider.name}
+                    </a>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
         </div>
       </div>
     </div>
@@ -228,5 +417,35 @@
 
   .input-block-item:not(:last-child) {
     padding-bottom: 7px;
+  }
+
+  .input-block-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .hint {
+    padding-bottom: 10px;
+
+    font-size: 0.85em;
+    color: #666;
+  }
+
+  .padding-between-metadata-and-notes {
+    padding-bottom: 30px;
+  }
+
+  .search-list {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .search-list-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 </style>

@@ -1,3 +1,5 @@
+import type { SongMetadata } from '$lib/playlist.ts';
+
 export interface SearchProvider {
   id: number;
   name: string;
@@ -10,3 +12,8 @@ export const defaultSearchProviders: SearchProvider[] = [
   { id: 2, name: 'Apple Music', url: 'https://music.apple.com/search?term=' },
   { id: 3, name: 'Deezer', url: 'https://www.deezer.com/search/' }
 ];
+
+export function searchUrl(song: SongMetadata, searchUrl: string) {
+  const searchTerm = `${song.title} ${song.artist}`;
+  return searchUrl + encodeURIComponent(searchTerm);
+}

@@ -11,3 +11,7 @@ export function appleMusicTrackIdFromUrl(url: string) {
 
   return null;
 }
+
+export function urlFromAppleMusicId(appleMusicId: string) {
+  return `https://music.apple.com/song/${appleMusicId}`;
+}

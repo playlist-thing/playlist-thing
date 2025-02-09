@@ -5,7 +5,8 @@
   import { youtubeIdFromUrl } from '$lib/external/youtube.ts';
   import { appleMusicTrackIdFromUrl } from '$lib/external/appleMusic.ts';
   import { validBandcampUrl } from '$lib/external/bandcamp.ts';
-  import type { PlaylistItem, SongMetadata } from '$lib/playlist.ts';
+  import type { PlaylistItem } from '$lib/playlist.ts';
+  import { searchUrl } from '$lib/search.ts';
 
   interface Props {
     item: PlaylistItem;
@@ -44,11 +45,6 @@
     } else {
       startEdit();
     }
-  }
-
-  function searchUrl(song: SongMetadata, searchUrl: string) {
-    const searchTerm = `${song.title} ${song.artist}`;
-    return encodeURI(searchUrl + searchTerm);
   }
 
   function dragoverHandler(ev: DragEvent) {

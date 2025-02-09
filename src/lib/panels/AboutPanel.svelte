@@ -1,3 +1,7 @@
+<script>
+  import { env } from '$env/dynamic/public';
+</script>
+
 <div class="outer-container">
   <div class="inner-container overflow">
     <div class="padding-container">
@@ -40,14 +44,41 @@
               </div>
             </li>
           </ul>
+
+          <ul class="links-bottom">
+            <li class="links-bottom-item">
+              <a
+                href="https://github.com/playlist-thing/playlist-thing"
+                rel="external"
+                target="_blank"
+              >
+                <i class="bi-github" aria-hidden="true"></i>
+                View source on GitHub
+              </a>
+            </li>
+
+            <li class="links-bottom-item">
+              <a
+                href="https://github.com/playlist-thing/playlist-thing/issues/new"
+                rel="external"
+                target="_blank"
+              >
+                <i class="bi-bug-fill" aria-hidden="true"></i>
+                Report bug or issue
+              </a>
+            </li>
+
+            {#if 'PUBLIC_PRIVACY_POLICY_URL' in env}
+              <li class="links-bottom-item">
+                <a href={env.PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
+                  <i class="bi-lock" aria-hidden="true"></i>
+                  Privacy policy
+                </a>
+              </li>
+            {/if}
+          </ul>
         </div>
       </section>
-
-      <p>
-        <a href="https://github.com/playlist-thing/playlist-thing" rel="external" target="_blank">
-          <i class="bi-github" aria-hidden="true"></i> View source on GitHub
-        </a>
-      </p>
     </div>
   </div>
 </div>
@@ -77,5 +108,16 @@
   .showcase-item-icon {
     font-size: 3em;
     padding-right: 15px;
+  }
+
+  .links-bottom {
+    list-style: none;
+    padding: 0px;
+    margin-top: 50px;
+  }
+
+  .links-bottom-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 </style>
