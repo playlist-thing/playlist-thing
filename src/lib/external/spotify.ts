@@ -1,10 +1,8 @@
-import { get, writable } from 'svelte/store';
+import { get } from 'svelte/store';
 
-import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
+import { spotifyToken, tokenNeedsRefresh, refreshToken } from '$lib/external/auth/spotify.ts';
 
 import type { PlaylistItem } from '$lib/playlist.ts';
-
-export const spotifyToken = writable('');
 
 export function spotifyTrackIdFromUrl(url: string) {
   const pattern = /https:\/\/(open|play).spotify.com\/track\/([a-zA-Z0-9]+)/;
@@ -14,44 +12,9 @@ export function spotifyTrackIdFromUrl(url: string) {
   return matches[2];
 }
 
-export async function spotifyConnectFromSettings() {
-  const clientId = get(spotifyClientId);
-  const clientSecret = get(spotifyClientSecret);
-
-  if (typeof clientId !== 'string' || clientId === '') {
-    throw new Error('Invalid Spotify client ID');
-  }
-
-  if (typeof clientSecret !== 'string' || clientSecret === '') {
-    throw new Error('Invalid Spotify client secret');
-  }
-
-  await spotifyConnect(clientId, clientSecret);
-}
-
-export async function spotifyConnect(clientId: string, clientSecret: string) {
-  const params = new URLSearchParams();
-  params.append('grant_type', 'client_credentials');
-  params.append('client_id', clientId);
-  params.append('client_secret', clientSecret);
-
-  const response = await fetch(`https://accounts.spotify.com/api/token`, {
-    method: 'POST',
-    body: params,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-  });
-
-  if (!response.ok) {
-    throw new Error('Spotify');
-  }
-
-  const json = await response.json();
-  spotifyToken.set(json.access_token);
-}
-
 export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistItem> {
-  if (!get(spotifyToken)) {
-    await spotifyConnectFromSettings();
+  if (tokenNeedsRefresh()) {
+    await refreshToken();
   }
 
   const response = await fetch(`https://api.spotify.com/v1/tracks/${spotifyTrackId}`, {

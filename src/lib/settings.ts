@@ -8,9 +8,6 @@ import { defaultSearchProviders } from '$lib/search.ts';
 
 // settings
 
-export const spotifyClientId = localStorageStore('spotifyClientId', '');
-export const spotifyClientSecret = localStorageStore('spotifyClientSecret', '');
-
 export const searchProviders = localStorageStore('searchProviders', defaultSearchProviders);
 export const quickSearchProviderId = localStorageStore('quickSearchProviderId', 0);
 
@@ -37,9 +34,6 @@ export const quickSearchUrl = derived(
 
 export async function exportSettings() {
   const settings = {
-    spotifyClientId: get(spotifyClientId),
-    spotifyClientSecret: get(spotifyClientSecret),
-
     searchProviders: get(searchProviders),
     quickSearchProviderId: get(quickSearchProviderId)
   };
@@ -55,9 +49,6 @@ export async function exportSettings() {
 
 export async function importSettings(file: File) {
   const settings = JSON.parse(await file.text());
-
-  spotifyClientId.set(settings.spotifyClientId);
-  spotifyClientSecret.set(settings.spotifyClientSecret);
 
   searchProviders.set(settings.searchProviders);
   quickSearchProviderId.set(settings.quickSearchProviderId);

@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { spotifyClientId, spotifyClientSecret } from '$lib/settings.ts';
+  import { redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
 </script>
 
-<div class="input-block">
-  <label class="label" for="spotify-client-id">Client ID</label>
-  <input class="input-text" id="spotify-client-id" type="text" bind:value={$spotifyClientId} />
+<p>Your Spotify account connection is stored locally and is not shared with anybody else.</p>
 
-  <label class="label" for="spotify-client-secret">Client Secret</label>
-  <input
-    class="input-text"
-    id="spotify-client-secret"
-    type="text"
-    bind:value={$spotifyClientSecret}
-  />
+<p>
+  All requests to Spotify are made directly in your browser without going through playlist-thing
+  servers.
+</p>
+
+<div class="input-block">
+  <button class="button" onclick={redirectToSpotifyAuthorize}>
+    <i class="bi-spotify"></i>
+    Connect Spotify account
+  </button>
 </div>
 
 <style>
