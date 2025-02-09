@@ -1,101 +1,145 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
-
-  import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
-  import AboutPanel from '$lib/panels/AboutPanel.svelte';
-  import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
-
-  let playlistAVisible = true;
-  let playlistBVisible = true;
-  let aboutVisible = $state(false);
-  let settingsVisible = $state(false);
-
-  function toggleAbout() {
-    aboutVisible = !aboutVisible;
-  }
-
-  function toggleSettings() {
-    settingsVisible = !settingsVisible;
-  }
+  import { env } from '$env/dynamic/public';
 </script>
 
 <svelte:head>
-  <title>Playlist Editor</title>
+  <title>playlist-thing</title>
 </svelte:head>
 
-<div class="app">
-  <div class="controls-top">
-    <div>
-      <button class="button transparent" class:inverted={aboutVisible} onclick={toggleAbout}>
-        <!-- TODO logo -->
-        Playlist Editor
-      </button>
+<div class="content-container">
+  <div class="content">
+    <h1>playlist-thing</h1>
+
+    <p><strong>playlist-thing</strong> is a playlist manager primarily for radio DJs.</p>
+
+    <ul class="showcase">
+      <li class="showcase-item">
+        <div class="showcase-item-icon">
+          <i class="bi-music-note-list" aria-hidden="true"></i>
+        </div>
+
+        <div>
+          Prepare your playlists before a show. Gather song metadata from different sources. Add
+          notes to tracks.
+        </div>
+      </li>
+
+      <li class="showcase-item">
+        <div class="showcase-item-icon">
+          <i class="bi-cloud-slash" aria-hidden="true"></i>
+        </div>
+
+        <div>
+          playlist-thing works offline. All playlists and settings are stored in your browser.
+        </div>
+      </li>
+
+      <li class="showcase-item">
+        <div class="showcase-item-icon">
+          <i class="bi-code-slash" aria-hidden="true"></i>
+        </div>
+
+        <div>
+          playlist-thing is open-source software. Anyone is free to inspect, modify, and contribute
+          to the source code.
+        </div>
+      </li>
+    </ul>
+
+    <div class="call-to-action">
+      <a class="button" href="/editor">
+        <i class="bi-music-note-list" aria-hidden="true"></i>
+        Open Editor
+      </a>
     </div>
 
-    {#if dev}
-      <div class="dev-mode">
-        <strong>DEV MODE</strong>
-      </div>
-    {/if}
+    <ul class="links-bottom">
+      <li class="links-bottom-item">
+        <a href="https://github.com/playlist-thing/playlist-thing" rel="external" target="_blank">
+          <i class="bi-github" aria-hidden="true"></i>
+          View source on GitHub
+        </a>
+      </li>
 
-    <div>
-      <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
-        <i class="bi-gear" aria-hidden="true"></i> Settings
-      </button>
-    </div>
-  </div>
+      <li class="links-bottom-item">
+        <a
+          href="https://github.com/playlist-thing/playlist-thing/issues/new"
+          rel="external"
+          target="_blank"
+        >
+          <i class="bi-bug-fill" aria-hidden="true"></i>
+          Report bug or issue
+        </a>
+      </li>
 
-  <div class="panels">
-    {#if aboutVisible}
-      <AboutPanel />
-    {/if}
-    {#if playlistAVisible}
-      <PlaylistPanel id={'A'} />
-    {/if}
-    {#if playlistBVisible}
-      <PlaylistPanel id={'B'} />
-    {/if}
-    {#if settingsVisible}
-      <SettingsPanel close={toggleSettings} />
-    {/if}
+      {#if 'PUBLIC_PRIVACY_POLICY_URL' in env}
+        <li class="links-bottom-item">
+          <a href={env.PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
+            <i class="bi-lock" aria-hidden="true"></i>
+            Privacy policy
+          </a>
+        </li>
+      {/if}
+    </ul>
   </div>
 </div>
 
 <style>
   @import '$lib/style/forms.css';
 
-  .app {
+  .content-container {
     display: flex;
-    flex-direction: column;
-    max-height: 100vh;
+    justify-content: center;
   }
 
-  .controls-top {
+  .content {
+    max-width: 800px;
+
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .showcase {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 6px;
+    flex-wrap: wrap;
+
+    list-style: none;
+    padding: 0px;
   }
 
-  .panels {
+  .showcase-item {
     display: flex;
-    min-height: 0;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-bottom: 6px;
+    align-items: center;
 
-    overflow: auto;
+    max-width: 380px;
+    padding: 10px;
   }
 
-  .dev-mode {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  .showcase-item:not(:last-child) {
+    padding-bottom: 30px;
+  }
 
-    background-color: #000;
-    color: #fff;
+  .showcase-item-icon {
+    font-size: 3em;
+    padding-right: 15px;
+  }
 
-    border-radius: 3px;
+  .call-to-action {
+    display: flex;
+    justify-content: center;
+
+    font-size: 1.3em;
+  }
+
+  .links-bottom {
+    list-style: none;
+    padding: 0px;
+    margin-top: 50px;
+  }
+
+  .links-bottom-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 </style>
