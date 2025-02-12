@@ -28,7 +28,7 @@
     </p>
 
     <p>
-      <a href="/">Back to editor</a>
+      <a href="/editor">Back to editor</a>
     </p>
   </div>
 </div>

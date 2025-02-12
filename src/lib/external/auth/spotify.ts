@@ -46,7 +46,11 @@ export async function redirectToSpotifyAuthorize() {
   const hashed = await sha256(codeVerifier);
   const codeChallenge = base64encode(hashed);
 
-  localStorage.setItem('spotifyCodeVerifier', codeVerifier);
+  sessionStorage.setItem('spotifyCodeVerifier', codeVerifier);
+
+  const state = generateRandomString(64);
+
+  sessionStorage.setItem('spotifyState', state);
 
   const authUrl = new URL(authorizationEndpoint);
   const params = {
@@ -55,6 +59,7 @@ export async function redirectToSpotifyAuthorize() {
     scope,
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
+    state,
     redirect_uri: `${location.origin}/oauth2/spotify/callback`
   };
 
@@ -89,7 +94,7 @@ export async function getToken(code: string) {
   }
 
   // stored in the previous step
-  const codeVerifier = localStorage.getItem('spotifyCodeVerifier');
+  const codeVerifier = sessionStorage.getItem('spotifyCodeVerifier');
   if (!codeVerifier) {
     throw new Error('No OAuth2 code verifer set');
   }

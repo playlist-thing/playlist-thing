@@ -3,13 +3,26 @@ import type { PageLoad } from './$types';
 
 import { getToken } from '$lib/external/auth/spotify.ts';
 
-// getToken requires access to localStorage for the code verifier
+// We require access to sessionStorage for the code verifier and state
 export const ssr = false;
 
 export const load: PageLoad = async ({ url }) => {
   const urlParams = url.searchParams;
-  if (urlParams.get('error')) {
-    error(400, `Error from Spotify: ${urlParams.get('error')}`);
+
+  const state = urlParams.get('state');
+  if (state) {
+    if (state === sessionStorage.getItem('spotifyState')) {
+      sessionStorage.removeItem('spotifyState');
+    } else {
+      error(400, 'Invalid OAuth state');
+    }
+  } else {
+    error(400, 'No OAuth state received from Spotify');
+  }
+
+  const spotifyError = urlParams.get('error');
+  if (spotifyError) {
+    error(400, `Error from Spotify: ${spotifyError}`);
   }
 
   const code = urlParams.get('code');
@@ -27,5 +40,5 @@ export const load: PageLoad = async ({ url }) => {
     }
   }
 
-  redirect(302, '/');
+  redirect(302, '/editor');
 };
