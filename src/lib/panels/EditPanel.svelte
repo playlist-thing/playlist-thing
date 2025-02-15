@@ -162,13 +162,19 @@
       </div>
 
       <div class="button-group tag-switch-buttons">
-        <button class="button" class:inverted={item.tag === 'Song'} onclick={convertToSong}>
+        <button
+          class="button"
+          class:inverted={item.tag === 'Song'}
+          disabled={item.tag === 'Song'}
+          onclick={convertToSong}
+        >
           <i class="bi-music-note" aria-hidden="true"></i>
           Song
         </button>
         <button
           class="button"
           class:inverted={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
+          disabled={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
           onclick={convertToAirBreak}
         >
           <i class="bi-mic" aria-hidden="true"></i>

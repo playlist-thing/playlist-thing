@@ -141,9 +141,12 @@
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
-    await getSpotifyTrack(spotifyTrackId)
-      .then(addItem)
-      .catch((error) => console.log(error));
+    try {
+      const track = await getSpotifyTrack(spotifyTrackId);
+      addItem(track);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function addFile(file: File) {
@@ -321,6 +324,10 @@
 <style>
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
+
+  .outer-container {
+    max-width: 800px;
+  }
 
   .playlist-container {
     display: flex;

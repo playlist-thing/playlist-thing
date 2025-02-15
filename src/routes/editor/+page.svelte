@@ -25,7 +25,7 @@
     </div>
 
     {#if dev}
-      <div class="dev-mode">
+      <div class="dev-mode-indicator">
         <strong>DEV MODE</strong>
       </div>
     {/if}
@@ -63,12 +63,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     padding: 6px;
   }
 
   .panels {
     display: flex;
+    justify-content: center;
     min-height: 0;
+
     padding-left: 6px;
     padding-right: 6px;
     padding-bottom: 6px;
@@ -76,7 +79,7 @@
     overflow: auto;
   }
 
-  .dev-mode {
+  .dev-mode-indicator {
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 10px;

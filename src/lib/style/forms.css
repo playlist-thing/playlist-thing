@@ -1,3 +1,5 @@
+@import '$lib/style/colors.css';
+
 .button-group {
   display: flex;
   align-items: stretch;
@@ -33,11 +35,11 @@
   cursor: pointer;
 }
 
-.button:hover:not(:disabled):not(.inverted) {
+.button:hover:not(:disabled) {
   background-color: #ddd;
 }
 
-.button:active:not(:disabled):not(.inverted) {
+.button:active:not(:disabled) {
   background-color: #bbb;
 }
 
@@ -56,6 +58,14 @@
   color: #fff;
 }
 
+.button.inverted:hover:not(:disabled) {
+  background-color: #444;
+}
+
+.button.inverted:active:not(:disabled) {
+  background-color: #000;
+}
+
 .button.transparent {
   background-color: inherit;
 }
@@ -63,6 +73,19 @@
 .button.transparent.inverted {
   background-color: #222;
   color: #fff;
+}
+
+.button.danger {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.button.danger:hover:not(:disabled) {
+  background-color: hsl(from var(--danger) h s 65%);
+}
+
+.button.danger:active:not(:disabled) {
+  background-color: hsl(from var(--danger) h s 40%);
 }
 
 .label {
