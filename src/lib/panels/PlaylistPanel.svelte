@@ -20,10 +20,10 @@
   import { exportNotes } from '$lib/export.ts';
 
   interface Props {
-    id: number;
+    panelId: string;
   }
 
-  let { id }: Props = $props();
+  let { panelId }: Props = $props();
 
   let items: PlaylistItem[] = $state([]);
   let name = $state('');
@@ -45,11 +45,11 @@
   // onDestroy(saveLocalStorage);
 
   function saveLocalStorage() {
-    localStorage.setItem(`playlist${id}`, toJson());
+    localStorage.setItem(`playlist${panelId}`, toJson());
   }
 
   function loadLocalStorage() {
-    const restoredPlaylist = localStorage.getItem(`playlist${id}`);
+    const restoredPlaylist = localStorage.getItem(`playlist${panelId}`);
     if (restoredPlaylist !== null) {
       fromJson(restoredPlaylist, false);
     }
@@ -372,14 +372,11 @@
     width: 100%;
   }
 
-  .drop-zone,
-  .autosave-indicator {
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
-  }
-
   .autosave-indicator {
     padding-right: 0.2em;
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
   }
 
   .controls-bottom {
@@ -390,6 +387,9 @@
   .drop-zone {
     padding: 1em;
     color: #666;
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
   }
 
   .controls-bottom-buttons {

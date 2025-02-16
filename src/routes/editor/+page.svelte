@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { dev } from '$app/environment';
 
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
@@ -8,9 +9,15 @@
   let playlistBVisible = true;
   let settingsVisible = $state(false);
 
+  let serviceWorkerHealth: Promise<Response> | null = $state(null);
+
   function toggleSettings() {
     settingsVisible = !settingsVisible;
   }
+
+  onMount(() => {
+    serviceWorkerHealth = fetch('/_localapi/health');
+  });
 </script>
 
 <svelte:head>
@@ -30,7 +37,24 @@
       </div>
     {/if}
 
-    <div>
+    <div class="controls-top-right">
+      {#snippet serviceWorkerError()}
+        <div class="controls-top-error-indicator">
+          <i class="bi bi-exclamation-triangle"></i>
+          Local saving is not available
+        </div>
+      {/snippet}
+
+      {#if serviceWorkerHealth}
+        {#await serviceWorkerHealth then response}
+          {#if !response || !response.ok}
+            {@render serviceWorkerError()}
+          {/if}
+        {:catch}
+          {@render serviceWorkerError()}
+        {/await}
+      {/if}
+
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
         <i class="bi-gear" aria-hidden="true"></i> Settings
       </button>
@@ -39,10 +63,10 @@
 
   <div class="panels">
     {#if playlistAVisible}
-      <PlaylistPanel id={'A'} />
+      <PlaylistPanel panelId={'A'} />
     {/if}
     {#if playlistBVisible}
-      <PlaylistPanel id={'B'} />
+      <PlaylistPanel panelId={'B'} />
     {/if}
     {#if settingsVisible}
       <SettingsPanel close={toggleSettings} />
@@ -51,6 +75,7 @@
 </div>
 
 <style>
+  @import '$lib/style/colors.css';
   @import '$lib/style/forms.css';
 
   .app {
@@ -65,6 +90,15 @@
     align-items: center;
 
     padding: 6px;
+  }
+
+  .controls-top-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .controls-top-error-indicator {
+    color: var(--danger);
   }
 
   .panels {
