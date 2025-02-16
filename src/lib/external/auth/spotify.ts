@@ -12,8 +12,7 @@ export const spotifyTokenRefresh = localStorageStore('spotifyTokenRefresh', '');
 export const spotifyTokenExpiry = localStorageStore('spotifyTokenExpiry', 0);
 
 export function tokenNeedsRefresh() {
-  const now = new Date();
-  if (now.getTime() > get(spotifyTokenExpiry)) return true;
+  if (Date.now() > get(spotifyTokenExpiry)) return true;
 
   return false;
 }
@@ -80,8 +79,7 @@ function saveToken(response: object) {
     throw new Error('Response has no expires_in');
   }
 
-  const now = new Date();
-  const expiry = now.getTime() + response.expires_in * 1000;
+  const expiry = Date.now() + response.expires_in * 1000;
 
   spotifyToken.set(response.access_token);
   spotifyTokenRefresh.set(response.refresh_token);

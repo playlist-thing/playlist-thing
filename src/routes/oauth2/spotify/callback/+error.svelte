@@ -2,6 +2,10 @@
   import { page } from '$app/state';
 </script>
 
+<svelte:head>
+  <title>Spotify authorization error</title>
+</svelte:head>
+
 <div class="content-container">
   <div class="content">
     <h1>Sorry, an error occured</h1>

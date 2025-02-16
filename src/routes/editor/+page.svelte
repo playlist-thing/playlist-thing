@@ -9,14 +9,22 @@
   let playlistBVisible = true;
   let settingsVisible = $state(false);
 
-  let serviceWorkerHealth: Promise<Response> | null = $state(null);
+  let serviceWorkerHealth: Promise<Response> = $state(
+    Promise.resolve(Response.json({ status: 'OK' }))
+  );
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
   }
 
-  onMount(() => {
-    serviceWorkerHealth = fetch('/_localapi/health');
+  onMount(async () => {
+    await navigator.serviceWorker.ready;
+    serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
+
+    // periodically check service worker health
+    setInterval(() => {
+      serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
+    }, 10 * 1000);
   });
 </script>
 
@@ -40,20 +48,18 @@
     <div class="controls-top-right">
       {#snippet serviceWorkerError()}
         <div class="controls-top-error-indicator">
-          <i class="bi bi-exclamation-triangle"></i>
+          <i class="bi-exclamation-triangle"></i>
           Local saving is not available
         </div>
       {/snippet}
 
-      {#if serviceWorkerHealth}
-        {#await serviceWorkerHealth then response}
-          {#if !response || !response.ok}
-            {@render serviceWorkerError()}
-          {/if}
-        {:catch}
+      {#await serviceWorkerHealth then response}
+        {#if !response || !response.ok}
           {@render serviceWorkerError()}
-        {/await}
-      {/if}
+        {/if}
+      {:catch}
+        {@render serviceWorkerError()}
+      {/await}
 
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
         <i class="bi-gear" aria-hidden="true"></i> Settings

@@ -14,7 +14,7 @@ async function health() {
 }
 
 const router = new Trouter<HandlerFunction>();
-router.get('/_localapi/health', health);
+router.get('/health', health);
 
 self.addEventListener('install', (event) => {});
 
@@ -24,12 +24,16 @@ self.addEventListener('fetch', (event: FetchEvent) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  const obj = router.find(request.method, url.pathname);
-  if (obj.handlers.length === 1) {
-    async function respond() {
-      return await obj.handlers[0](obj.params);
-    }
+  if (url.origin === 'https://localapi.playlist-thing.com') {
+    const obj = router.find(request.method, url.pathname);
+    if (obj.handlers.length === 1) {
+      async function respond() {
+        return await obj.handlers[0](obj.params);
+      }
 
-    event.respondWith(respond());
+      event.respondWith(respond());
+    } else {
+      event.respondWith(Response.error());
+    }
   }
 });
