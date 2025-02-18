@@ -1,5 +1,13 @@
 <script lang="ts">
-  let { children, attribute, urlFromAttribute, onadd, onremove } = $props();
+  interface Props {
+    children: any;
+    attribute: string;
+    urlFromAttribute: (attribute: string) => string;
+    onadd: (input: string) => void;
+    onremove: () => void;
+  }
+
+  let { children, attribute, urlFromAttribute, onadd, onremove }: Props = $props();
 
   let input = $state('');
 </script>
@@ -17,8 +25,8 @@
       </button>
     </div>
   {:else}
-    <div>
-      <form>
+    <form>
+      <div>
         <label>
           {@render children()}
           <input type="text" class="input-text" bind:value={input} />
@@ -28,8 +36,8 @@
           <i class="bi-plus-lg" aria-hidden="true"></i>
           Add
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   {/if}
 </div>
 

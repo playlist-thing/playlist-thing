@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Attribute from './edit/Attribute.svelte';
+  import LinkAttribute from './edit/LinkAttribute.svelte';
+  import FileAttribute from './edit/FileAttribute.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
@@ -23,8 +24,6 @@
   }
 
   let { item = $bindable(), close }: Props = $props();
-
-  let audioFiles: FileList | undefined = $state();
 
   let durationInputElement: HTMLInputElement;
 
@@ -75,10 +74,10 @@
     }
   }
 
-  function addFile() {
+  function addFile(files: FileList | undefined) {
     if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
-      if (audioFiles !== undefined && audioFiles.length === 1) {
-        item.content.attributes.file = audioFiles[0].name;
+      if (files !== undefined && files.length === 1) {
+        item.content.attributes.file = files[0].name;
       }
     }
   }
@@ -276,37 +275,16 @@
           {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
             <div class="input-block-header">Attributes</div>
             <div class="input-block-item">
-              <div>
-                {#if 'file' in item.content.attributes}
-                  <div>
-                    <i class="bi-file-earmark" aria-hidden="true"></i>
-                    Audio file:
-                    <span>{item.content.attributes.file}</span>
+              <FileAttribute
+                attribute={item.content.attributes.file}
+                onadd={addFile}
+                onremove={removeFile}
+              >
+                <i class="bi-file-earmark" aria-hidden="true"></i>
+                Audio file
+              </FileAttribute>
 
-                    <button class="button transparent" onclick={removeFile}>
-                      <i class="bi-trash" aria-hidden="true"></i>
-                      <span class="visually-hidden">Delete</span>
-                    </button>
-                  </div>
-                {:else}
-                  <div>
-                    <form>
-                      <label for="audio-file">
-                        <i class="bi-file-earmark" aria-hidden="true"></i>
-                        Audio file
-                      </label>
-                      <input type="file" id="audio-file" bind:files={audioFiles} />
-
-                      <button type="submit" class="button" onclick={addFile}>
-                        <i class="bi-plus-lg" aria-hidden="true"></i>
-                        Add
-                      </button>
-                    </form>
-                  </div>
-                {/if}
-              </div>
-
-              <Attribute
+              <LinkAttribute
                 attribute={item.content.attributes['spotify.com']}
                 urlFromAttribute={urlFromSpotifyTrackId}
                 onadd={addSpotify}
@@ -314,9 +292,9 @@
               >
                 <i class="bi-spotify" aria-hidden="true"></i>
                 Spotify track link
-              </Attribute>
+              </LinkAttribute>
 
-              <Attribute
+              <LinkAttribute
                 attribute={item.content.attributes['music.apple.com']}
                 urlFromAttribute={urlFromAppleMusicId}
                 onadd={addAppleMusic}
@@ -324,9 +302,9 @@
               >
                 <i class="bi-apple" aria-hidden="true"></i>
                 Apple Music track link
-              </Attribute>
+              </LinkAttribute>
 
-              <Attribute
+              <LinkAttribute
                 attribute={item.content.attributes['youtube.com']}
                 urlFromAttribute={urlFromYoutubeId}
                 onadd={addYoutube}
@@ -334,16 +312,16 @@
               >
                 <i class="bi-youtube" aria-hidden="true"></i>
                 YouTube link
-              </Attribute>
+              </LinkAttribute>
 
-              <Attribute
+              <LinkAttribute
                 attribute={item.content.attributes['bandcamp.com']}
                 urlFromAttribute={(x: string) => x}
                 onadd={addBandcamp}
                 onremove={removeBandcamp}
               >
                 Bandcamp link
-              </Attribute>
+              </LinkAttribute>
             </div>
 
             <div class="input-block-header">Search</div>
