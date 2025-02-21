@@ -9,6 +9,7 @@
   let playlistBVisible = true;
   let settingsVisible = $state(false);
 
+  // default to healthy so that SSR does not produce the error message
   let serviceWorkerHealth: Promise<Response> = $state(
     Promise.resolve(Response.json({ status: 'OK' }))
   );
@@ -19,7 +20,6 @@
 
   onMount(async () => {
     await navigator.serviceWorker.ready;
-    serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
 
     // periodically check service worker health
     setInterval(() => {

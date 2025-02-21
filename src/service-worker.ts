@@ -18,7 +18,9 @@ router.get('/health', health);
 
 self.addEventListener('install', (event) => {});
 
-self.addEventListener('activate', (event) => {});
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
 
 self.addEventListener('fetch', (event: FetchEvent) => {
   const request = event.request;
