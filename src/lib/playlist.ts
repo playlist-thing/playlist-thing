@@ -68,7 +68,7 @@ interface Playlist {
   // if null, playlist is not visible to public
   //
   // if non-null, the playlist is public. However, only the items up
-    // to this index (exclusive) will be shown to the public
+  // to this index (exclusive) will be shown to the public
   //
   // for fully public, use length
   publicUntilIndex: number | null;
