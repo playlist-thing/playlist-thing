@@ -3,6 +3,8 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
+const sw = self as unknown as ServiceWorkerGlobalScope;
+
 import { Trouter } from 'trouter';
 
 type HandlerFunction = (params: Record<string, string>) => Promise<Response>;
@@ -16,13 +18,13 @@ async function health() {
 const router = new Trouter<HandlerFunction>();
 router.get('/health', health);
 
-self.addEventListener('install', (event) => {});
+sw.addEventListener('install', (event) => {});
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+sw.addEventListener('activate', (event) => {
+  event.waitUntil(sw.clients.claim());
 });
 
-self.addEventListener('fetch', (event: FetchEvent) => {
+sw.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
