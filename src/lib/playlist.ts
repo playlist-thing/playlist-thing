@@ -4,7 +4,7 @@ interface BasePlaylistItem {
   notes: string;
 }
 
-export interface SongMetadata {
+interface SongMetadata {
   artist: string;
   title: string;
   album: string;
@@ -28,9 +28,9 @@ interface AirBreakWithBackgroundMusic extends BasePlaylistItem {
   content: SongMetadata;
 }
 
-export type PlaylistItem = Song | AirBreak | AirBreakWithBackgroundMusic;
+type PlaylistItem = Song | AirBreak | AirBreakWithBackgroundMusic;
 
-export const emptySongMetadata: SongMetadata = {
+const emptySongMetadata: SongMetadata = {
   artist: '',
   title: '',
   album: '',
@@ -40,7 +40,7 @@ export const emptySongMetadata: SongMetadata = {
   attributes: {}
 };
 
-export const emptySong: Song = {
+const emptySong: Song = {
   id: 0,
   seconds: 0,
   notes: '',
@@ -49,7 +49,7 @@ export const emptySong: Song = {
   content: emptySongMetadata
 };
 
-export const emptyAirBreak: AirBreak = {
+const emptyAirBreak: AirBreak = {
   id: 0,
   seconds: 90,
   notes: '',
@@ -58,22 +58,80 @@ export const emptyAirBreak: AirBreak = {
 };
 
 interface Playlist {
-  id: number;
+  // not included in exports
+  localId: number;
+  // not included in exports
+  remoteId: number | null;
+
   name: string;
+  items: PlaylistItem[];
+  // if null, playlist is not visible to public
+  //
+  // if non-null, the playlist is public. However, only the items up
+    // to this index (exclusive) will be shown to the public
+  //
+  // for fully public, use length
+  publicUntilIndex: number | null;
+  // milliseconds since unix epoch (i.e. Date.getTime())
+  broadcastStart: number | null;
+  createdAt: number;
+  lastModifiedAt: number;
+
+  // - not included in exports
+  // - on write to remote API, replace with remoteId of show
+  // - on read from remote API, replace with id of show
+  showId: number | null;
 }
 
 interface Show {
-  id: number;
+  localId: number;
+  remoteId: number | null;
+
   name: string;
   slug: string;
   description: string;
   links: string[];
+
+  // - on write to remote API, replace with remoteId of station
+  // - on read from remote API, replace with id of station
+  stationId: number | null;
+}
+
+type DomainVerification = AutomaticDomainVerification | ManualDomainVerification;
+
+interface AutomaticDomainVerification {
+  tag: 'AutomaticDomainVerification';
+  content: {
+    authenticationCode: string;
+    // milliseconds since unix epoch (i.e. Date.getTime())
+    lastCheckAt: number;
+    lastSuccessfulCheckAt: number;
+  };
+}
+
+interface ManualDomainVerification {
+  tag: 'ManualDomainVerification';
+  content: {
+    // milliseconds since unix epoch (i.e. Date.getTime())
+    verifiedAt: number;
+  };
+}
+
+interface Domain {
+  domain: string;
+  verification: null | DomainVerification;
 }
 
 interface Station {
-  id: number;
+  localId: number;
+  remoteId: number | null;
+
   name: string;
   slug: string;
   description: string;
+  domains: Domain[];
   links: string[];
 }
+
+export { emptySong, emptyAirBreak, emptySongMetadata };
+export type { SongMetadata, PlaylistItem, Playlist, Show, Station };
