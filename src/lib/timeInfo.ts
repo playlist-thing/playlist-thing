@@ -25,18 +25,25 @@ function calculateTimeUntilEnd(items: PlaylistItem[]) {
   return result.reverse();
 }
 
-export function calculateTimeInfo(items: PlaylistItem[], mode: string) {
-  if (mode === 'duration') {
-    return items.map((item) => item.seconds);
-  } else if (mode === 'beginsAt') {
-    return calculateBeginsAt(items);
-  } else if (mode === 'timeUntilEnd') {
-    return calculateTimeUntilEnd(items);
+export enum TimeInfoMode {
+  Duration,
+  BeginsAt,
+  TimeUntilEnd
+}
+
+export function calculateTimeInfo(items: PlaylistItem[], mode: TimeInfoMode): number[] {
+  switch (mode) {
+    case TimeInfoMode.Duration:
+      return items.map((item) => item.seconds);
+    case TimeInfoMode.BeginsAt:
+      return calculateBeginsAt(items);
+    case TimeInfoMode.TimeUntilEnd:
+      return calculateTimeUntilEnd(items);
   }
 }
 
 export const calculateTotalDuration = (items: PlaylistItem[]) =>
   items.reduce((sum, item) => sum + item.seconds, 0);
 
-export const calculateTotalDurationWithoutPauses = (items: PlaylistItem[]) =>
+export const calculateTotalDurationSongsOnly = (items: PlaylistItem[]) =>
   calculateTotalDuration(items.filter((item) => item.tag === 'Song'));

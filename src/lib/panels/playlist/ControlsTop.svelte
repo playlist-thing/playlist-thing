@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { calculateTotalDuration, calculateTotalDurationWithoutPauses } from '$lib/timeInfo.ts';
+  import {
+    TimeInfoMode,
+    calculateTotalDuration,
+    calculateTotalDurationSongsOnly
+  } from '$lib/timeInfo.ts';
   import { formatSeconds } from '$lib/format.ts';
 
   let { items, name = $bindable(), timeInfoMode = $bindable() } = $props();
@@ -7,7 +11,7 @@
   let editingName = $state(false);
 
   let totalDuration = $derived(calculateTotalDuration(items));
-  let totalDurationWithoutPauses = $derived(calculateTotalDurationWithoutPauses(items));
+  let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(items));
 
   function toggleEdit() {
     editingName = !editingName;
@@ -60,15 +64,15 @@
     <div class="row duration-info">
       <div>
         <select bind:value={timeInfoMode}>
-          <option value="duration">Duration</option>
-          <option value="beginsAt">Begins At</option>
-          <option value="timeUntilEnd">Time Until End</option>
+          <option value={TimeInfoMode.Duration}>Duration</option>
+          <option value={TimeInfoMode.BeginsAt}>Begins At</option>
+          <option value={TimeInfoMode.TimeUntilEnd}>Time Until End</option>
         </select>
       </div>
 
       <div>
         Total duration: {formatSeconds(totalDuration)}
-        Without pauses: {formatSeconds(totalDurationWithoutPauses)}
+        Songs only: {formatSeconds(totalDurationSongsOnly)}
       </div>
     </div>
   {/if}

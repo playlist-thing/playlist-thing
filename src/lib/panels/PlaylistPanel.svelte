@@ -15,7 +15,7 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
-  import { calculateTimeInfo } from '$lib/timeInfo.ts';
+  import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';
   import { exportNotes } from '$lib/export.ts';
 
@@ -32,7 +32,7 @@
   let autosaved = $state(false);
   let showConfirmClear = $state(false);
   let editingItemIdx: number | null = $state(null);
-  let timeInfoMode = $state('duration');
+  let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
   let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
