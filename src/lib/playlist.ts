@@ -79,8 +79,12 @@ interface Playlist {
 
   // - not included in exports
   // - on write to remote API, replace with remoteId of show
-  // - on read from remote API, replace with id of show
+  // - on read from remote API, replace with localId of show
   showId: number | null;
+
+  // - on write to remote API, replace with remoteId of dj
+  // - on read from remote API, replace with localId of dj
+  djIds: number[];
 }
 
 interface Show {
@@ -93,8 +97,21 @@ interface Show {
   links: string[];
 
   // - on write to remote API, replace with remoteId of station
-  // - on read from remote API, replace with id of station
+  // - on read from remote API, replace with localId of station
   stationId: number | null;
+
+  // - on write to remote API, replace with remoteId of dj
+  // - on read from remote API, replace with localId of dj
+  djIds: number[];
+}
+
+interface DJ {
+  localId: number;
+  remoteId: number | null;
+
+  name: string;
+  description: string;
+  links: string[];
 }
 
 type DomainVerification = AutomaticDomainVerification | ManualDomainVerification;
@@ -131,7 +148,11 @@ interface Station {
   description: string;
   domains: Domain[];
   links: string[];
+
+  // - on write to remote API, replace with remoteId of dj
+  // - on read from remote API, replace with localId of dj
+  djIds: number[];
 }
 
 export { emptySong, emptyAirBreak, emptySongMetadata };
-export type { SongMetadata, PlaylistItem, Playlist, Show, Station };
+export type { SongMetadata, PlaylistItem, Playlist, Show, Station, DJ };
