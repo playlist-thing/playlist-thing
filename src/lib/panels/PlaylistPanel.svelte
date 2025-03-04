@@ -2,12 +2,12 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
-  import { parseBlob } from 'music-metadata';
   import type { DndEvent } from 'svelte-dnd-action';
   import { dndzone } from 'svelte-dnd-action';
   import slug from 'slug';
 
   import Song from '$lib/Song.svelte';
+  import Modal from '$lib/Modal.svelte';
   import EditPanel from '$lib/panels/EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
@@ -15,6 +15,8 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
+  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
+  import { getFile } from '$lib/external/file.ts';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
   import { nextId } from '$lib/state.ts';
   import { exportNotes } from '$lib/export.ts';
@@ -33,6 +35,10 @@
   let showConfirmClear = $state(false);
   let editingItemIdx: number | null = $state(null);
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
+
+  let showURLInvalidModal = $state(false);
+  let showSpotifyConnectModal = $state(false);
+  let showAddFileErrorModal = $state(false);
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
   let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
@@ -141,6 +147,11 @@
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
+    if (!$spotifyToken) {
+      showSpotifyConnectModal = true;
+      return;
+    }
+
     try {
       const track = await getSpotifyTrack(spotifyTrackId);
       addItem(track);
@@ -150,34 +161,13 @@
   }
 
   async function addFile(file: File) {
-    const metadata = await parseBlob(file, {
-      duration: true,
-      skipCovers: true
-    });
-
-    const seconds = Math.ceil(metadata.format.duration ? metadata.format.duration : 0);
-    const artist = metadata.common.artist;
-    const title = metadata.common.title;
-    const album = metadata.common.album;
-
-    addItem({
-      id: 0,
-      seconds: seconds,
-      notes: '',
-
-      tag: 'Song',
-      content: {
-        artist: artist ? artist : '',
-        title: title ? title : '',
-        album: album ? album : '',
-        released: '',
-        label: '',
-
-        attributes: {
-          file: file.name
-        }
-      }
-    });
+    try {
+      const track = await getFile(file);
+      addItem(track);
+    } catch (e) {
+      showAddFileErrorModal = true;
+      console.log(e);
+    }
   }
 
   async function openPlaylistFile(file: File) {
@@ -215,6 +205,8 @@
                 const spotifyTrackId = spotifyTrackIdFromUrl(line);
                 if (spotifyTrackId) {
                   await addSpotifyTrack(spotifyTrackId);
+                } else {
+                  showURLInvalidModal = true;
                 }
               }
             });
@@ -321,6 +313,27 @@
   <EditPanel bind:item={items[editingItemIdx]} close={() => (editingItemIdx = null)} />
 {/if}
 
+<Modal bind:showModal={showURLInvalidModal} title="URL not recognized" buttonText="OK">
+  Sorry, the URL you provided does not match any source supported by playlist-thing.
+</Modal>
+
+<Modal bind:showModal={showAddFileErrorModal} title="Error adding file" buttonText="OK">
+  Sorry, the file you provided could not be added to the playlist.
+</Modal>
+
+<Modal
+  bind:showModal={showSpotifyConnectModal}
+  title="Connect your Spotify account"
+  buttonText="Cancel"
+>
+  <div class="modal-text">A Spotify account connection is required for fetching track details.</div>
+
+  <button class="button" onclick={redirectToSpotifyAuthorize}>
+    <i class="bi-spotify"></i>
+    Connect Spotify account
+  </button>
+</Modal>
+
 <style>
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
@@ -400,5 +413,9 @@
 
   .autosave-indicator {
     color: #666;
+  }
+
+  .modal-text {
+    padding-bottom: 20px;
   }
 </style>

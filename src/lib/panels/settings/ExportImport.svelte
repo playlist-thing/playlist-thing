@@ -11,7 +11,8 @@
 </script>
 
 <h3>Export</h3>
-<div>
+
+<div class="input-block">
   <button class="button" onclick={exportSettings}>
     <i class="bi-box-arrow-up-right" aria-hidden="true"></i>
     Export settings
@@ -29,4 +30,9 @@
 
 <style>
   @import '$lib/style/forms.css';
+
+  .input-block {
+    display: flex;
+    flex-direction: column;
+  }
 </style>

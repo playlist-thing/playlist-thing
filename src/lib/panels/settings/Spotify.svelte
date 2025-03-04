@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
+  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
 </script>
 
 <p>Your Spotify account connection is stored locally and is not shared with anybody else.</p>
@@ -12,7 +12,11 @@
 <div class="input-block">
   <button class="button" onclick={redirectToSpotifyAuthorize}>
     <i class="bi-spotify"></i>
-    Connect Spotify account
+    {#if $spotifyToken}
+      Switch Spotify account
+    {:else}
+      Connect Spotify account
+    {/if}
   </button>
 </div>
 

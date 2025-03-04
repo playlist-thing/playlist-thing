@@ -1,0 +1,18 @@
+.modal {
+  border: 0;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.modal-content {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: right;
+
+  padding-top: 30px;
+}

@@ -41,7 +41,7 @@
             <i class="bi-search" aria-hidden="true"></i>
             <span class="visually-hidden">Search</span>
           </button>
-          button in a playlist
+          button of a playlist item
         </p>
         <QuickSearchProvider />
       </section>
