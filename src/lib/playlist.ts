@@ -58,10 +58,10 @@ const emptyAirBreak: AirBreak = {
 };
 
 interface Playlist {
+  // UUID
+  //
   // not included in exports
-  localId: number;
-  // not included in exports
-  remoteId: number | null;
+  id: string;
 
   name: string;
   items: PlaylistItem[];
@@ -77,39 +77,34 @@ interface Playlist {
   createdAt: number;
   lastModifiedAt: number;
 
-  // - not included in exports
-  // - on write to remote API, replace with remoteId of show
-  // - on read from remote API, replace with localId of show
-  showId: number | null;
+  // not included in exports
+  showId: string | null;
 
-  // - on write to remote API, replace with remoteId of dj
-  // - on read from remote API, replace with localId of dj
-  djIds: number[];
+  // M:N relationship
+  djIds: string[];
 }
 
 interface Show {
-  localId: number;
-  remoteId: number | null;
+  // UUID
+  id: string;
 
   name: string;
   slug: string;
   description: string;
   links: string[];
 
-  // - on write to remote API, replace with remoteId of station
-  // - on read from remote API, replace with localId of station
-  stationId: number | null;
+  stationId: string | null;
 
-  // - on write to remote API, replace with remoteId of dj
-  // - on read from remote API, replace with localId of dj
-  djIds: number[];
+  // M:N relationship
+  djIds: string[];
 }
 
 interface DJ {
-  localId: number;
-  remoteId: number | null;
+  // UUID
+  id: string;
 
   name: string;
+  slug: string;
   description: string;
   links: string[];
 }
@@ -140,8 +135,8 @@ interface Domain {
 }
 
 interface Station {
-  localId: number;
-  remoteId: number | null;
+  // UUID
+  id: string;
 
   name: string;
   slug: string;
@@ -149,9 +144,8 @@ interface Station {
   domains: Domain[];
   links: string[];
 
-  // - on write to remote API, replace with remoteId of dj
-  // - on read from remote API, replace with localId of dj
-  djIds: number[];
+  // M:N relationship
+  djIds: string[];
 }
 
 export { emptySong, emptyAirBreak, emptySongMetadata };
