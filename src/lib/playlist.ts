@@ -64,6 +64,8 @@ interface Playlist {
   id: string;
 
   name: string;
+  slug: string;
+  description: string;
   items: PlaylistItem[];
   // if null, playlist is not visible to public
   //
