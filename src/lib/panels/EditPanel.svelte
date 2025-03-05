@@ -353,6 +353,10 @@
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
 
+  .outer-container {
+    max-width: 700px;
+  }
+
   .tag-switch-buttons > .button {
     width: 100%;
   }

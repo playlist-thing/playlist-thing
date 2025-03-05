@@ -5,9 +5,10 @@
   import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
 
-  let playlistAVisible = true;
-  let playlistBVisible = true;
+  let doublePlaylistView = $state(false);
   let settingsVisible = $state(false);
+  let playlistAVisible = true;
+  let playlistBVisible = $derived(doublePlaylistView);
 
   // default to healthy so that SSR does not produce the error message
   let serviceWorkerHealth: Promise<Response> = $state(
@@ -19,7 +20,11 @@
   }
 
   onMount(async () => {
+    serviceWorkerHealth = Promise.reject();
+
     await navigator.serviceWorker.ready;
+
+    serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
 
     // periodically check service worker health
     setInterval(() => {
@@ -34,9 +39,32 @@
 
 <div class="app">
   <div class="controls-top">
-    <div>
-      <!-- TODO logo -->
-      Playlist Editor
+    <div class="controls-top-row">
+      <div class="logo-banner">
+        <!-- TODO logo -->
+        Playlist Editor
+      </div>
+
+      <div class="button-group">
+        <button
+          class="button"
+          class:inverted={!doublePlaylistView}
+          disabled={!doublePlaylistView}
+          onclick={() => (doublePlaylistView = false)}
+        >
+          <i class="bi-window"></i>
+          <span class="visually-hidden">Single playlist view</span>
+        </button>
+        <button
+          class="button"
+          class:inverted={doublePlaylistView}
+          disabled={doublePlaylistView}
+          onclick={() => (doublePlaylistView = true)}
+        >
+          <i class="bi-window-split"></i>
+          <span class="visually-hidden">Double playlist view</span>
+        </button>
+      </div>
     </div>
 
     {#if dev}
@@ -45,7 +73,7 @@
       </div>
     {/if}
 
-    <div class="controls-top-right">
+    <div class="controls-top-row">
       {#snippet serviceWorkerError()}
         <div class="controls-top-error-indicator">
           <i class="bi-exclamation-triangle"></i>
@@ -81,6 +109,7 @@
 </div>
 
 <style>
+  @import '$lib/style/a11y.css';
   @import '$lib/style/colors.css';
   @import '$lib/style/forms.css';
 
@@ -98,9 +127,13 @@
     padding: 6px;
   }
 
-  .controls-top-right {
+  .controls-top-row {
     display: flex;
     align-items: center;
+  }
+
+  .logo-banner {
+    padding-right: 10px;
   }
 
   .controls-top-error-indicator {
