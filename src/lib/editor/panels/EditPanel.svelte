@@ -6,17 +6,20 @@
   import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
 
-  import { searchProviders } from '$lib/settings.ts';
-  import { searchUrl } from '$lib/search.ts';
+  import { searchProviders } from '$lib/editor/settings.ts';
+  import { searchUrl } from '$lib/editor/search.ts';
 
   import {
     spotifyTrackIdFromUrl,
     urlFromSpotifyTrackId,
     getSpotifyTrack
-  } from '$lib/external/spotify.ts';
-  import { youtubeIdFromUrl, urlFromYoutubeId } from '$lib/external/youtube.ts';
-  import { appleMusicTrackIdFromUrl, urlFromAppleMusicId } from '$lib/external/appleMusic.ts';
-  import { validBandcampUrl } from '$lib/external/bandcamp.ts';
+  } from '$lib/editor/external/spotify.ts';
+  import { youtubeIdFromUrl, urlFromYoutubeId } from '$lib/editor/external/youtube.ts';
+  import {
+    appleMusicTrackIdFromUrl,
+    urlFromAppleMusicId
+  } from '$lib/editor/external/appleMusic.ts';
+  import { validBandcampUrl } from '$lib/editor/external/bandcamp.ts';
 
   interface Props {
     item: PlaylistItem;

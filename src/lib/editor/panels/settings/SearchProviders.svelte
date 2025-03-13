@@ -2,9 +2,9 @@
   import type { DndEvent } from 'svelte-dnd-action';
   import { dragHandleZone, dragHandle } from 'svelte-dnd-action';
 
-  import { searchProviders } from '$lib/settings.ts';
-  import type { SearchProvider } from '$lib/search.ts';
-  import { defaultSearchProviders } from '$lib/search.ts';
+  import { searchProviders } from '$lib/editor/settings.ts';
+  import type { SearchProvider } from '$lib/editor/search.ts';
+  import { defaultSearchProviders } from '$lib/editor/search.ts';
 
   function handleSort(e: CustomEvent<DndEvent>) {
     $searchProviders = e.detail.items as SearchProvider[];

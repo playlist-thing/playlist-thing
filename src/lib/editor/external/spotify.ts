@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 
-import { spotifyToken, tokenNeedsRefresh, refreshToken } from '$lib/external/auth/spotify.ts';
+import { spotifyToken, tokenNeedsRefresh, refreshToken } from './auth/spotify.ts';
 
 import type { PlaylistItem } from '$lib/playlist.ts';
 

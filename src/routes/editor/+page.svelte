@@ -2,8 +2,8 @@
   import { onMount } from 'svelte';
   import { dev } from '$app/environment';
 
-  import PlaylistPanel from '$lib/panels/PlaylistPanel.svelte';
-  import SettingsPanel from '$lib/panels/SettingsPanel.svelte';
+  import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
+  import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
 
   let doublePlaylistView = $state(false);
   let settingsVisible = $state(false);

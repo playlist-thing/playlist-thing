@@ -1,12 +1,12 @@
 <script lang="ts">
   import { formatSeconds } from '$lib/format.ts';
-  import { quickSearchUrl } from '$lib/settings.ts';
-  import { spotifyTrackIdFromUrl } from '$lib/external/spotify.ts';
-  import { youtubeIdFromUrl } from '$lib/external/youtube.ts';
-  import { appleMusicTrackIdFromUrl } from '$lib/external/appleMusic.ts';
-  import { validBandcampUrl } from '$lib/external/bandcamp.ts';
+  import { quickSearchUrl } from '$lib/editor/settings.ts';
+  import { spotifyTrackIdFromUrl } from '$lib/editor/external/spotify.ts';
+  import { youtubeIdFromUrl } from '$lib/editor/external/youtube.ts';
+  import { appleMusicTrackIdFromUrl } from '$lib/editor/external/appleMusic.ts';
+  import { validBandcampUrl } from '$lib/editor/external/bandcamp.ts';
   import type { PlaylistItem } from '$lib/playlist.ts';
-  import { searchUrl } from '$lib/search.ts';
+  import { searchUrl } from '$lib/editor/search.ts';
 
   interface Props {
     item: PlaylistItem;

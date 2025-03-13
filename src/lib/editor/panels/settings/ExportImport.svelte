@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { exportSettings, importSettings } from '$lib/settings.ts';
+  import { exportSettings, importSettings } from '$lib/editor/settings.ts';
 
   let files: FileList | undefined = $state();
 

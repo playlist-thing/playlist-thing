@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
+  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/editor/external/auth/spotify.ts';
 </script>
 
 <p>Your Spotify account connection is stored locally and is not shared with anybody else.</p>

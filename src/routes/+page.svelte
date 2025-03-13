@@ -46,6 +46,26 @@
       </li>
     </ul>
 
+    <p><strong>playlist-thing</strong> does not...</p>
+
+    <ul class="showcase">
+      <li class="showcase-item">
+        <div class="showcase-item-icon">
+          <i class="bi-book" aria-hidden="true"></i>
+        </div>
+
+        <div>...manage your song library.</div>
+      </li>
+
+      <li class="showcase-item">
+        <div class="showcase-item-icon">
+          <i class="bi-volume-mute-fill" aria-hidden="true"></i>
+        </div>
+
+        <div>...deal with audio files. Only metadata like links to tracks can be stored here.</div>
+      </li>
+    </ul>
+
     <div class="call-to-action">
       <a class="button" href="/editor">
         <i class="bi-music-note-list" aria-hidden="true"></i>
@@ -68,7 +88,7 @@
           target="_blank"
         >
           <i class="bi-bug-fill" aria-hidden="true"></i>
-          Report bug or issue
+          Report bug or request feature
         </a>
       </li>
 
@@ -112,6 +132,7 @@
     display: flex;
     align-items: center;
 
+    width: 100%;
     max-width: 380px;
     padding: 10px;
   }

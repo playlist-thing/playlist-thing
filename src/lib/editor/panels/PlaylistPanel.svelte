@@ -6,20 +6,20 @@
   import { dndzone } from 'svelte-dnd-action';
   import slug from 'slug';
 
-  import Song from '$lib/Song.svelte';
+  import Song from '$lib/editor/Song.svelte';
   import Modal from '$lib/Modal.svelte';
-  import EditPanel from '$lib/panels/EditPanel.svelte';
+  import EditPanel from './EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
-  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/external/spotify.ts';
-  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/external/auth/spotify.ts';
-  import { getFile } from '$lib/external/file.ts';
+  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
+  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/editor/external/auth/spotify.ts';
+  import { getFile } from '$lib/editor/external/file.ts';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
-  import { nextId } from '$lib/state.ts';
-  import { exportNotes } from '$lib/export.ts';
+  import { nextId } from '$lib/editor/state.ts';
+  import { exportNotes } from '$lib/editor/export.ts';
 
   interface Props {
     panelId: string;

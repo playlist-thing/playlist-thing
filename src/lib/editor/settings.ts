@@ -4,7 +4,7 @@ import { fileSave } from 'browser-fs-access';
 
 import localStorageStore from '$lib/localStorageStore.ts';
 
-import { defaultSearchProviders } from '$lib/search.ts';
+import { defaultSearchProviders } from './search.ts';
 
 // settings
 
