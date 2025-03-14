@@ -347,6 +347,7 @@
     flex-direction: column;
 
     overflow: auto;
+    position: relative;
   }
 
   .playlist {
