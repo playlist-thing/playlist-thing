@@ -20,6 +20,7 @@
 
 .inner-container.overflow {
   overflow: auto;
+  position: relative;
 }
 
 .header {
