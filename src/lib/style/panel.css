@@ -1,3 +1,9 @@
+@media (max-width: 768px) {
+  .outer-container:not(:last-child) {
+    display: none;
+  }
+}
+
 .outer-container {
   width: 100%;
 }

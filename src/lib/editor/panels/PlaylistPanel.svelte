@@ -7,7 +7,6 @@
   import slug from 'slug';
 
   import Song from '$lib/editor/Song.svelte';
-  import Modal from '$lib/Modal.svelte';
   import EditPanel from './EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
@@ -15,10 +14,10 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
-  import { spotifyToken, redirectToSpotifyAuthorize } from '$lib/editor/external/auth/spotify.ts';
+  import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
-  import { nextId } from '$lib/editor/state.ts';
+  import { nextId, modals } from '$lib/editor/state.svelte.ts';
   import { exportNotes } from '$lib/editor/export.ts';
 
   interface Props {
@@ -35,10 +34,6 @@
   let showConfirmClear = $state(false);
   let editingItemIdx: number | null = $state(null);
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
-
-  let showURLInvalidModal = $state(false);
-  let showSpotifyConnectModal = $state(false);
-  let showAddFileErrorModal = $state(false);
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
   let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
@@ -148,7 +143,7 @@
 
   async function addSpotifyTrack(spotifyTrackId: string) {
     if (!$spotifyToken) {
-      showSpotifyConnectModal = true;
+      modals.showSpotifyConnectModal = true;
       return;
     }
 
@@ -165,7 +160,7 @@
       const track = await getFile(file);
       addItem(track);
     } catch (e) {
-      showAddFileErrorModal = true;
+      modals.showAddFileErrorModal = true;
       console.log(e);
     }
   }
@@ -206,7 +201,7 @@
                 if (spotifyTrackId) {
                   await addSpotifyTrack(spotifyTrackId);
                 } else {
-                  showURLInvalidModal = true;
+                  modals.showURLInvalidModal = true;
                 }
               }
             });
@@ -313,27 +308,6 @@
   <EditPanel bind:item={items[editingItemIdx]} close={() => (editingItemIdx = null)} />
 {/if}
 
-<Modal bind:showModal={showURLInvalidModal} title="URL not recognized" buttonText="OK">
-  Sorry, the URL you provided does not match any source supported by playlist-thing.
-</Modal>
-
-<Modal bind:showModal={showAddFileErrorModal} title="Error adding file" buttonText="OK">
-  Sorry, the file you provided could not be added to the playlist.
-</Modal>
-
-<Modal
-  bind:showModal={showSpotifyConnectModal}
-  title="Connect your Spotify account"
-  buttonText="Cancel"
->
-  <div class="modal-text">A Spotify account connection is required for fetching track details.</div>
-
-  <button class="button" onclick={redirectToSpotifyAuthorize}>
-    <i class="bi-spotify"></i>
-    Connect Spotify account
-  </button>
-</Modal>
-
 <style>
   @import '$lib/style/forms.css';
   @import '$lib/style/panel.css';
@@ -414,9 +388,5 @@
 
   .autosave-indicator {
     color: #666;
-  }
-
-  .modal-text {
-    padding-bottom: 20px;
   }
 </style>

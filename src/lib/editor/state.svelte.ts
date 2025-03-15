@@ -6,3 +6,9 @@ import { writable } from 'svelte/store';
 
 /** next id assigned to an item */
 export const nextId = writable(0);
+
+export const modals = $state({
+  showURLInvalidModal: false,
+  showSpotifyConnectModal: false,
+  showAddFileErrorModal: false
+});

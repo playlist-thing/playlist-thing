@@ -1,14 +1,21 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { MediaQuery } from 'svelte/reactivity';
   import { dev } from '$app/environment';
 
   import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
 
+  import URLInvalidModal from '$lib/editor/modals/URLInvalidModal.svelte';
+  import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
+  import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
+
+  const md = new MediaQuery('min-width: 768px', false);
+
   let doublePlaylistView = $state(false);
   let settingsVisible = $state(false);
   let playlistAVisible = true;
-  let playlistBVisible = $derived(doublePlaylistView);
+  let playlistBVisible = $derived(md.current && doublePlaylistView);
 
   // default to healthy so that SSR does not produce the error message
   let serviceWorkerHealth: Promise<Response> = $state(
@@ -45,7 +52,7 @@
         Playlist Editor
       </div>
 
-      <div class="button-group">
+      <div class="button-group sm-hide">
         <button
           class="button"
           class:inverted={!doublePlaylistView}
@@ -108,10 +115,15 @@
   </div>
 </div>
 
+<URLInvalidModal />
+<AddFileErrorModal />
+<SpotifyConnectModal />
+
 <style>
   @import '$lib/style/a11y.css';
   @import '$lib/style/colors.css';
   @import '$lib/style/forms.css';
+  @import '$lib/style/responsive.css';
 
   .app {
     display: flex;

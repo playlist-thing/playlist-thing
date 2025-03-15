@@ -8,7 +8,7 @@
 
 <div class="content-container">
   <div class="content">
-    <h1>Sorry, an error occured</h1>
+    <h1>Sorry, an error occurred</h1>
 
     <p>
       {page.error!.message}
