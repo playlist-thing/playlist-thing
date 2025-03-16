@@ -3,13 +3,13 @@
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
   import type { DndEvent } from 'svelte-dnd-action';
-  import { dndzone } from 'svelte-dnd-action';
+  import { dndzone, dragHandleZone } from 'svelte-dnd-action';
   import slug from 'slug';
 
-  import Song from '$lib/editor/Song.svelte';
   import EditPanel from './EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import ConfirmClear from './playlist/ConfirmClear.svelte';
+  import Song from './playlist/Song.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
@@ -17,7 +17,7 @@
   import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
-  import { nextId, modals } from '$lib/editor/state.svelte.ts';
+  import { nextId, modals, displaySizeMedium } from '$lib/editor/state.svelte.ts';
   import { exportNotes } from '$lib/editor/export.ts';
 
   interface Props {
@@ -222,13 +222,7 @@
       <ConfirmClear {clear} cancel={() => (showConfirmClear = false)} />
     {:else}
       <div class="playlist-container">
-        <div
-          class="playlist"
-          role="list"
-          use:dndzone={dndOptions}
-          onconsider={handleSort}
-          onfinalize={handleSort}
-        >
+        {#snippet playlistItems()}
           {#each items as item, idx (item.id)}
             <Song
               bind:item={items[idx]}
@@ -243,7 +237,29 @@
               <i>Empty playlist</i>
             </div>
           {/each}
-        </div>
+        {/snippet}
+
+        {#if displaySizeMedium.current}
+          <div
+            class="playlist"
+            role="list"
+            use:dndzone={dndOptions}
+            onconsider={handleSort}
+            onfinalize={handleSort}
+          >
+            {@render playlistItems()}
+          </div>
+        {:else}
+          <div
+            class="playlist"
+            role="list"
+            use:dragHandleZone={dndOptions}
+            onconsider={handleSort}
+            onfinalize={handleSort}
+          >
+            {@render playlistItems()}
+          </div>
+        {/if}
 
         <div class="add-item-buttons">
           <button class="button" onclick={addEmpty}>

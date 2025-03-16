@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { MediaQuery } from 'svelte/reactivity';
   import { dev } from '$app/environment';
 
   import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
@@ -10,12 +9,12 @@
   import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
 
-  const md = new MediaQuery('min-width: 768px', false);
+  import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
 
   let doublePlaylistView = $state(false);
   let settingsVisible = $state(false);
   let playlistAVisible = true;
-  let playlistBVisible = $derived(md.current && doublePlaylistView);
+  let playlistBVisible = $derived(displaySizeMedium.current && doublePlaylistView);
 
   // default to healthy so that SSR does not produce the error message
   let serviceWorkerHealth: Promise<Response> = $state(

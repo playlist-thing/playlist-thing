@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { dragHandle } from 'svelte-dnd-action';
+
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/editor/settings.ts';
   import { spotifyTrackIdFromUrl } from '$lib/editor/external/spotify.ts';
@@ -7,6 +9,7 @@
   import { validBandcampUrl } from '$lib/editor/external/bandcamp.ts';
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { searchUrl } from '$lib/editor/search.ts';
+  import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
 
   interface Props {
     item: PlaylistItem;
@@ -102,6 +105,12 @@
 
 <div role="listitem" class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
   <div class="time-and-metadata">
+    {#if !displaySizeMedium.current}
+      <div use:dragHandle aria-label="drag-handle for {item.id}" class="drag-handle">
+        <i class="bi-list" aria-hidden="true"></i>
+      </div>
+    {/if}
+
     <div class="time-info">
       <div>
         {formatSeconds(timeInfo)}
@@ -176,7 +185,7 @@
 
   <div class="buttons-right">
     <div class="button-group">
-      {#if $quickSearchUrl && (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic')}
+      {#if displaySizeMedium.current && $quickSearchUrl && (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic')}
         <a
           class="button"
           title="Search"
@@ -212,6 +221,13 @@
     padding-right: 4px;
     padding-top: 6px;
     padding-bottom: 6px;
+  }
+
+  .drag-handle {
+    font-size: 1.3em;
+
+    padding-left: 5px;
+    padding-right: 10px;
   }
 
   .time-and-metadata {
