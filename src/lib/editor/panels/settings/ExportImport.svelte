@@ -23,9 +23,12 @@
 
 <p><strong>Warning: this will overwrite all current settings.</strong></p>
 
-<div>
-  <label for="import-file">Settings file</label>
-  <input accept="application/json" id="import-file" type="file" bind:files />
+<div class="input-block">
+  <label class="button" for="import-file">
+    <i class="bi-box-arrow-in-down-right" aria-hidden="true"></i>
+    Import settings file
+  </label>
+  <input class="file-input" accept="application/json" id="import-file" type="file" bind:files />
 </div>
 
 <style>
@@ -34,5 +37,9 @@
   .input-block {
     display: flex;
     flex-direction: column;
+  }
+
+  .file-input {
+    opacity: 0;
   }
 </style>
