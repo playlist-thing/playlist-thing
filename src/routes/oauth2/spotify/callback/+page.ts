@@ -7,31 +7,8 @@ import { getToken } from '$lib/editor/external/auth/spotify.ts';
 export const ssr = false;
 
 export const load: PageLoad = async ({ url }) => {
-  const urlParams = url.searchParams;
-
-  const state = urlParams.get('state');
-  if (state) {
-    if (state === sessionStorage.getItem('spotifyState')) {
-      sessionStorage.removeItem('spotifyState');
-    } else {
-      error(400, 'Invalid OAuth state');
-    }
-  } else {
-    error(400, 'No OAuth state received from Spotify');
-  }
-
-  const spotifyError = urlParams.get('error');
-  if (spotifyError) {
-    error(400, `Error from Spotify: ${spotifyError}`);
-  }
-
-  const code = urlParams.get('code');
-  if (code === null) {
-    error(400, 'No code specified.');
-  }
-
   try {
-    await getToken(code);
+    await getToken(url);
   } catch (e) {
     if (e instanceof Error) {
       error(400, e.message);

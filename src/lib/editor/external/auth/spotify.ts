@@ -1,10 +1,10 @@
 import { get } from 'svelte/store';
 import { env } from '$env/dynamic/public';
 
+import * as openid from 'openid-client';
+
 import localStorageStore from '$lib/localStorageStore.ts';
 
-const authorizationEndpoint = 'https://accounts.spotify.com/authorize';
-const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 const scope = '';
 
 export const spotifyToken = localStorageStore('spotifyToken', '');
@@ -17,65 +17,48 @@ export function tokenNeedsRefresh() {
   return false;
 }
 
-function generateRandomString(length: number) {
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const values = crypto.getRandomValues(new Uint8Array(length));
-  return values.reduce((acc, x) => acc + possible[x % possible.length], '');
-}
-
-async function sha256(plain: string) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(plain);
-  return window.crypto.subtle.digest('SHA-256', data);
-}
-
-function base64encode(input: ArrayBuffer) {
-  return btoa(String.fromCharCode(...new Uint8Array(input)))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-}
-
-export async function redirectToSpotifyAuthorize() {
+async function config() {
   if (!env.PUBLIC_SPOTIFY_CLIENT_ID) {
     throw new Error('Spotify client ID missing');
   }
 
-  const codeVerifier = generateRandomString(64);
-  const hashed = await sha256(codeVerifier);
-  const codeChallenge = base64encode(hashed);
+  return new openid.Configuration(
+    {
+      issuer: 'https://accounts.spotify.com',
+      authorization_endpoint: 'https://accounts.spotify.com/authorize',
+      token_endpoint: 'https://accounts.spotify.com/api/token'
+    },
+    env.PUBLIC_SPOTIFY_CLIENT_ID
+  );
+}
+
+export async function redirectToSpotifyAuthorize() {
+  const codeVerifier = openid.randomPKCECodeVerifier();
+  const codeChallenge = openid.calculatePKCECodeChallenge(codeVerifier);
 
   sessionStorage.setItem('spotifyCodeVerifier', codeVerifier);
 
-  const state = generateRandomString(64);
+  const state = openid.randomState();
 
   sessionStorage.setItem('spotifyState', state);
 
-  const authUrl = new URL(authorizationEndpoint);
-  const params = {
-    response_type: 'code',
-    client_id: env.PUBLIC_SPOTIFY_CLIENT_ID,
-    scope,
+  const authUrl = openid.buildAuthorizationUrl(await config(), {
+    redirect_uri: `${location.origin}/oauth2/spotify/callback`,
+    scope: scope,
     code_challenge_method: 'S256',
-    code_challenge: codeChallenge,
-    state,
-    redirect_uri: `${location.origin}/oauth2/spotify/callback`
-  };
+    code_challenge: await codeChallenge,
+    state
+  });
 
-  authUrl.search = new URLSearchParams(params).toString();
-  window.location.href = authUrl.toString(); // Redirect the user to the authorization server for login
+  window.location.href = authUrl.toString();
 }
 
-function saveToken(response: object) {
-  if (!('access_token' in response && typeof response.access_token === 'string')) {
-    throw new Error('Response has no access_token');
-  }
-
-  if (!('refresh_token' in response && typeof response.refresh_token === 'string')) {
+function saveToken(response: openid.TokenEndpointResponse) {
+  if (!response.refresh_token) {
     throw new Error('Response has no refresh_token');
   }
 
-  if (!('expires_in' in response && typeof response.expires_in === 'number')) {
+  if (!response.expires_in) {
     throw new Error('Response has no expires_in');
   }
 
@@ -86,71 +69,35 @@ function saveToken(response: object) {
   spotifyTokenExpiry.set(expiry);
 }
 
-export async function getToken(code: string) {
-  if (!env.PUBLIC_SPOTIFY_CLIENT_ID) {
-    throw new Error('Spotify client ID missing');
-  }
-
+export async function getToken(url: URL) {
   // stored in the previous step
   const codeVerifier = sessionStorage.getItem('spotifyCodeVerifier');
   if (!codeVerifier) {
     throw new Error('No OAuth2 code verifer set');
   }
+  sessionStorage.removeItem('spotifyCodeVerifier');
 
-  const payload = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-      client_id: env.PUBLIC_SPOTIFY_CLIENT_ID,
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: `${location.origin}/oauth2/spotify/callback`,
-      code_verifier: codeVerifier
-    })
-  };
-
-  const body = await fetch(tokenEndpoint, payload);
-
-  if (!body.ok) {
-    const text = await body.text();
-    throw new Error(`Spotify responded with error while getting token: ${text}`);
+  const state = sessionStorage.getItem('spotifyState');
+  if (!state) {
+    throw new Error('No OAuth2 state set');
   }
+  sessionStorage.removeItem('spotifyState');
 
-  const response = await body.json();
+  let response = await openid.authorizationCodeGrant(await config(), url, {
+    pkceCodeVerifier: codeVerifier,
+    expectedState: state
+  });
+
   saveToken(response);
 }
 
 export async function refreshToken() {
-  if (!env.PUBLIC_SPOTIFY_CLIENT_ID) {
-    throw new Error('Spotify client ID missing');
-  }
-
   const refreshToken = get(spotifyTokenRefresh);
   if (!refreshToken) {
     throw new Error('No refresh token');
   }
 
-  const payload = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-      client_id: env.PUBLIC_SPOTIFY_CLIENT_ID,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken
-    })
-  };
+  let response = await openid.refreshTokenGrant(await config(), refreshToken);
 
-  const body = await fetch(tokenEndpoint, payload);
-
-  if (!body.ok) {
-    const text = await body.text();
-    throw new Error(`Spotify responded with error while getting token: ${text}`);
-  }
-
-  const response = await body.json();
   saveToken(response);
 }
