@@ -5,9 +5,11 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
+  import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
 
   import { searchProviders } from '$lib/editor/settings.ts';
   import { searchUrl } from '$lib/editor/search.ts';
+  import { modals } from '$lib/editor/state.svelte.ts';
 
   import {
     spotifyTrackIdFromUrl,
@@ -72,6 +74,11 @@
 
   async function fillFromSpotify() {
     if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
+      if (!$spotifyToken) {
+        modals.showSpotifyConnectModal = true;
+        return;
+      }
+
       const spotifyItem = await getSpotifyTrack(item.content.attributes['spotify.com']);
       item = { ...item, ...spotifyItem, id: item.id };
     }
