@@ -8,10 +8,10 @@ export async function exportNotes(items: PlaylistItem[], name: string) {
 
   for (const item of items) {
     if (item.tag === 'AirBreak') {
-      output.push('--- AIR BREAK ---');
+      output.push('--- AIR BREAK ---\n');
     } else {
       if (item.tag === 'AirBreakWithBackgroundMusic') {
-        output.push('--- AIR BREAK WITH BACKGROUND MUSIC ---');
+        output.push('--- AIR BREAK WITH BACKGROUND MUSIC ---\n');
       }
       output.push(`Title: ${item.content.title}\n`);
       output.push(`Artist: ${item.content.artist}\n`);
