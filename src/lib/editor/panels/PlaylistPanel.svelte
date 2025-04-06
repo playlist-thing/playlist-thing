@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
   import type { DndEvent } from 'svelte-dnd-action';
@@ -37,6 +37,8 @@
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
   let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
+
+  let playlistContainer: HTMLElement;
 
   $effect(() => {
     modified(items, name);
@@ -77,7 +79,7 @@
     showConfirmClear = false;
   }
 
-  function fromJson(json: string, append: boolean) {
+  async function fromJson(json: string, append: boolean) {
     const parsed = JSON.parse(json);
 
     // clear items
@@ -90,10 +92,7 @@
       name = parsed.name;
     }
 
-    for (let item of parsed.items) {
-      // TODO optimize
-      addItem(item);
-    }
+    await addItems(parsed.items);
   }
 
   function toJson() {
@@ -127,18 +126,25 @@
     items = items.filter((item) => item.id !== id);
   }
 
-  function addItem(item: PlaylistItem) {
-    item.id = $nextId;
-    $nextId += 1;
-    items = [...items, item];
+  async function addItems(newItems: PlaylistItem[]) {
+    const oldNextId = $nextId;
+    for (let i = 0; i < newItems.length; i++) {
+      newItems[i].id = oldNextId + i;
+    }
+    $nextId += newItems.length;
+
+    items = [...items, ...newItems];
+
+    await tick();
+    playlistContainer.scrollTo(0, playlistContainer.scrollHeight);
   }
 
-  function addEmpty() {
-    addItem(emptySong);
+  async function addEmpty() {
+    await addItems([emptySong]);
   }
 
-  function addPause() {
-    addItem(emptyAirBreak);
+  async function addPause() {
+    await addItems([emptyAirBreak]);
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
@@ -149,7 +155,7 @@
 
     try {
       const track = await getSpotifyTrack(spotifyTrackId);
-      addItem(track);
+      await addItems([track]);
     } catch (e) {
       console.log(e);
     }
@@ -158,7 +164,7 @@
   async function addFile(file: File) {
     try {
       const track = await getFile(file);
-      addItem(track);
+      await addItems([track]);
     } catch (e) {
       modals.showAddFileErrorModal = true;
       console.log(e);
@@ -221,7 +227,7 @@
     {#if showConfirmClear}
       <ConfirmClear {clear} cancel={() => (showConfirmClear = false)} />
     {:else}
-      <div class="playlist-container">
+      <div bind:this={playlistContainer} class="playlist-container">
         {#snippet playlistItems()}
           {#each items as item, idx (item.id)}
             <Song
