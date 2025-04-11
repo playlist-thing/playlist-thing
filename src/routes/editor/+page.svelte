@@ -16,27 +16,9 @@
   let playlistAVisible = true;
   let playlistBVisible = $derived(displaySizeMedium.current && doublePlaylistView);
 
-  // default to healthy so that SSR does not produce the error message
-  let serviceWorkerHealth: Promise<Response> = $state(
-    Promise.resolve(Response.json({ status: 'OK' }))
-  );
-
   function toggleSettings() {
     settingsVisible = !settingsVisible;
   }
-
-  onMount(async () => {
-    serviceWorkerHealth = Promise.reject();
-
-    await navigator.serviceWorker.ready;
-
-    serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
-
-    // periodically check service worker health
-    setInterval(() => {
-      serviceWorkerHealth = fetch('https://localapi.playlist-thing.com/health');
-    }, 10 * 1000);
-  });
 </script>
 
 <svelte:head>
@@ -80,21 +62,6 @@
     {/if}
 
     <div class="controls-top-row">
-      {#snippet serviceWorkerError()}
-        <div class="controls-top-error-indicator">
-          <i class="bi-exclamation-triangle"></i>
-          Local saving is not available
-        </div>
-      {/snippet}
-
-      {#await serviceWorkerHealth then response}
-        {#if !response || !response.ok}
-          {@render serviceWorkerError()}
-        {/if}
-      {:catch}
-        {@render serviceWorkerError()}
-      {/await}
-
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
         <i class="bi-gear" aria-hidden="true"></i> Settings
       </button>
