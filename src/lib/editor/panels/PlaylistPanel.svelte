@@ -41,11 +41,24 @@
   let playlistContainer: HTMLElement;
 
   $effect(() => {
-    modified(items, name);
+    // this makes us "track" all relevant information and call this
+    // function again when anything inside the data touched by toJson
+    // changes
+    const _ = toJson();
+
+    autosaved = false;
   });
 
-  onMount(loadLocalStorage);
-  // onDestroy(saveLocalStorage);
+  onMount(() => {
+    loadLocalStorage();
+    autosaveCallback = setTimeout(autosave, 1000);
+  });
+  onDestroy(() => {
+    if (!browser) return;
+
+    clearTimeout(autosaveCallback!);
+    saveLocalStorage();
+  });
 
   function saveLocalStorage() {
     localStorage.setItem(`playlist${panelId}`, toJson());
@@ -59,19 +72,12 @@
   }
 
   function autosave() {
-    saveLocalStorage();
-    autosaved = true;
-    autosaveCallback = null;
-  }
+    if (!autosaved) {
+      saveLocalStorage();
+      autosaved = true;
+    }
 
-  function modified(items, name) {
-    autosaved = false;
-
-    // cancel callback if it exists
-    if (autosaveCallback) cancelIdleCallback(autosaveCallback);
-
-    // set a new idle callback
-    autosaveCallback = requestIdleCallback(autosave);
+    autosaveCallback = setTimeout(autosave, 1000);
   }
 
   function clear() {
