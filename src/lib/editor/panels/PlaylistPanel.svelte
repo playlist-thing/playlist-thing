@@ -197,9 +197,9 @@
           const file = item.getAsFile()!;
 
           if (file.name.endsWith('.json')) {
-            openPlaylistFile(file);
+            await openPlaylistFile(file);
           } else {
-            addFile(file);
+            await addFile(file);
           }
         } else if (item.kind === 'string') {
           if (item.type === 'text/plain') {
