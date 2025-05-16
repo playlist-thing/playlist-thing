@@ -43,12 +43,16 @@ export default function localStorageStore<T>(key: string, defaultValue: T) {
         innerStore.set(JSON.parse(event.newValue!));
       }
     };
-    window.addEventListener('storage', eventListener);
+    if (browser) {
+      window.addEventListener('storage', eventListener);
+    }
 
     return () => {
       innerSubscription();
 
-      window.removeEventListener('storage', eventListener);
+      if (browser) {
+        window.removeEventListener('storage', eventListener);
+      }
     };
   }
 

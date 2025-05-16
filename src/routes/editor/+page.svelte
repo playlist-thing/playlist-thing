@@ -10,11 +10,12 @@
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
 
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
+  import localStorageStore from '$lib/localStorageStore';
 
-  let doublePlaylistView = $state(false);
+  let doublePlaylistView = localStorageStore("doublePlaylistView", false);
   let settingsVisible = $state(false);
   let playlistAVisible = true;
-  let playlistBVisible = $derived(displaySizeMedium.current && doublePlaylistView);
+  let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
@@ -36,18 +37,18 @@
       <div class="button-group sm-hide">
         <button
           class="button"
-          class:inverted={!doublePlaylistView}
-          disabled={!doublePlaylistView}
-          onclick={() => (doublePlaylistView = false)}
+          class:inverted={!$doublePlaylistView}
+          disabled={!$doublePlaylistView}
+          onclick={() => ($doublePlaylistView = false)}
         >
           <i class="bi-window"></i>
           <span class="visually-hidden">Single playlist view</span>
         </button>
         <button
           class="button"
-          class:inverted={doublePlaylistView}
-          disabled={doublePlaylistView}
-          onclick={() => (doublePlaylistView = true)}
+          class:inverted={$doublePlaylistView}
+          disabled={$doublePlaylistView}
+          onclick={() => ($doublePlaylistView = true)}
         >
           <i class="bi-window-split"></i>
           <span class="visually-hidden">Double playlist view</span>
