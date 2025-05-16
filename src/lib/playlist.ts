@@ -57,6 +57,13 @@ const emptyAirBreak: AirBreak = {
   tag: 'AirBreak'
 };
 
+interface Schedule {
+  // milliseconds since unix epoch (i.e. Date.getTime())
+  start: number;
+  // milliseconds
+  duration: number;
+}
+
 interface Playlist {
   // UUID
   //
@@ -67,15 +74,8 @@ interface Playlist {
   slug: string;
   description: string;
   items: PlaylistItem[];
-  // if null, playlist is not visible to public
-  //
-  // if non-null, the playlist is public. However, only the items up
-  // to this index (exclusive) will be shown to the public
-  //
-  // for fully public, use length
-  publicUntilIndex: number | null;
-  // milliseconds since unix epoch (i.e. Date.getTime())
-  broadcastStart: number | null;
+  public: boolean;
+  schedule: Schedule | null;
   createdAt: number;
   lastModifiedAt: number;
 

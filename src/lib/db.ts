@@ -49,7 +49,6 @@ async function openDatabase() {
         keyPath: 'id'
       });
       playlists.createIndex('slug', 'slug', { unique: false });
-      playlists.createIndex('broadcastStart', 'broadcastStart', { unique: false });
       playlists.createIndex('createdAt', 'createdAt', { unique: false });
       playlists.createIndex('lastModifiedAt', 'lastModifiedAt', { unique: false });
       playlists.createIndex('showId', 'showId', { unique: false });
