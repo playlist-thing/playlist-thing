@@ -12,7 +12,7 @@
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
   import localStorageStore from '$lib/localStorageStore';
 
-  let doublePlaylistView = localStorageStore("doublePlaylistView", false);
+  let doublePlaylistView = localStorageStore('doublePlaylistView', false);
   let settingsVisible = $state(false);
   let playlistAVisible = true;
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
