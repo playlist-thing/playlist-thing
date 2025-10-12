@@ -27,25 +27,3 @@ export async function exportNotes(items: PlaylistItem[], name: string) {
     fileName: `${slug(name)}_notes.txt`
   });
 }
-
-export async function exportCollectionScript(items: PlaylistItem[], name: string) {
-  let output: string[] = [];
-
-  let i = 1;
-  for (const item of items) {
-    if (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic') {
-      if ('file' in item.content.attributes) {
-        const orig = JSON.stringify(item.content.attributes.file);
-        const number = `${i}`.padStart(2, '0');
-        const newName = `${number} - ${item.content.artist} - ${item.content.title}.mp3`;
-        output.push(`collect ${orig} "${newName}"\n`);
-        i += 1;
-      }
-    }
-  }
-
-  const blob = new Blob(output);
-  await fileSave(blob, {
-    fileName: `${slug(name)}_notes.txt`
-  });
-}
