@@ -12,24 +12,24 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@fontsource-variable/work-sans": "^5.2.5",
-    "@sveltejs/adapter-node": "^5.2.12",
-    "@sveltejs/kit": "^2.21.0",
-    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@fontsource-variable/work-sans": "^5.2.8",
+    "@sveltejs/adapter-node": "^5.3.3",
+    "@sveltejs/kit": "^2.46.4",
+    "@sveltejs/vite-plugin-svelte": "^5.1.1",
     "@types/slug": "^5.0.9",
     "bootstrap-icons": "^1.13.1",
     "browser-fs-access": "^0.35.0",
     "idb": "^8.0.3",
-    "music-metadata": "^11.2.2",
-    "openid-client": "^6.5.0",
-    "prettier": "^3.5.3",
+    "music-metadata": "^11.9.0",
+    "openid-client": "^6.8.1",
+    "prettier": "^3.6.2",
     "prettier-plugin-svelte": "^3.4.0",
     "slug": "^10.0.0",
-    "svelte": "^5.30.1",
-    "svelte-dnd-action": "^0.9.61",
+    "svelte": "^5.39.11",
+    "svelte-dnd-action": "^0.9.65",
     "uuid": "^11.1.0",
-    "vite": "^6.3.5",
-    "vitest": "^3.1.3"
+    "vite": "^6.3.6",
+    "vitest": "^3.2.4"
   },
   "type": "module"
 }
