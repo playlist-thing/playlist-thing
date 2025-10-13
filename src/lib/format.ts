@@ -1,21 +1,31 @@
+const secs_per_hour = 60 * 60;
+
 export function formatSeconds(seconds: number) {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
+  const hours = Math.floor(seconds / secs_per_hour);
+  const mins_secs = seconds % secs_per_hour;
+  const mins = Math.floor(mins_secs / 60);
+  const secs = mins_secs % 60;
   const secsPadded = `${secs}`.padStart(2, '0');
-  return `${mins}:${secsPadded}`;
+
+  if (hours > 0) {
+    const minsPadded = `${mins}`.padStart(2, '0');
+    return `${hours}:${minsPadded}:${secsPadded}`;
+  } else {
+    return `${mins}:${secsPadded}`;
+  }
 }
 
 export function parseDuration(raw: string) {
   const split = raw.split(':');
   let result = 0;
 
-  if (split.length === 1) {
-    const secs = Number.parseInt(split[0]);
-    result = secs;
-  } else if (split.length === 2) {
-    const mins = Number.parseInt(split[0]);
-    const secs = Number.parseInt(split[1]);
-    result = mins * 60 + secs;
+  if (split.length > 3) {
+    return 0;
+  }
+
+  for (const raw of split) {
+    result *= 60;
+    result += Number.parseInt(raw);
   }
 
   if (Number.isNaN(result)) result = 0;
