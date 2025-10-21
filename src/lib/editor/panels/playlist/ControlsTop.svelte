@@ -6,7 +6,13 @@
   } from '$lib/timeInfo.ts';
   import { formatSeconds } from '$lib/format.ts';
 
-  let { items, name = $bindable(), timeInfoMode = $bindable() } = $props();
+  let {
+    items,
+    name = $bindable(),
+    timeInfoMode = $bindable(),
+    showOptions = $bindable(),
+    autosaved
+  } = $props();
 
   let editingName = $state(false);
 
@@ -15,6 +21,10 @@
 
   function toggleEdit() {
     editingName = !editingName;
+  }
+
+  function toggleOptions() {
+    showOptions = !showOptions;
   }
 
   function dragstartHandler(ev: DragEvent) {
@@ -39,6 +49,7 @@
           <span class="playlist-name">
             <input class="input-text name" type="text" bind:value={name} />
           </span>
+
           <button type="submit" class="button transparent edit">
             <i class="bi bi-floppy" aria-hidden="true"></i>
             <span class="visually-hidden">Edit playlist name</span>
@@ -52,15 +63,31 @@
             <i>Untitled playlist</i>
           {/if}
         </span>
+
         <button class="button transparent edit" onclick={toggleEdit}>
           <i class="bi bi-pencil" aria-hidden="true"></i>
           <span class="visually-hidden">Save playlist name</span>
         </button>
+
+        <button
+          class="button transparent edit"
+          onclick={toggleOptions}
+          class:inverted={showOptions}
+        >
+          <i class="bi bi-three-dots" aria-hidden="true"></i>
+          <span class="visually-hidden">Playlist options</span>
+        </button>
+
+        <span class="autosave-indicator">
+          {#if autosaved}
+            autosaved
+          {/if}
+        </span>
       {/if}
     </div>
   </div>
 
-  {#if items.length > 0}
+  {#if !showOptions && items.length > 0}
     <div class="row duration-info">
       <div>
         <select bind:value={timeInfoMode}>
@@ -114,5 +141,9 @@
 
   .input-text.name {
     padding: 0;
+  }
+
+  .autosave-indicator {
+    color: #666;
   }
 </style>

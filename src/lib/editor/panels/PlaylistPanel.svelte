@@ -8,7 +8,7 @@
 
   import EditPanel from './EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
-  import ConfirmClear from './playlist/ConfirmClear.svelte';
+  import Options from './playlist/Options.svelte';
   import Song from './playlist/Song.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
@@ -31,7 +31,7 @@
 
   let autosaveCallback: number | null;
   let autosaved = $state(false);
-  let showConfirmClear = $state(false);
+  let showOptions = $state(false);
   let editingItemIdx: number | null = $state(null);
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
 
@@ -82,7 +82,6 @@
 
   function clear() {
     items = [];
-    showConfirmClear = false;
   }
 
   async function fromJson(json: string, append: boolean) {
@@ -228,10 +227,14 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop {items} bind:name bind:timeInfoMode />
-
-    {#if showConfirmClear}
-      <ConfirmClear {clear} cancel={() => (showConfirmClear = false)} />
+    <ControlsTop {items} bind:name bind:timeInfoMode bind:showOptions {autosaved} />
+    {#if showOptions}
+      <Options
+        {clear}
+        download={downloadJson}
+        exportNotes={() => exportNotes(items, name)}
+        close={() => (showOptions = false)}
+      />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
         {#snippet playlistItems()}
@@ -290,42 +293,6 @@
         <div ondragover={dragoverHandler} ondrop={dropHandler} class="drop-zone">
           <i class="bi-plus-lg"></i>
           Drop new songs or playlists here
-        </div>
-
-        <div class="controls-bottom-buttons">
-          <div class="button-group">
-            <button
-              class="button"
-              class:disabled={items.length === 0}
-              onclick={() => (showConfirmClear = true)}
-              disabled={items.length === 0}
-            >
-              <i class="bi-trash" aria-hidden="true"></i> Clear
-            </button>
-
-            <button
-              class="button"
-              class:disabled={items.length === 0}
-              onclick={downloadJson}
-              disabled={items.length === 0}
-            >
-              <i class="bi-download" aria-hidden="true"></i> Download
-            </button>
-            <button
-              class="button"
-              class:disabled={items.length === 0}
-              onclick={() => exportNotes(items, name)}
-              disabled={items.length === 0}
-            >
-              <i class="bi-list-ul" aria-hidden="true"></i> Export Notes
-            </button>
-          </div>
-
-          <div class="autosave-indicator">
-            {#if autosaved}
-              autosaved
-            {/if}
-          </div>
         </div>
       </div>
     {/if}
@@ -412,9 +379,5 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .autosave-indicator {
-    color: #666;
   }
 </style>
