@@ -1,6 +1,8 @@
 <script lang="ts">
   import { dragHandle } from 'svelte-dnd-action';
 
+  import SongEditor from './SongEditor.svelte';
+
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/editor/settings.ts';
   import { spotifyTrackIdFromUrl } from '$lib/editor/external/spotify.ts';
@@ -14,28 +16,27 @@
   interface Props {
     item: PlaylistItem;
     timeInfo: number;
-    editing: boolean;
-    startEdit: () => void;
-    stopEdit: () => void;
     deleteItem: () => void;
   }
 
-  let { item = $bindable(), timeInfo, editing, startEdit, stopEdit, deleteItem }: Props = $props();
+  let { item = $bindable(), timeInfo, deleteItem }: Props = $props();
+
+  let editing = $state(false);
 
   function rowClass(item: PlaylistItem) {
     if (!item.seconds) {
-      return 'row missing-info';
+      return 'missing-info';
     } else {
       if (item.tag === 'AirBreak') {
-        return 'row pause';
+        return 'pause';
       } else {
         if (!item.content.artist || !item.content.title) {
-          return 'row missing-info';
+          return 'missing-info';
         } else {
           if (item.tag === 'AirBreakWithBackgroundMusic') {
-            return 'row pause';
+            return 'pause';
           } else if (item.tag === 'Song') {
-            return 'row';
+            return '';
           }
         }
       }
@@ -43,11 +44,7 @@
   }
 
   function toggleEdit() {
-    if (editing) {
-      stopEdit();
-    } else {
-      startEdit();
-    }
+    editing = !editing;
   }
 
   function dragoverHandler(ev: DragEvent) {
@@ -104,109 +101,114 @@
 </script>
 
 <div role="listitem" class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
-  <div class="time-and-metadata">
-    {#if !displaySizeMedium.current}
-      <div use:dragHandle aria-label="drag-handle for {item.id}" class="drag-handle">
-        <i class="bi-list" aria-hidden="true"></i>
-      </div>
-    {/if}
+  <div class="row">
+    <div class="time-and-metadata">
+      {#if !displaySizeMedium.current}
+        <div use:dragHandle aria-label="drag-handle for {item.id}" class="drag-handle">
+          <i class="bi-list" aria-hidden="true"></i>
+        </div>
+      {/if}
 
-    <div class="time-info">
+      <div class="time-info">
+        <div>
+          {formatSeconds(timeInfo)}
+        </div>
+      </div>
+
       <div>
-        {formatSeconds(timeInfo)}
+        {#if item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
+          <div
+            class="metadata-row"
+            class:air-break-with-bg={item.tag === 'AirBreakWithBackgroundMusic'}
+          >
+            <div>
+              <i class="bi bi-mic"></i>
+              {#if item.tag === 'AirBreakWithBackgroundMusic'}
+                <i>Air break with background music</i>
+              {:else}
+                <i>Air break</i>
+              {/if}
+            </div>
+          </div>
+        {/if}
+        {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
+          <div class="metadata-row top">
+            <div>
+              <i class="bi bi-music-note"></i>
+              {#if item.content.title}
+                {item.content.title}
+              {:else}
+                <i>No title</i>
+              {/if}
+            </div>
+
+            <div>
+              <i class="bi bi-person"></i>
+              {#if item.content.artist}
+                {item.content.artist}
+              {:else}
+                <i>No artist</i>
+              {/if}
+            </div>
+          </div>
+
+          <div class="metadata-row bottom">
+            <div>
+              <i class="bi bi-vinyl"></i>
+              {#if item.content.album}
+                {item.content.album}
+              {:else}
+                <i>No album</i>
+              {/if}
+            </div>
+
+            <div>
+              {#if 'file' in item.content.attributes}
+                <i class="bi-file-earmark"></i>
+              {/if}
+              {#if 'spotify.com' in item.content.attributes}
+                <i class="bi-spotify"></i>
+              {/if}
+              {#if 'music.apple.com' in item.content.attributes}
+                <i class="bi-apple"></i>
+              {/if}
+              {#if 'youtube.com' in item.content.attributes}
+                <i class="bi-youtube"></i>
+              {/if}
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
 
-    <div>
-      {#if item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
-        <div
-          class="metadata-row"
-          class:air-break-with-bg={item.tag === 'AirBreakWithBackgroundMusic'}
-        >
-          <div>
-            <i class="bi bi-mic"></i>
-            {#if item.tag === 'AirBreakWithBackgroundMusic'}
-              <i>Air break with background music</i>
-            {:else}
-              <i>Air break</i>
-            {/if}
-          </div>
-        </div>
-      {/if}
-      {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
-        <div class="metadata-row top">
-          <div>
-            <i class="bi bi-music-note"></i>
-            {#if item.content.title}
-              {item.content.title}
-            {:else}
-              <i>No title</i>
-            {/if}
-          </div>
-
-          <div>
-            <i class="bi bi-person"></i>
-            {#if item.content.artist}
-              {item.content.artist}
-            {:else}
-              <i>No artist</i>
-            {/if}
-          </div>
-        </div>
-
-        <div class="metadata-row bottom">
-          <div>
-            <i class="bi bi-vinyl"></i>
-            {#if item.content.album}
-              {item.content.album}
-            {:else}
-              <i>No album</i>
-            {/if}
-          </div>
-
-          <div>
-            {#if 'file' in item.content.attributes}
-              <i class="bi-file-earmark"></i>
-            {/if}
-            {#if 'spotify.com' in item.content.attributes}
-              <i class="bi-spotify"></i>
-            {/if}
-            {#if 'music.apple.com' in item.content.attributes}
-              <i class="bi-apple"></i>
-            {/if}
-            {#if 'youtube.com' in item.content.attributes}
-              <i class="bi-youtube"></i>
-            {/if}
-          </div>
-        </div>
-      {/if}
+    <div class="buttons-right">
+      <div class="button-group">
+        {#if displaySizeMedium.current && $quickSearchUrl && (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic')}
+          <a
+            class="button"
+            title="Search"
+            href={searchUrl(item.content, $quickSearchUrl)}
+            target="_blank"
+            rel="external"
+          >
+            <i class="bi-search" aria-hidden="true"></i>
+            <span class="visually-hidden">Search</span>
+          </a>
+        {/if}
+        <button class="button" class:inverted={editing} onclick={toggleEdit}>
+          <i class="bi-pencil" aria-hidden="true"></i>
+          <span class="visually-hidden">Edit</span>
+        </button>
+        <button class="button" onclick={deleteItem}>
+          <i class="bi-trash" aria-hidden="true"></i>
+          <span class="visually-hidden">Delete</span>
+        </button>
+      </div>
     </div>
   </div>
-
-  <div class="buttons-right">
-    <div class="button-group">
-      {#if displaySizeMedium.current && $quickSearchUrl && (item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic')}
-        <a
-          class="button"
-          title="Search"
-          href={searchUrl(item.content, $quickSearchUrl)}
-          target="_blank"
-          rel="external"
-        >
-          <i class="bi-search" aria-hidden="true"></i>
-          <span class="visually-hidden">Search</span>
-        </a>
-      {/if}
-      <button class="button" class:inverted={editing} onclick={toggleEdit}>
-        <i class="bi-pencil" aria-hidden="true"></i>
-        <span class="visually-hidden">Edit</span>
-      </button>
-      <button class="button" onclick={deleteItem}>
-        <i class="bi-trash" aria-hidden="true"></i>
-        <span class="visually-hidden">Delete</span>
-      </button>
-    </div>
-  </div>
+  {#if editing}
+    <SongEditor bind:item />
+  {/if}
 </div>
 
 <style>

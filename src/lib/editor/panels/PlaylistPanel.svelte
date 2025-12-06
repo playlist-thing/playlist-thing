@@ -32,7 +32,6 @@
   let autosaveCallback: number | null;
   let autosaved = $state(false);
   let showOptions = $state(false);
-  let editingItemIdx: number | null = $state(null);
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
 
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
@@ -124,10 +123,6 @@
   }
 
   function deleteItem(id: number) {
-    if (editingItemIdx !== null && items[editingItemIdx].id === id) {
-      editingItemIdx = null;
-    }
-
     items = items.filter((item) => item.id !== id);
   }
 
@@ -241,11 +236,8 @@
           {#each items as item, idx (item.id)}
             <Song
               bind:item={items[idx]}
-              editing={editingItemIdx === idx}
               timeInfo={timeInfo[idx]}
               deleteItem={() => deleteItem(item.id)}
-              startEdit={() => (editingItemIdx = idx)}
-              stopEdit={() => (editingItemIdx = null)}
             />
           {:else}
             <div class="empty-item">
@@ -298,10 +290,6 @@
     {/if}
   </div>
 </div>
-
-{#if editingItemIdx !== null}
-  <EditPanel bind:item={items[editingItemIdx]} close={() => (editingItemIdx = null)} />
-{/if}
 
 <style>
   @import '$lib/style/forms.css';
