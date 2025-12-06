@@ -334,7 +334,7 @@
               </LinkAttribute>
             </div>
 
-            <div class="input-block-header">Search</div>
+            <div class="input-block-header">Search this song</div>
             <div class="input-block-item">
               <ul class="search-list">
                 {#each $searchProviders as searchProvider (searchProvider.id)}
