@@ -337,10 +337,6 @@
     user-select: none;
   }
 
-  .button-group {
-    padding-left: 0.2em;
-  }
-
   .add-item-buttons {
     display: flex;
 
