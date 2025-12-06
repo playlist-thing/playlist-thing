@@ -6,7 +6,6 @@
   import { dndzone, dragHandleZone } from 'svelte-dnd-action';
   import slug from 'slug';
 
-  import EditPanel from './EditPanel.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
   import Song from './playlist/Song.svelte';
