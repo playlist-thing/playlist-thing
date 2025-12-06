@@ -2,39 +2,39 @@
   import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
-  import type { DndEvent } from 'svelte-dnd-action';
-  import { dndzone, dragHandleZone } from 'svelte-dnd-action';
   import slug from 'slug';
 
+  import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
-  import Song from './playlist/Song.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
   import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';
-  import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo.ts';
-  import { nextId, modals, displaySizeMedium } from '$lib/editor/state.svelte.ts';
+  import { nextId, modals } from '$lib/editor/state.svelte.ts';
   import { exportNotes } from '$lib/editor/export.ts';
 
   interface Props {
     panelId: string;
   }
 
+  enum SubList {
+    Playlist,
+    Queue
+  }
+
   let { panelId }: Props = $props();
 
-  let items: PlaylistItem[] = $state([]);
   let name = $state('');
+
+  let items: PlaylistItem[] = $state([]);
+  let queue: PlaylistItem[] = $state([]);
 
   let autosaveCallback: number | null;
   let autosaved = $state(false);
   let showOptions = $state(false);
-  let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
-
-  let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
-  let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
 
   let playlistContainer: HTMLElement;
 
@@ -65,7 +65,7 @@
   function loadLocalStorage() {
     const restoredPlaylist = localStorage.getItem(`playlist${panelId}`);
     if (restoredPlaylist !== null) {
-      fromJson(restoredPlaylist, false);
+      fromJson(restoredPlaylist);
     }
   }
 
@@ -80,28 +80,23 @@
 
   function clear() {
     items = [];
+    queue = [];
   }
 
-  async function fromJson(json: string, append: boolean) {
+  async function fromJson(json: string) {
     const parsed = JSON.parse(json);
 
-    // clear items
-    if (!append) {
-      items = [];
-    }
-
-    // if we are starting from scratch, also adopt name
-    if (items.length === 0) {
-      name = parsed.name;
-    }
-
-    await addItems(parsed.items);
+    clear();
+    name = parsed.name;
+    await addItems(parsed.items, SubList.Playlist);
+    await addItems(parsed.queue, SubList.Queue);
   }
 
   function toJson() {
     const data = {
       name: name,
-      items: items
+      items: items,
+      queue: queue
     };
 
     return JSON.stringify(data);
@@ -117,33 +112,29 @@
     });
   }
 
-  function handleSort(e: CustomEvent<DndEvent>) {
-    items = e.detail.items as PlaylistItem[];
-  }
-
-  function deleteItem(id: number) {
-    items = items.filter((item) => item.id !== id);
-  }
-
-  async function addItems(newItems: PlaylistItem[]) {
+  async function addItems(newItems: PlaylistItem[], target: SubList) {
     const oldNextId = $nextId;
     for (let i = 0; i < newItems.length; i++) {
       newItems[i].id = oldNextId + i;
     }
     $nextId += newItems.length;
 
-    items = [...items, ...newItems];
+    if (target == SubList.Playlist) {
+      items = [...items, ...newItems];
+    } else {
+      queue = [...queue, ...newItems];
+    }
 
     await tick();
     playlistContainer.scrollTo(0, playlistContainer.scrollHeight);
   }
 
   async function addEmpty() {
-    await addItems([emptySong]);
+    await addItems([emptySong], SubList.Queue);
   }
 
   async function addPause() {
-    await addItems([emptyAirBreak]);
+    await addItems([emptyAirBreak], SubList.Queue);
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
@@ -154,7 +145,7 @@
 
     try {
       const track = await getSpotifyTrack(spotifyTrackId);
-      await addItems([track]);
+      await addItems([track], SubList.Queue);
     } catch (e) {
       console.log(e);
     }
@@ -163,7 +154,7 @@
   async function addFile(file: File) {
     try {
       const track = await getFile(file);
-      await addItems([track]);
+      await addItems([track], SubList.Queue);
     } catch (e) {
       modals.showAddFileErrorModal = true;
       console.log(e);
@@ -172,7 +163,7 @@
 
   async function openPlaylistFile(file: File) {
     const json = await file.text();
-    fromJson(json, true);
+    fromJson(json);
   }
 
   function dragoverHandler(ev: DragEvent) {
@@ -211,7 +202,7 @@
               }
             });
           } else if (item.type === 'application/x.playlist-json') {
-            item.getAsString((json) => fromJson(json, true));
+            item.getAsString((json) => addItems(JSON.parse(json), SubList.Queue));
           }
         }
       }
@@ -221,7 +212,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop {items} bind:name bind:timeInfoMode bind:showOptions {autosaved} />
+    <ControlsTop bind:name bind:showOptions {autosaved} />
     {#if showOptions}
       <Options
         {clear}
@@ -231,41 +222,8 @@
       />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
-        {#snippet playlistItems()}
-          {#each items as item, idx (item.id)}
-            <Song
-              bind:item={items[idx]}
-              timeInfo={timeInfo[idx]}
-              deleteItem={() => deleteItem(item.id)}
-            />
-          {:else}
-            <div class="empty-item">
-              <i>Empty playlist</i>
-            </div>
-          {/each}
-        {/snippet}
-
-        {#if displaySizeMedium.current}
-          <div
-            class="playlist"
-            role="list"
-            use:dndzone={dndOptions}
-            onconsider={handleSort}
-            onfinalize={handleSort}
-          >
-            {@render playlistItems()}
-          </div>
-        {:else}
-          <div
-            class="playlist"
-            role="list"
-            use:dragHandleZone={dndOptions}
-            onconsider={handleSort}
-            onfinalize={handleSort}
-          >
-            {@render playlistItems()}
-          </div>
-        {/if}
+        <List name={'Playlist'} bind:items />
+        <List name={'Queue'} bind:items={queue} />
 
         <div class="add-item-buttons">
           <button class="button" onclick={addEmpty}>
@@ -277,6 +235,8 @@
             Add air break
           </button>
         </div>
+
+        <div></div>
       </div>
 
       <div class="controls-bottom">
@@ -304,24 +264,6 @@
 
     overflow: auto;
     position: relative;
-  }
-
-  .playlist {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .empty-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    padding: 20px;
-
-    color: #666;
-
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
   }
 
   .add-item-buttons {

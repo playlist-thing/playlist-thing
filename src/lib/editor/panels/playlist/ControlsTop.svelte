@@ -1,23 +1,7 @@
 <script lang="ts">
-  import {
-    TimeInfoMode,
-    calculateTotalDuration,
-    calculateTotalDurationSongsOnly
-  } from '$lib/timeInfo.ts';
-  import { formatSeconds } from '$lib/format.ts';
-
-  let {
-    items,
-    name = $bindable(),
-    timeInfoMode = $bindable(),
-    showOptions = $bindable(),
-    autosaved
-  } = $props();
+  let { name = $bindable(), showOptions = $bindable(), autosaved } = $props();
 
   let editingName = $state(false);
-
-  let totalDuration = $derived(calculateTotalDuration(items));
-  let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(items));
 
   function toggleEdit() {
     editingName = !editingName;
@@ -25,19 +9,6 @@
 
   function toggleOptions() {
     showOptions = !showOptions;
-  }
-
-  function dragstartHandler(ev: DragEvent) {
-    const json = JSON.stringify({
-      name: name,
-      items: items
-    });
-
-    // The property can be null when the event is created using the
-    // constructor. It is never null when dispatched by the browser.
-    //
-    // https://developer.mozilla.org/en-US/docs/Web/API/DragEvent/dataTransfer
-    ev.dataTransfer!.setData('application/x.playlist-json', json);
   }
 </script>
 
@@ -56,7 +27,7 @@
           </button>
         </form>
       {:else}
-        <span ondragstart={dragstartHandler} draggable="true" class="playlist-name">
+        <span class="playlist-name">
           {#if name}
             {name}
           {:else}
@@ -86,23 +57,6 @@
       {/if}
     </div>
   </div>
-
-  {#if !showOptions && items.length > 0}
-    <div class="row duration-info">
-      <div>
-        <select bind:value={timeInfoMode}>
-          <option value={TimeInfoMode.Duration}>Duration</option>
-          <option value={TimeInfoMode.BeginsAt}>Begins At</option>
-          <option value={TimeInfoMode.TimeUntilEnd}>Time Until End</option>
-        </select>
-      </div>
-
-      <div>
-        Total duration: {formatSeconds(totalDuration)}
-        Songs only: {formatSeconds(totalDurationSongsOnly)}
-      </div>
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -114,25 +68,16 @@
     flex-direction: column;
   }
 
+  .playlist-name {
+    font-size: 1.5em;
+  }
+
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     padding-bottom: 0.2em;
-  }
-
-  .row.duration-info {
-    flex-wrap: wrap-reverse;
-  }
-
-  .playlist-name {
-    font-size: 1.3em;
-
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
-
-    cursor: grab;
   }
 
   .button.edit {

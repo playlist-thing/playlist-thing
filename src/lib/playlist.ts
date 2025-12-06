@@ -73,11 +73,13 @@ interface Playlist {
   name: string;
   slug: string;
   description: string;
-  items: PlaylistItem[];
   public: boolean;
   schedule: Schedule | null;
   createdAt: number;
   lastModifiedAt: number;
+
+  items: PlaylistItem[];
+  queue: PlaylistItem[];
 
   // not included in exports
   showId: string | null;
