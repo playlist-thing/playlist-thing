@@ -57,7 +57,7 @@ const emptyAirBreak: AirBreak = {
   tag: 'AirBreak'
 };
 
-interface Schedule {
+interface Broadcast {
   // milliseconds since unix epoch (i.e. Date.getTime())
   start: number;
   // milliseconds
@@ -74,7 +74,7 @@ interface Playlist {
   slug: string;
   description: string;
   public: boolean;
-  schedule: Schedule | null;
+  broadcast: Broadcast | null;
   createdAt: number;
   lastModifiedAt: number;
 
@@ -153,4 +153,4 @@ interface Station {
 }
 
 export { emptySong, emptyAirBreak, emptySongMetadata };
-export type { SongMetadata, PlaylistItem, Playlist, Show, Station, DJ };
+export type { SongMetadata, PlaylistItem, Playlist, Show, Station, DJ, Broadcast };
