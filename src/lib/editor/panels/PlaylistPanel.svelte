@@ -2,13 +2,13 @@
   import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
-  import slug from 'slug';
+  import toSlug from 'slug';
 
   import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem } from '$lib/playlist.ts';
+  import type { PlaylistItem, Playlist, Broadcast } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
   import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
@@ -28,9 +28,18 @@
   let { panelId }: Props = $props();
 
   let name = $state('');
+  let slug = $state('');
+  let description = $state('');
+  let isPublic = $state(false);
+  let broadcast: Broadcast | null = $state(null);
+  let createdAt = $state(0);
+  let lastModifiedAt = $state(0);
 
   let items: PlaylistItem[] = $state([]);
   let queue: PlaylistItem[] = $state([]);
+
+  let showId: string | null = $state(null);
+  let djIds: string[] = $state([]);
 
   let autosaveCallback: number | null;
   let autosaved = $state(false);
@@ -85,18 +94,40 @@
 
   async function fromJson(json: string) {
     const parsed = JSON.parse(json);
-
     clear();
-    name = parsed.name;
+
+    ({
+      name,
+      slug,
+      description,
+      public: isPublic,
+      broadcast,
+      createdAt,
+      lastModifiedAt,
+
+      showId,
+      djIds
+    } = parsed);
+
     await addItems(parsed.items, SubList.Playlist);
     await addItems(parsed.queue, SubList.Queue);
   }
 
   function toJson() {
-    const data = {
-      name: name,
-      items: items,
-      queue: queue
+    const data: Omit<Playlist, 'id'> = {
+      name,
+      slug,
+      description,
+      public: isPublic,
+      broadcast,
+      createdAt,
+      lastModifiedAt,
+
+      items,
+      queue,
+
+      showId,
+      djIds
     };
 
     return JSON.stringify(data);
@@ -108,7 +139,7 @@
     });
 
     await fileSave(blob, {
-      fileName: slug(name)
+      fileName: toSlug(name)
     });
   }
 
