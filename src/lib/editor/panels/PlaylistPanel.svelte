@@ -20,11 +20,6 @@
     panelId: string;
   }
 
-  enum SubList {
-    Playlist,
-    Queue
-  }
-
   let { panelId }: Props = $props();
 
   let name = $state('');
@@ -109,8 +104,8 @@
       djIds
     } = parsed);
 
-    await addItems(parsed.items, SubList.Playlist);
-    await addItems(parsed.queue, SubList.Queue);
+    items = withFreshIds(parsed.items);
+    queue = withFreshIds(parsed.queue);
   }
 
   function toJson() {
@@ -143,25 +138,20 @@
     });
   }
 
-  async function addItems(newItems: PlaylistItem[], target: SubList) {
+  async function addItemsToQueue(newItems: PlaylistItem[]) {
     newItems = withFreshIds(newItems);
-
-    if (target == SubList.Playlist) {
-      items = [...items, ...newItems];
-    } else {
-      queue = [...queue, ...newItems];
-    }
+    queue.push(...newItems);
 
     await tick();
     playlistContainer.scrollTo(0, playlistContainer.scrollHeight);
   }
 
   async function addEmpty() {
-    await addItems([emptySong], SubList.Queue);
+    await addItemsToQueue([emptySong]);
   }
 
   async function addPause() {
-    await addItems([emptyAirBreak], SubList.Queue);
+    await addItemsToQueue([emptyAirBreak]);
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
@@ -172,7 +162,7 @@
 
     try {
       const track = await getSpotifyTrack(spotifyTrackId);
-      await addItems([track], SubList.Queue);
+      await addItemsToQueue([track]);
     } catch (e) {
       console.log(e);
     }
@@ -181,7 +171,7 @@
   async function addFile(file: File) {
     try {
       const track = await getFile(file);
-      await addItems([track], SubList.Queue);
+      await addItemsToQueue([track]);
     } catch (e) {
       modals.showAddFileErrorModal = true;
       console.log(e);
@@ -229,7 +219,7 @@
               }
             });
           } else if (item.type === 'application/x.playlist-json') {
-            item.getAsString((json) => addItems(JSON.parse(json), SubList.Queue));
+            item.getAsString((json) => addItemsToQueue(JSON.parse(json)));
           }
         }
       }
