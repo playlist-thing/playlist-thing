@@ -13,7 +13,7 @@
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
   import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';
-  import { nextId, modals } from '$lib/editor/state.svelte.ts';
+  import { withFreshIds, modals } from '$lib/editor/state.svelte.ts';
   import { exportNotes } from '$lib/editor/export.ts';
 
   interface Props {
@@ -144,11 +144,7 @@
   }
 
   async function addItems(newItems: PlaylistItem[], target: SubList) {
-    const oldNextId = $nextId;
-    for (let i = 0; i < newItems.length; i++) {
-      newItems[i].id = oldNextId + i;
-    }
-    $nextId += newItems.length;
+    newItems = withFreshIds(newItems);
 
     if (target == SubList.Playlist) {
       items = [...items, ...newItems];
