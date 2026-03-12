@@ -20,7 +20,7 @@
     "bootstrap-icons": "^1.13.1",
     "browser-fs-access": "^0.38.0",
     "idb": "^8.0.3",
-    "music-metadata": "^11.12.1",
+    "music-metadata": "^11.12.2",
     "openid-client": "^6.8.2",
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.5.1",
