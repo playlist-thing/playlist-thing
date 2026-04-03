@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { dev } from '$app/environment';
 
   import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
@@ -31,7 +30,9 @@
     <div class="controls-top-row">
       <div class="logo-banner">
         <!-- TODO logo -->
-        Playlist Editor
+        <a href="/" class="button transparent">
+          <span class="banner-text">playlist-thing</span>
+        </a>
       </div>
 
       <div class="button-group sm-hide">
@@ -113,6 +114,11 @@
 
   .logo-banner {
     padding-right: 10px;
+  }
+
+  .banner-text {
+    font-size: 1.1em;
+    font-weight: bold;
   }
 
   .controls-top-error-indicator {
