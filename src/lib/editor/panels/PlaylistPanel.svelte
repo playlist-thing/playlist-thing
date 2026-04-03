@@ -245,7 +245,7 @@
         <div class="add-item-buttons">
           <button class="button" onclick={addEmpty}>
             <i class="bi bi-music-note" aria-hidden="true"></i>
-            Add empty song
+            Add song
           </button>
           <button class="button" onclick={addPause}>
             <i class="bi bi-mic" aria-hidden="true"></i>
