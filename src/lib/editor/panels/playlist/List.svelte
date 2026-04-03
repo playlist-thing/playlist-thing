@@ -1,7 +1,7 @@
 <script lang="ts">
   import { dndzone, dragHandleZone, type DndEvent } from 'svelte-dnd-action';
 
-  import Song from './Song.svelte';
+  import Item from './Item.svelte';
   import type { PlaylistItem } from '$lib/playlist';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
@@ -44,7 +44,7 @@
 
 {#snippet playlistItems(renderItems: PlaylistItem[])}
   {#each renderItems as item, idx (item.id)}
-    <Song bind:item={items[idx]} timeInfo={timeInfo[idx]} deleteItem={() => deleteItem(item.id)} />
+    <Item bind:item={items[idx]} timeInfo={timeInfo[idx]} deleteItem={() => deleteItem(item.id)} />
   {:else}
     <div class="empty-item">
       <i>Empty playlist</i>

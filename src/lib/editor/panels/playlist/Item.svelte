@@ -1,7 +1,7 @@
 <script lang="ts">
   import { dragHandle } from 'svelte-dnd-action';
 
-  import SongEditor from './SongEditor.svelte';
+  import ItemEditor from './ItemEditor.svelte';
 
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/editor/settings.ts';
@@ -207,7 +207,7 @@
     </div>
   </div>
   {#if editing}
-    <SongEditor bind:item />
+    <ItemEditor bind:item />
   {/if}
 </div>
 
