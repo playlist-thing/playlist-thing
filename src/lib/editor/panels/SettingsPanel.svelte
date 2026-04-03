@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { env } from '$env/dynamic/public';
+
   import SearchProviders from './settings/SearchProviders.svelte';
   import QuickSearchProvider from './settings/QuickSearchProvider.svelte';
   import Spotify from './settings/Spotify.svelte';
@@ -64,6 +66,43 @@
         <p>Save all settings to a file and restore them at a later point.</p>
         <ExportImport />
       </section>
+
+      <section>
+        <h2>About playlist-thing</h2>
+
+        <ul class="links-bottom">
+          <li class="links-bottom-item">
+            <a
+              href="https://github.com/playlist-thing/playlist-thing"
+              rel="external"
+              target="_blank"
+            >
+              <i class="bi-github" aria-hidden="true"></i>
+              View source on GitHub
+            </a>
+          </li>
+
+          <li class="links-bottom-item">
+            <a
+              href="https://github.com/playlist-thing/playlist-thing/issues/new"
+              rel="external"
+              target="_blank"
+            >
+              <i class="bi-bug-fill" aria-hidden="true"></i>
+              Report bug or request feature
+            </a>
+          </li>
+
+          {#if 'PUBLIC_PRIVACY_POLICY_URL' in env}
+            <li class="links-bottom-item">
+              <a href={env.PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
+                <i class="bi-lock" aria-hidden="true"></i>
+                Privacy policy
+              </a>
+            </li>
+          {/if}
+        </ul>
+      </section>
     </div>
   </div>
 </div>
@@ -75,5 +114,15 @@
 
   .outer-container {
     max-width: 600px;
+  }
+
+  .links-bottom {
+    list-style: none;
+    padding: 0px;
+  }
+
+  .links-bottom-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 </style>
