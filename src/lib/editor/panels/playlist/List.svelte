@@ -7,6 +7,7 @@
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
   import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '$lib/timeInfo.ts';
   import { formatSeconds } from '$lib/format.ts';
+  import { withFreshIds } from '$lib/editor/state.svelte.ts';
 
   interface Props {
     name: string;
@@ -27,6 +28,10 @@
     items = items.filter((item) => item.id !== id);
   }
 
+  function insertItems(newItems: PlaylistItem[], atIndex: number) {
+    items = items.toSpliced(atIndex, 0, ...withFreshIds(newItems));
+  }
+
   function handleSort(e: CustomEvent<DndEvent>) {
     items = e.detail.items as PlaylistItem[];
   }
@@ -44,7 +49,12 @@
 
 {#snippet playlistItems(renderItems: PlaylistItem[])}
   {#each renderItems as item, idx (item.id)}
-    <Item bind:item={items[idx]} timeInfo={timeInfo[idx]} deleteItem={() => deleteItem(item.id)} />
+    <Item
+      bind:item={items[idx]}
+      timeInfo={timeInfo[idx]}
+      deleteItem={() => deleteItem(item.id)}
+      insertItems={(items) => insertItems(items, idx)}
+    />
   {:else}
     <div class="empty-item">
       <i>Empty playlist</i>

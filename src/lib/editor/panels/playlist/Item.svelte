@@ -17,11 +17,13 @@
     item: PlaylistItem;
     timeInfo: number;
     deleteItem: () => void;
+    insertItems: (items: PlaylistItem[]) => void;
   }
 
-  let { item = $bindable(), timeInfo, deleteItem }: Props = $props();
+  let { item = $bindable(), timeInfo, deleteItem, insertItems }: Props = $props();
 
   let editing = $state(false);
+  let showMenu = $state(false);
 
   function rowClass(item: PlaylistItem) {
     if (!item.seconds) {
@@ -45,6 +47,15 @@
 
   function toggleEdit() {
     editing = !editing;
+  }
+
+  function toggleMenu() {
+    showMenu = !showMenu;
+  }
+
+  function duplicate() {
+    insertItems([item]);
+    showMenu = false;
   }
 
   function dragoverHandler(ev: DragEvent) {
@@ -203,6 +214,21 @@
           <i class="bi-trash" aria-hidden="true"></i>
           <span class="visually-hidden">Delete</span>
         </button>
+        <div class="dropdown-container">
+          <button class="button button-toggle-menu" onclick={toggleMenu}>
+            <i class="bi-three-dots" aria-hidden="true"></i>
+            <span class="visually-hidden">More options</span>
+          </button>
+
+          {#if showMenu}
+            <div class="dropdown-menu">
+              <button class="button transparent align-left" onclick={duplicate}>
+                <i class="bi-copy" aria-hidden="true"></i>
+                Duplicate
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
   </div>
@@ -280,5 +306,30 @@
   .buttons-right {
     display: flex;
     align-items: center;
+  }
+
+  .button-toggle-menu {
+    /* fix as this button is in a div */
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  .dropdown-container {
+    position: relative;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
   }
 </style>

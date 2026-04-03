@@ -48,6 +48,10 @@
   cursor: inherit;
 }
 
+.button.align-left {
+  text-align: left;
+}
+
 /* extra visual cues */
 .button.disabled {
   background-color: #fff;
