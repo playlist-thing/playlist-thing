@@ -240,6 +240,7 @@
 <style>
   @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
+  @import '$lib/style/dropdown.css';
 
   .row {
     display: flex;
@@ -312,24 +313,5 @@
     /* fix as this button is in a div */
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
-  }
-
-  .dropdown-container {
-    position: relative;
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    right: 0;
-
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-
-    background-color: #fff;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    border-radius: 4px;
   }
 </style>
