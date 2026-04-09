@@ -26,7 +26,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.5.1",
     "slug": "^11.0.1",
-    "svelte": "^5.55.1",
+    "svelte": "^5.55.2",
     "svelte-dnd-action": "^0.9.69",
     "typescript": "^5.9.3",
     "uuid": "^13.0.0",
