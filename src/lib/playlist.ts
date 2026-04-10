@@ -95,6 +95,7 @@ interface Show {
   name: string;
   slug: string;
   description: string;
+  public: boolean;
   links: string[];
 
   stationId: string | null;
@@ -110,6 +111,7 @@ interface DJ {
   name: string;
   slug: string;
   description: string;
+  public: boolean;
   links: string[];
 }
 
@@ -145,6 +147,7 @@ interface Station {
   name: string;
   slug: string;
   description: string;
+  public: boolean;
   domains: Domain[];
   links: string[];
 
