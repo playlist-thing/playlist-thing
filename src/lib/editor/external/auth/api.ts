@@ -2,14 +2,16 @@ import { get } from 'svelte/store';
 import { env } from '$env/dynamic/public';
 
 import * as openid from 'openid-client';
+import type { IDToken } from 'openid-client';
 
 import localStorageStore from '$lib/localStorageStore.ts';
 
-const scope = 'profile';
+const scope = 'openid playlist:read playlist:write';
 
 export const apiToken = localStorageStore('apiToken', '');
 export const apiTokenRefresh = localStorageStore('apiTokenRefresh', '');
 export const apiTokenExpiry = localStorageStore('apiTokenExpiry', 0);
+export const apiTokenClaims = localStorageStore<IDToken | null>('apiTokenClaims', null);
 
 export function tokenNeedsRefresh() {
   if (Date.now() > get(apiTokenExpiry)) return true;
@@ -20,6 +22,10 @@ export function tokenNeedsRefresh() {
 async function config() {
   if (!env.PUBLIC_API_CLIENT_ID) {
     throw new Error('API client ID missing');
+  }
+
+  if (!env.PUBLIC_API_AUTH_METADATA_URL) {
+    throw new Error('API metadata URL missing');
   }
 
   const metadata_url = URL.parse(env.PUBLIC_API_AUTH_METADATA_URL);
@@ -56,12 +62,13 @@ export async function redirectToSSOLogout() {
   apiToken.set('');
   apiTokenRefresh.set('');
   apiTokenExpiry.set(0);
+  apiTokenClaims.set(null);
 
   const logoutUrl = openid.buildEndSessionUrl(await config());
   window.location.href = logoutUrl.toString();
 }
 
-function saveToken(response: openid.TokenEndpointResponse) {
+function saveToken(response: openid.TokenEndpointResponse & openid.TokenEndpointResponseHelpers) {
   if (!response.refresh_token) {
     throw new Error('Response has no refresh_token');
   }
@@ -75,6 +82,11 @@ function saveToken(response: openid.TokenEndpointResponse) {
   apiToken.set(response.access_token);
   apiTokenRefresh.set(response.refresh_token);
   apiTokenExpiry.set(expiry);
+
+  const claims = response.claims();
+  if (claims) {
+    apiTokenClaims.set(claims);
+  }
 }
 
 export async function getToken(url: URL) {
