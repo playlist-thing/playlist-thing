@@ -1,6 +1,8 @@
 <script lang="ts">
   import { dev } from '$app/environment';
 
+  import AccountMenu from '$lib/AccountMenu.svelte';
+
   import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
   import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
 
@@ -9,11 +11,6 @@
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
 
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
-  import {
-    apiToken,
-    redirectToSSOAuthorize,
-    redirectToSSOLogout
-  } from '$lib/editor/external/auth/api';
   import localStorageStore from '$lib/localStorageStore';
 
   let doublePlaylistView = localStorageStore('doublePlaylistView', false);
@@ -69,15 +66,7 @@
     {/if}
 
     <div class="controls-top-row">
-      {#if $apiToken}
-        <button class="button transparent" onclick={redirectToSSOLogout}>
-          <i class="bi-box-arrow-right" aria-hidden="true"></i> Sign out
-        </button>
-      {:else}
-        <button class="button transparent" onclick={redirectToSSOAuthorize}>
-          <i class="bi-box-arrow-in-right" aria-hidden="true"></i> Sign in
-        </button>
-      {/if}
+      <AccountMenu />
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
         <i class="bi-gear" aria-hidden="true"></i> Settings
       </button>
