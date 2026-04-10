@@ -8,7 +8,7 @@
   } from '$lib/editor/external/auth/api';
 
   let showMenu = $state(false);
-  let username = $derived($apiTokenClaims && $apiTokenClaims.name);
+  let username = $derived($apiTokenClaims && $apiTokenClaims.preferred_username);
 
   function toggleMenu() {
     showMenu = !showMenu;
