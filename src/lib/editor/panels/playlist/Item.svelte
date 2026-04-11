@@ -1,6 +1,8 @@
 <script lang="ts">
   import { dragHandle } from 'svelte-dnd-action';
 
+  import { OutClick } from 'svelte-outclick';
+
   import ItemEditor from './ItemEditor.svelte';
 
   import { formatSeconds } from '$lib/format.ts';
@@ -221,12 +223,14 @@
           </button>
 
           {#if showMenu}
-            <div class="dropdown-menu">
-              <button class="button transparent align-left" onclick={duplicate}>
-                <i class="bi-copy" aria-hidden="true"></i>
-                Duplicate
-              </button>
-            </div>
+            <OutClick onOutClick={() => (showMenu = false)}>
+              <div class="dropdown-menu">
+                <button class="button transparent align-left" onclick={duplicate}>
+                  <i class="bi-copy" aria-hidden="true"></i>
+                  Duplicate
+                </button>
+              </div>
+            </OutClick>
           {/if}
         </div>
       </div>

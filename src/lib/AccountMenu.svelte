@@ -1,5 +1,8 @@
 <script lang="ts">
   import { env } from '$env/dynamic/public';
+
+  import { OutClick } from 'svelte-outclick';
+
   import {
     apiToken,
     apiTokenClaims,
@@ -22,21 +25,23 @@
     </button>
 
     {#if showMenu}
-      <div class="dropdown-menu">
-        <div class="avatar">
-          <i class="bi-person" aria-hidden="true"></i>
-        </div>
-        <div class="username">
-          {username}
-        </div>
+      <OutClick onOutClick={() => (showMenu = false)}>
+        <div class="dropdown-menu">
+          <div class="avatar">
+            <i class="bi-person" aria-hidden="true"></i>
+          </div>
+          <div class="username">
+            {username}
+          </div>
 
-        <a href={env.PUBLIC_ACCOUNT_MANAGER_URL} class="button transparent align-left">
-          <i class="bi-person" aria-hidden="true"></i> Manage account
-        </a>
-        <button class="button transparent align-left" onclick={redirectToSSOLogout}>
-          <i class="bi-box-arrow-right" aria-hidden="true"></i> Sign out
-        </button>
-      </div>
+          <a href={env.PUBLIC_ACCOUNT_MANAGER_URL} class="button transparent align-left">
+            <i class="bi-person" aria-hidden="true"></i> Manage account
+          </a>
+          <button class="button transparent align-left" onclick={redirectToSSOLogout}>
+            <i class="bi-box-arrow-right" aria-hidden="true"></i> Sign out
+          </button>
+        </div>
+      </OutClick>
     {/if}
   </div>
 {:else}
