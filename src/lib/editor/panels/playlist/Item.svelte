@@ -1,7 +1,8 @@
 <script lang="ts">
   import { dragHandle } from 'svelte-dnd-action';
 
-  import ItemEditor from './ItemEditor.svelte';
+  import ItemEditor from './item/ItemEditor.svelte';
+  import Dropdown from './item/Dropdown.svelte';
 
   import { formatSeconds } from '$lib/format.ts';
   import { quickSearchUrl } from '$lib/editor/settings.ts';
@@ -12,7 +13,6 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { searchUrl } from '$lib/editor/search.ts';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
-  import Dropdown from './item/Dropdown.svelte';
 
   interface Props {
     item: PlaylistItem;
