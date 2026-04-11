@@ -11,6 +11,7 @@
   } from '$lib/editor/external/auth/api';
 
   let showMenu = $state(false);
+  let accountButton: HTMLButtonElement | null = $state(null);
   let username = $derived($apiTokenClaims && $apiTokenClaims.preferred_username);
 
   function toggleMenu() {
@@ -20,12 +21,17 @@
 
 {#if $apiToken}
   <div class="dropdown-container">
-    <button class="button transparent" class:inverted={showMenu} onclick={toggleMenu}>
+    <button
+      class="button transparent"
+      class:inverted={showMenu}
+      onclick={toggleMenu}
+      bind:this={accountButton}
+    >
       <i class="bi-person" aria-hidden="true"></i> Account
     </button>
 
     {#if showMenu}
-      <OutClick onOutClick={() => (showMenu = false)}>
+      <OutClick onOutClick={() => (showMenu = false)} excludeElements={accountButton}>
         <div class="dropdown-menu">
           <div class="avatar">
             <i class="bi-person" aria-hidden="true"></i>

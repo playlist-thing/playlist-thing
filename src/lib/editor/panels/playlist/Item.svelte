@@ -1,8 +1,6 @@
 <script lang="ts">
   import { dragHandle } from 'svelte-dnd-action';
 
-  import { OutClick } from 'svelte-outclick';
-
   import ItemEditor from './ItemEditor.svelte';
 
   import { formatSeconds } from '$lib/format.ts';
@@ -14,6 +12,7 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { searchUrl } from '$lib/editor/search.ts';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
+  import Dropdown from './item/Dropdown.svelte';
 
   interface Props {
     item: PlaylistItem;
@@ -49,10 +48,6 @@
 
   function toggleEdit() {
     editing = !editing;
-  }
-
-  function toggleMenu() {
-    showMenu = !showMenu;
   }
 
   function duplicate() {
@@ -216,23 +211,7 @@
           <i class="bi-trash" aria-hidden="true"></i>
           <span class="visually-hidden">Delete</span>
         </button>
-        <div class="dropdown-container">
-          <button class="button button-toggle-menu" onclick={toggleMenu}>
-            <i class="bi-three-dots" aria-hidden="true"></i>
-            <span class="visually-hidden">More options</span>
-          </button>
-
-          {#if showMenu}
-            <OutClick onOutClick={() => (showMenu = false)}>
-              <div class="dropdown-menu">
-                <button class="button transparent align-left" onclick={duplicate}>
-                  <i class="bi-copy" aria-hidden="true"></i>
-                  Duplicate
-                </button>
-              </div>
-            </OutClick>
-          {/if}
-        </div>
+        <Dropdown {duplicate} bind:showMenu />
       </div>
     </div>
   </div>
@@ -244,7 +223,6 @@
 <style>
   @import '$lib/style/a11y.css';
   @import '$lib/style/forms.css';
-  @import '$lib/style/dropdown.css';
 
   .row {
     display: flex;
@@ -311,11 +289,5 @@
   .buttons-right {
     display: flex;
     align-items: center;
-  }
-
-  .button-toggle-menu {
-    /* fix as this button is in a div */
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
   }
 </style>
