@@ -207,11 +207,13 @@
           <i class="bi-pencil" aria-hidden="true"></i>
           <span class="visually-hidden">Edit</span>
         </button>
-        <button class="button" onclick={deleteItem}>
-          <i class="bi-trash" aria-hidden="true"></i>
-          <span class="visually-hidden">Delete</span>
-        </button>
-        <Dropdown {duplicate} bind:showMenu />
+        {#if displaySizeMedium.current}
+          <button class="button" onclick={deleteItem}>
+            <i class="bi-trash" aria-hidden="true"></i>
+            <span class="visually-hidden">Delete</span>
+          </button>
+        {/if}
+        <Dropdown {duplicate} {deleteItem} bind:showMenu />
       </div>
     </div>
   </div>

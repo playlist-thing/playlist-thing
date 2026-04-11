@@ -1,12 +1,15 @@
 <script lang="ts">
   import { OutClick } from 'svelte-outclick';
 
+  import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
+
   interface Props {
     showMenu: boolean;
     duplicate: () => void;
+    deleteItem: () => void;
   }
 
-  let { showMenu = $bindable(), duplicate }: Props = $props();
+  let { showMenu = $bindable(), duplicate, deleteItem }: Props = $props();
 
   let dropdownButton: HTMLButtonElement | null = $state(null);
 
@@ -33,6 +36,12 @@
           <i class="bi-copy" aria-hidden="true"></i>
           Duplicate
         </button>
+        {#if !displaySizeMedium.current}
+          <button class="button transparent align-left" onclick={deleteItem}>
+            <i class="bi-trash" aria-hidden="true"></i>
+            Delete
+          </button>
+        {/if}
       </div>
     </OutClick>
   {/if}
