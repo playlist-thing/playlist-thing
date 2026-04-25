@@ -31,20 +31,6 @@
 
   let durationInputElement: HTMLInputElement;
 
-  function convertToAirBreak() {
-    if (item.tag === 'Song') {
-      item = { ...item, tag: 'AirBreakWithBackgroundMusic' };
-    }
-  }
-
-  function convertToSong() {
-    if (item.tag === 'AirBreakWithBackgroundMusic') {
-      item = { ...item, tag: 'Song' };
-    } else if (item.tag === 'AirBreak') {
-      item = { ...emptySong, id: item.id, seconds: item.seconds, notes: item.notes };
-    }
-  }
-
   function addBackgroundMusic() {
     item = {
       id: item.id,
@@ -160,27 +146,6 @@
 <div class="outer-padding">
   <div class="header">
     <h1 class="title">Edit item</h1>
-  </div>
-
-  <div class="button-group tag-switch-buttons">
-    <button
-      class="button"
-      class:inverted={item.tag === 'Song'}
-      disabled={item.tag === 'Song'}
-      onclick={convertToSong}
-    >
-      <i class="bi-music-note" aria-hidden="true"></i>
-      Song
-    </button>
-    <button
-      class="button"
-      class:inverted={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
-      disabled={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
-      onclick={convertToAirBreak}
-    >
-      <i class="bi-mic" aria-hidden="true"></i>
-      Air break
-    </button>
   </div>
 
   <div class="metadata-container">
@@ -351,10 +316,6 @@
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
-  }
-
-  .tag-switch-buttons > .button {
-    width: 100%;
   }
 
   .metadata-container {

@@ -10,7 +10,7 @@
   import { youtubeIdFromUrl } from '$lib/editor/external/youtube.ts';
   import { appleMusicTrackIdFromUrl } from '$lib/editor/external/appleMusic.ts';
   import { validBandcampUrl } from '$lib/editor/external/bandcamp.ts';
-  import type { PlaylistItem } from '$lib/playlist.ts';
+  import { emptySong, type PlaylistItem } from '$lib/playlist.ts';
   import { searchUrl } from '$lib/editor/search.ts';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
 
@@ -52,6 +52,22 @@
 
   function duplicate() {
     insertItems([item]);
+    showMenu = false;
+  }
+
+  function convertToAirBreak() {
+    if (item.tag === 'Song') {
+      item = { ...item, tag: 'AirBreakWithBackgroundMusic' };
+    }
+    showMenu = false;
+  }
+
+  function convertToSong() {
+    if (item.tag === 'AirBreakWithBackgroundMusic') {
+      item = { ...item, tag: 'Song' };
+    } else if (item.tag === 'AirBreak') {
+      item = { ...emptySong, id: item.id, seconds: item.seconds, notes: item.notes };
+    }
     showMenu = false;
   }
 
@@ -213,7 +229,15 @@
             <span class="visually-hidden">Delete</span>
           </button>
         {/if}
-        <Dropdown {duplicate} {deleteItem} bind:showMenu />
+        <Dropdown
+          {duplicate}
+          {deleteItem}
+          showConvertToAirBreak={item.tag === 'Song'}
+          {convertToAirBreak}
+          showConvertToSong={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
+          {convertToSong}
+          bind:showMenu
+        />
       </div>
     </div>
   </div>
