@@ -56,8 +56,10 @@
           metadata sources. The IDs can be found using search providers.
         </p>
 
-        <h3>Spotify</h3>
-        <Spotify />
+        {#if env.PUBLIC_SPOTIFY_CLIENT_ID}
+          <h3>Spotify</h3>
+          <Spotify />
+        {/if}
       </section>
 
       <section>
