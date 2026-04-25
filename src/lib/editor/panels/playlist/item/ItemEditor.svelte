@@ -5,7 +5,7 @@
   import type { PlaylistItem } from '$lib/playlist.ts';
   import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
-  import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
+  import { spotifyToken } from '$lib/auth/spotify.ts';
 
   import { searchProviders } from '$lib/editor/settings.ts';
   import { searchUrl } from '$lib/editor/search.ts';

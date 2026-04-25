@@ -1,7 +1,7 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-import { getToken } from '$lib/editor/external/auth/api.ts';
+import { getToken } from '$lib/auth/api';
 
 // We require access to sessionStorage for the code verifier and state
 export const ssr = false;

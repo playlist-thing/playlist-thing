@@ -11,7 +11,7 @@
   import type { PlaylistItem, Playlist, Broadcast } from '$lib/playlist.ts';
   import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
-  import { spotifyToken } from '$lib/editor/external/auth/spotify.ts';
+  import { spotifyToken } from '$lib/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';
   import { withFreshIds, modals } from '$lib/editor/state.svelte.ts';
   import { exportNotes } from '$lib/editor/export.ts';

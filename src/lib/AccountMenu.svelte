@@ -8,7 +8,7 @@
     apiTokenClaims,
     redirectToSSOAuthorize,
     redirectToSSOLogout
-  } from '$lib/editor/external/auth/api';
+  } from '$lib/auth/api';
 
   let showMenu = $state(false);
   let accountButton: HTMLButtonElement | null = $state(null);

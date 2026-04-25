@@ -2,7 +2,7 @@
   import Modal from '$lib/Modal.svelte';
 
   import { modals } from '$lib/editor/state.svelte.ts';
-  import { redirectToSpotifyAuthorize } from '$lib/editor/external/auth/spotify.ts';
+  import { redirectToSpotifyAuthorize } from '$lib/auth/spotify.ts';
 </script>
 
 <Modal
