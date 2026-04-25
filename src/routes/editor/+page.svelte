@@ -99,7 +99,7 @@
   .app {
     display: flex;
     flex-direction: column;
-    max-height: 100vh;
+    height: 100vh;
   }
 
   .controls-top {
@@ -131,7 +131,7 @@
   .panels {
     display: flex;
     justify-content: center;
-    min-height: 0;
+    flex: 1;
 
     padding-left: 6px;
     padding-right: 6px;
