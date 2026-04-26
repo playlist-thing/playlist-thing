@@ -4,8 +4,12 @@
   padding: 0;
 }
 
+.modal::backdrop {
+  backdrop-filter: blur(8px);
+}
+
 .modal-content {
-  padding: 1em;
+  padding: 15px;
   display: flex;
   flex-direction: column;
 }
