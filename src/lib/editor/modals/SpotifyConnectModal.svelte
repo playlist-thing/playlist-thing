@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Modal from '$lib/Modal.svelte';
+  import Modal from '$lib/ui/Modal.svelte';
 
   import { modals } from '$lib/editor/state.svelte.ts';
   import { redirectToSpotifyAuthorize } from '$lib/auth/spotify.ts';

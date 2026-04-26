@@ -1,7 +1,16 @@
 <script lang="ts">
   // https://svelte.dev/playground/modal?version=5.22.1
 
-  let { showModal = $bindable(), title, children, buttonText } = $props();
+  import type { Snippet } from 'svelte';
+
+  interface Props {
+    showModal: boolean;
+    title: string;
+    children: Snippet;
+    buttonText: string;
+  }
+
+  let { showModal = $bindable(), title, children, buttonText }: Props = $props();
 
   let dialog: HTMLDialogElement | undefined = $state();
 
