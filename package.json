@@ -22,7 +22,7 @@
     "browser-fs-access": "^0.38.0",
     "idb": "^8.0.3",
     "music-metadata": "^11.12.3",
-    "openid-client": "^6.8.3",
+    "openid-client": "^6.8.4",
     "prettier": "^3.8.3",
     "prettier-plugin-svelte": "^3.5.1",
     "slug": "^11.0.1",
