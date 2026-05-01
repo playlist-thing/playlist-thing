@@ -3,7 +3,7 @@
   import FileAttribute from './edit/FileAttribute.svelte';
 
   import type { PlaylistItem } from '$lib/playlist.ts';
-  import { emptySong, emptySongMetadata } from '$lib/playlist.ts';
+  import { emptySongMetadata } from '$lib/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
   import { spotifyToken } from '$lib/auth/spotify.ts';
 
@@ -144,10 +144,6 @@
 </script>
 
 <div class="outer-padding">
-  <div class="header">
-    <h1 class="title">Edit item</h1>
-  </div>
-
   <div class="metadata-container">
     {#if item.tag === 'AirBreakWithBackgroundMusic'}
       <div class="background-music-header">
