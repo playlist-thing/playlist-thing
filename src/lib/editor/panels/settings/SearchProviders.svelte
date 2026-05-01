@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { DndEvent } from 'svelte-dnd-action';
-  import { dragHandleZone, dragHandle } from 'svelte-dnd-action';
+  import { dragHandleZone } from 'svelte-dnd-action';
+
+  import SearchProviderItem from './search/SearchProvider.svelte';
 
   import { searchProviders } from '$lib/editor/settings.ts';
   import type { SearchProvider } from '$lib/editor/search.ts';
@@ -18,7 +20,7 @@
     const ids = $searchProviders.map((searchProvider) => searchProvider.id);
     const nextId = Math.max(...ids) + 1;
 
-    $searchProviders = [...$searchProviders, { id: nextId, name: '', url: '' }];
+    $searchProviders = [...$searchProviders, { id: nextId, name: 'New search provider', url: '' }];
   }
 
   function deleteSearchProvider(id: number) {
@@ -33,40 +35,8 @@
     onfinalize={handleSort}
     class="search-provider-list"
   >
-    {#each $searchProviders as searchProvider (searchProvider.id)}
-      <div class="search-provider">
-        <div use:dragHandle aria-label="drag-handle for {searchProvider.name}" class="drag-handle">
-          <i class="bi-list"></i>
-        </div>
-        <div class="search-provider-info">
-          <div class="info-item">
-            <div class="info-item-label">
-              <i class="bi-search"></i>
-            </div>
-            <input
-              class="input-text info-item-input"
-              type="text"
-              bind:value={searchProvider.name}
-            />
-          </div>
-          <div class="info-item">
-            <div class="info-item-label">
-              <i class="bi-link-45deg"></i>
-            </div>
-            <input class="input-text info-item-input" type="text" bind:value={searchProvider.url} />
-          </div>
-        </div>
-
-        <div>
-          <button
-            class="button transparent"
-            onclick={() => deleteSearchProvider(searchProvider.id)}
-          >
-            <i class="bi-trash" aria-hidden="true"></i>
-            <span class="visually-hidden">Delete search provider</span>
-          </button>
-        </div>
-      </div>
+    {#each $searchProviders as searchProvider, idx (searchProvider.id)}
+      <SearchProviderItem bind:searchProvider={$searchProviders[idx]} {deleteSearchProvider} />
     {/each}
   </div>
 {/if}
@@ -93,39 +63,6 @@
 
   .search-provider-list > :not(:last-child) {
     padding-bottom: 5px;
-  }
-
-  .search-provider {
-    display: flex;
-    align-items: center;
-  }
-
-  .search-provider-info {
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-
-    width: 100%;
-  }
-
-  .info-item-label {
-    padding-right: 5px;
-  }
-
-  .info-item-input {
-    width: 100%;
-  }
-
-  .drag-handle {
-    font-size: 1.3em;
-
-    padding: 5px;
   }
 
   .controls-bottom {

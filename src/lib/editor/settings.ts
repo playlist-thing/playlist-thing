@@ -18,7 +18,7 @@ export const quickSearchUrl = derived(
   ([$searchProviders, $quickSearchProviderId]) => {
     if ($searchProviders.length > 0) {
       const result = $searchProviders.filter(
-        (searchProvider: any) => searchProvider.id == $quickSearchProviderId
+        (searchProvider) => searchProvider.id == $quickSearchProviderId
       );
 
       if (result.length === 1) {
