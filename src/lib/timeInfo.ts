@@ -1,4 +1,4 @@
-import type { PlaylistItem } from '$lib/playlist.ts';
+import type { PlaylistItem } from '$lib/schema/playlist.ts';
 
 function calculateBeginsAt(items: PlaylistItem[]) {
   let result: number[] = [];

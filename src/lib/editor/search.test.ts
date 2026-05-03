@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { searchUrl } from './search.ts';
-import type { SongMetadata } from '$lib/playlist.ts';
+import type { SongMetadata } from '$lib/schema/playlist.ts';
 
 const cloudbusting: SongMetadata = {
   title: 'Cloudbusting',

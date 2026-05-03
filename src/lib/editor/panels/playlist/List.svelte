@@ -2,7 +2,7 @@
   import { dndzone, dragHandleZone, type DndEvent } from 'svelte-dnd-action';
 
   import Item from './Item.svelte';
-  import type { PlaylistItem } from '$lib/playlist';
+  import type { PlaylistItem } from '$lib/schema/playlist';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
   import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '$lib/timeInfo.ts';

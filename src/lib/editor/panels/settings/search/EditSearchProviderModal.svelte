@@ -1,6 +1,6 @@
 <script lang="ts">
   import { searchUrl, type SearchProvider } from '$lib/editor/search';
-  import type { SongMetadata } from '$lib/playlist';
+  import type { SongMetadata } from '$lib/schema/playlist';
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
 
   interface Props {

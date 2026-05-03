@@ -2,8 +2,8 @@
   import LinkAttribute from './edit/LinkAttribute.svelte';
   import FileAttribute from './edit/FileAttribute.svelte';
 
-  import type { PlaylistItem } from '$lib/playlist.ts';
-  import { emptySongMetadata } from '$lib/playlist.ts';
+  import type { PlaylistItem } from '$lib/schema/playlist.ts';
+  import { emptySongMetadata } from '$lib/schema/playlist.ts';
   import { formatSeconds, parseDuration } from '$lib/format.ts';
   import { spotifyToken } from '$lib/auth/spotify.ts';
 

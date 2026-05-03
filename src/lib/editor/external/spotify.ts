@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 
 import { spotifyToken, tokenNeedsRefresh, refreshToken } from '$lib/auth/spotify.ts';
 
-import type { PlaylistItem } from '$lib/playlist.ts';
+import type { PlaylistItem } from '$lib/schema/playlist.ts';
 
 export function spotifyTrackIdFromUrl(url: string) {
   const pattern = /https:\/\/(open|play).spotify.com\/track\/([a-zA-Z0-9]+)/;

@@ -8,8 +8,8 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem, Playlist, Broadcast } from '$lib/playlist.ts';
-  import { emptySong, emptyAirBreak } from '$lib/playlist.ts';
+  import type { PlaylistItem, Playlist, Broadcast } from '$lib/schema/playlist.ts';
+  import { emptySong, emptyAirBreak } from '$lib/schema/playlist.ts';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
   import { spotifyToken } from '$lib/auth/spotify.ts';
   import { getFile } from '$lib/editor/external/file.ts';

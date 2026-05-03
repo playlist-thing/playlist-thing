@@ -1,7 +1,7 @@
 import { fileSave } from 'browser-fs-access';
 import slug from 'slug';
 
-import type { PlaylistItem } from '$lib/playlist.ts';
+import type { PlaylistItem } from '$lib/schema/playlist.ts';
 
 export async function exportNotes(items: PlaylistItem[], name: string) {
   let output: string[] = [];

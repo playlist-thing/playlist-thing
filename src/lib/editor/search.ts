@@ -1,4 +1,4 @@
-import type { SongMetadata } from '$lib/playlist.ts';
+import type { SongMetadata } from '$lib/schema/playlist.ts';
 
 export interface SearchProvider {
   id: number;

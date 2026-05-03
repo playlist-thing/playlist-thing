@@ -1,7 +1,10 @@
 import { openDB } from 'idb';
 import type { DBSchema } from 'idb';
 
-import type { Playlist, Show, Station, DJ } from '$lib/playlist.ts';
+import type { Playlist } from '$lib/schema/playlist';
+import type { Show } from '$lib/schema/show';
+import type { Station } from '$lib/schema/station';
+import type { DJ } from '$lib/schema/dj';
 
 interface DBv1 extends DBSchema {
   playlists: {
@@ -42,7 +45,7 @@ interface DBv1 extends DBSchema {
   };
 }
 
-async function openDatabase() {
+export async function openDatabase() {
   const db = await openDB<DBv1>('playlist-thing', 1, {
     async upgrade(db, oldVersion) {
       const playlists = db.createObjectStore('playlists', {

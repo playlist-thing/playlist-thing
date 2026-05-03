@@ -10,7 +10,7 @@
   import { youtubeIdFromUrl } from '$lib/editor/external/youtube.ts';
   import { appleMusicTrackIdFromUrl } from '$lib/editor/external/appleMusic.ts';
   import { validBandcampUrl } from '$lib/editor/external/bandcamp.ts';
-  import { emptySong, type PlaylistItem } from '$lib/playlist.ts';
+  import { emptySong, type PlaylistItem } from '$lib/schema/playlist.ts';
   import { searchUrl } from '$lib/editor/search.ts';
   import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
 
