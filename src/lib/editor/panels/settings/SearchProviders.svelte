@@ -30,7 +30,7 @@
 
 {#if $searchProviders.length > 0}
   <div
-    use:dragHandleZone={{ items: $searchProviders }}
+    use:dragHandleZone={{ items: $searchProviders, type: 'search-provider' }}
     onconsider={handleSort}
     onfinalize={handleSort}
     class="search-provider-list"

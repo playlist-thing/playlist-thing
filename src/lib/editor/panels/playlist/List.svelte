@@ -22,7 +22,7 @@
   let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(items));
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
 
-  let dndOptions = $derived({ items, dragDisabled: items.length === 0 });
+  let dndOptions = $derived({ items, dragDisabled: items.length === 0, type: 'playlist' });
 
   function deleteItem(id: number) {
     items = items.filter((item) => item.id !== id);
