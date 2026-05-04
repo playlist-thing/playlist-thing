@@ -3,14 +3,6 @@
   import type { SongMetadata } from '$lib/schema/playlist';
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
 
-  interface Props {
-    showModal: boolean;
-    searchProvider: SearchProvider;
-    saveSearchProvider: (searchProvider: SearchProvider) => void;
-  }
-
-  let { showModal = $bindable(), searchProvider, saveSearchProvider }: Props = $props();
-
   let exampleSong: SongMetadata = {
     artist: 'The Beatles',
     title: 'A Day In The Life',
@@ -20,7 +12,25 @@
     attributes: {}
   };
 
-  let exampleSongSearchUrl = $derived(searchUrl(exampleSong, searchProvider.url));
+  interface Props {
+    showModal: boolean;
+    searchProvider: SearchProvider;
+    saveSearchProvider: (searchProvider: SearchProvider) => void;
+  }
+
+  let { showModal = $bindable(), searchProvider, saveSearchProvider }: Props = $props();
+
+  let name = $state('');
+  let url = $state('');
+
+  let exampleSongSearchUrl = $derived(searchUrl(exampleSong, url));
+
+  $effect(() => {
+    if (showModal) {
+      name = searchProvider.name;
+      url = searchProvider.url;
+    }
+  });
 </script>
 
 <OkCancelModal
@@ -28,17 +38,17 @@
   title="Edit search provider"
   buttonCancelText="Cancel"
   buttonOkText="Save"
-  onOk={() => saveSearchProvider(searchProvider)}
+  onOk={() => saveSearchProvider({ id: searchProvider.id, name, url })}
 >
   <div class="input-block">
     <div class="input-block-item">
       <label class="label" for="name">Name</label>
-      <input class="input-text" id="name" type="text" bind:value={searchProvider.name} />
+      <input class="input-text" id="name" type="text" bind:value={name} />
     </div>
 
     <div class="input-block-item">
       <label class="label" for="url">URL</label>
-      <input class="input-text" id="url" type="text" bind:value={searchProvider.url} />
+      <input class="input-text" id="url" type="text" bind:value={url} />
     </div>
 
     <div class="hint">
