@@ -13,7 +13,7 @@
   }
 
   function resetSearchProviders() {
-    $searchProviders = defaultSearchProviders;
+    $searchProviders = structuredClone(defaultSearchProviders);
   }
 
   function addSearchProvider() {
