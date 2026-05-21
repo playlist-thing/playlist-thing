@@ -24,7 +24,7 @@
     "music-metadata": "^11.12.3",
     "openid-client": "^6.8.4",
     "prettier": "^3.8.3",
-    "prettier-plugin-svelte": "^3.5.2",
+    "prettier-plugin-svelte": "^4.0.0",
     "slug": "^11.0.1",
     "svelte": "^5.55.9",
     "svelte-dnd-action": "^0.9.69",
