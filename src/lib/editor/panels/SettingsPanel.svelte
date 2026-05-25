@@ -103,6 +103,15 @@
               </a>
             </li>
           {/if}
+
+          {#if 'PUBLIC_IMPRINT_URL' in env}
+            <li class="links-bottom-item">
+              <a href={env.PUBLIC_IMPRINT_URL} rel="external" target="_blank">
+                <i class="bi-file-earmark-text" aria-hidden="true"></i>
+                Imprint
+              </a>
+            </li>
+          {/if}
         </ul>
       </section>
     </div>
