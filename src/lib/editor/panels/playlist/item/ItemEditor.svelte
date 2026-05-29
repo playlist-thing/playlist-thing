@@ -305,9 +305,6 @@
 </div>
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-
   .outer-padding {
     padding-left: 30px;
     padding-right: 30px;

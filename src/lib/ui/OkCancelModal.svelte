@@ -57,9 +57,6 @@
 </dialog>
 
 <style>
-  @import '$lib/style/forms.css';
-  @import '$lib/style/modal.css';
-
   .button.ok {
     margin-right: 5px;
   }

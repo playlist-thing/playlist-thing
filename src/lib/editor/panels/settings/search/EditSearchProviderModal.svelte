@@ -62,9 +62,6 @@
 </OkCancelModal>
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-
   .input-block {
     display: flex;
     flex-direction: column;

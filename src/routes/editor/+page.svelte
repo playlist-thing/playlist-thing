@@ -91,11 +91,6 @@
 <SpotifyConnectModal />
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/colors.css';
-  @import '$lib/style/forms.css';
-  @import '$lib/style/responsive.css';
-
   .app {
     display: flex;
     flex-direction: column;

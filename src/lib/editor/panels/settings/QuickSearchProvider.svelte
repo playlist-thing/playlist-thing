@@ -13,7 +13,3 @@
 {:else}
   <i>No search providers to choose from</i>
 {/if}
-
-<style>
-  @import '$lib/style/forms.css';
-</style>

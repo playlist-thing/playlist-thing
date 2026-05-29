@@ -40,8 +40,3 @@
     </div>
   </div>
 </dialog>
-
-<style>
-  @import '$lib/style/forms.css';
-  @import '$lib/style/modal.css';
-</style>

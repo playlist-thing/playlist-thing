@@ -38,8 +38,3 @@
     </form>
   {/if}
 </div>
-
-<style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-</style>

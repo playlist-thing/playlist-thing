@@ -21,8 +21,6 @@
 </div>
 
 <style>
-  @import '$lib/style/forms.css';
-
   .input-block {
     display: flex;
     flex-direction: column;

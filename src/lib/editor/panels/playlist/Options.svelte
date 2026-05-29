@@ -70,10 +70,6 @@
 {/if}
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-  @import '$lib/style/panel.css';
-
   .outer-modal {
     display: flex;
     flex-direction: column;

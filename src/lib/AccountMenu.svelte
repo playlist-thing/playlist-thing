@@ -57,9 +57,6 @@
 {/if}
 
 <style>
-  @import '$lib/style/forms.css';
-  @import '$lib/style/dropdown.css';
-
   .dropdown-menu {
     min-width: 200px;
   }

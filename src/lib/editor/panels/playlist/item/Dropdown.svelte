@@ -72,10 +72,6 @@
 </div>
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-  @import '$lib/style/dropdown.css';
-
   .button-toggle-menu {
     /* fix as this button is in a div */
     border-top-left-radius: 0px;

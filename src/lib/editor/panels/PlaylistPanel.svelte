@@ -268,9 +268,6 @@
 </div>
 
 <style>
-  @import '$lib/style/forms.css';
-  @import '$lib/style/panel.css';
-
   .outer-container {
     max-width: 800px;
   }

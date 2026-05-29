@@ -247,9 +247,6 @@
 </div>
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-
   .row {
     display: flex;
     justify-content: space-between;

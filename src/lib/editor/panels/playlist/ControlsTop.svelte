@@ -60,9 +60,6 @@
 </div>
 
 <style>
-  @import '$lib/style/a11y.css';
-  @import '$lib/style/forms.css';
-
   .controls-top {
     display: flex;
     flex-direction: column;

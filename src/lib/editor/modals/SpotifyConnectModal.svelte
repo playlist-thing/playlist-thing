@@ -19,8 +19,6 @@
 </Modal>
 
 <style>
-  @import '$lib/style/forms.css';
-
   .modal-text {
     padding-bottom: 20px;
   }

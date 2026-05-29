@@ -114,8 +114,6 @@
 </div>
 
 <style>
-  @import '$lib/style/forms.css';
-
   .content-container {
     display: flex;
     justify-content: center;
