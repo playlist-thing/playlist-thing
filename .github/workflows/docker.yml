@@ -22,7 +22,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Login to ghcr.io
         if: github.event_name != 'pull_request'
