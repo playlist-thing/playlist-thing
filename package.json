@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@fontsource-variable/work-sans": "^5.2.8",
-    "@sveltejs/adapter-node": "^5.5.4",
+    "@sveltejs/adapter-node": "^5.5.5",
     "@sveltejs/kit": "^2.61.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@types/node": "^25.9.3",
