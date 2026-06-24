@@ -33,7 +33,7 @@
   let items: PlaylistItem[] = $state([]);
   let queue: PlaylistItem[] = $state([]);
 
-  let showId: string | null = $state(null);
+  let showIds: string[] = $state([]);
   let djIds: string[] = $state([]);
 
   let autosaveCallback: number | null;
@@ -100,7 +100,7 @@
       createdAt,
       lastModifiedAt,
 
-      showId,
+      showId: showIds,
       djIds
     } = parsed);
 
@@ -121,7 +121,7 @@
       items,
       queue,
 
-      showId,
+      showId: showIds,
       djIds
     };
 

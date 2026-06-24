@@ -81,8 +81,8 @@ export interface Playlist {
   items: PlaylistItem[];
   queue: PlaylistItem[];
 
-  // not included in exports
-  showId: string | null;
+  // M:N relationship
+  showId: string[];
 
   // M:N relationship
   djIds: string[];

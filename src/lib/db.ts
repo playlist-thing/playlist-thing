@@ -50,10 +50,10 @@ export async function openDatabase() {
       const playlists = db.createObjectStore('playlists', {
         keyPath: 'id'
       });
-      playlists.createIndex('slug', 'slug', { unique: false });
+      playlists.createIndex('slug', 'slug', { unique: true });
       playlists.createIndex('createdAt', 'createdAt', { unique: false });
       playlists.createIndex('lastModifiedAt', 'lastModifiedAt', { unique: false });
-      playlists.createIndex('showId', 'showId', { unique: false });
+      playlists.createIndex('showId', 'showIds', { unique: false, multiEntry: true });
       playlists.createIndex('djId', 'djIds', { unique: false, multiEntry: true });
 
       const shows = db.createObjectStore('shows', {
