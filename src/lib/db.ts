@@ -12,7 +12,6 @@ interface DBv1 extends DBSchema {
     value: Playlist;
     indexes: {
       slug: string;
-      broadcastStart: number;
       createdAt: number;
       lastModifiedAt: number;
       showId: string;
@@ -52,7 +51,6 @@ export async function openDatabase() {
         keyPath: 'id'
       });
       playlists.createIndex('slug', 'slug', { unique: false });
-      playlists.createIndex('broadcastStart', ['broadcast', 'start'], { unique: false });
       playlists.createIndex('createdAt', 'createdAt', { unique: false });
       playlists.createIndex('lastModifiedAt', 'lastModifiedAt', { unique: false });
       playlists.createIndex('showId', 'showId', { unique: false });

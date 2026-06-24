@@ -26,7 +26,7 @@
   let slug = $state('');
   let description = $state('');
   let isPublic = $state(false);
-  let broadcast: Broadcast | null = $state(null);
+  let broadcasts: Broadcast[] = $state([]);
   let createdAt = $state(0);
   let lastModifiedAt = $state(0);
 
@@ -96,7 +96,7 @@
       slug,
       description,
       public: isPublic,
-      broadcast,
+      broadcasts,
       createdAt,
       lastModifiedAt,
 
@@ -114,7 +114,7 @@
       slug,
       description,
       public: isPublic,
-      broadcast,
+      broadcasts,
       createdAt,
       lastModifiedAt,
 

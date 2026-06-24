@@ -74,7 +74,7 @@ export interface Playlist {
   slug: string;
   description: string;
   public: boolean;
-  broadcast: Broadcast | null;
+  broadcasts: Broadcast[];
   createdAt: number;
   lastModifiedAt: number;
 
