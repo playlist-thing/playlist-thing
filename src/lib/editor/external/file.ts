@@ -16,7 +16,8 @@ export async function getFile(file: File): Promise<PlaylistItem> {
   return {
     id: 0,
     seconds: seconds,
-    notes: '',
+    internalNotes: '',
+    publicNotes: '',
 
     tag: 'Song',
     content: {

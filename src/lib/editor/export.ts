@@ -19,7 +19,8 @@ export async function exportNotes(items: PlaylistItem[], name: string) {
       output.push(`Released: ${item.content.released}\n`);
     }
 
-    output.push(`Notes:\n${item.notes}\n\n`);
+    output.push(`Internal Notes:\n${item.internalNotes}\n`);
+    output.push(`Public Notes:\n${item.publicNotes}\n\n`);
   }
 
   const blob = new Blob(output);

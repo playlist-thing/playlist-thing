@@ -35,7 +35,8 @@
     item = {
       id: item.id,
       seconds: item.seconds,
-      notes: item.notes,
+      internalNotes: item.internalNotes,
+      publicNotes: item.publicNotes,
 
       tag: 'AirBreakWithBackgroundMusic',
       content: emptySongMetadata
@@ -46,7 +47,8 @@
     item = {
       id: item.id,
       seconds: item.seconds,
-      notes: item.notes,
+      internalNotes: item.internalNotes,
+      publicNotes: item.publicNotes,
 
       tag: 'AirBreak'
     };
@@ -226,8 +228,15 @@
       {/if}
 
       <div class="input-block-item">
-        <label class="label" for="notes">Notes</label>
-        <textarea class="input-text" id="notes" rows="10" bind:value={item.notes}></textarea>
+        <label class="label" for="internal-notes">Internal notes</label>
+        <textarea class="input-text" id="internal-notes" rows="5" bind:value={item.internalNotes}
+        ></textarea>
+      </div>
+
+      <div class="input-block-item">
+        <label class="label" for="public-notes">Public notes</label>
+        <textarea class="input-text" id="public-notes" rows="5" bind:value={item.publicNotes}
+        ></textarea>
       </div>
 
       {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}

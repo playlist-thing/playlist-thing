@@ -66,7 +66,13 @@
     if (item.tag === 'AirBreakWithBackgroundMusic') {
       item = { ...item, tag: 'Song' };
     } else if (item.tag === 'AirBreak') {
-      item = { ...emptySong, id: item.id, seconds: item.seconds, notes: item.notes };
+      item = {
+        ...emptySong,
+        id: item.id,
+        seconds: item.seconds,
+        internalNotes: item.internalNotes,
+        publicNotes: item.publicNotes
+      };
     }
     showMenu = false;
   }

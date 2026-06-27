@@ -3,7 +3,8 @@ import { z } from 'zod';
 const BasePlaylistItemSchema = z.object({
   id: z.number(),
   seconds: z.number(),
-  notes: z.string()
+  internalNotes: z.string(),
+  publicNotes: z.string()
 });
 
 export const SongMetadataSchema = z.object({
@@ -56,7 +57,8 @@ export const emptySongMetadata: SongMetadata = {
 export const emptySong: PlaylistItem = {
   id: 0,
   seconds: 0,
-  notes: '',
+  internalNotes: '',
+  publicNotes: '',
 
   tag: 'Song',
   content: emptySongMetadata
@@ -65,7 +67,8 @@ export const emptySong: PlaylistItem = {
 export const emptyAirBreak: PlaylistItem = {
   id: 0,
   seconds: 90,
-  notes: '',
+  internalNotes: '',
+  publicNotes: '',
 
   tag: 'AirBreak'
 };

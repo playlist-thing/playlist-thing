@@ -42,7 +42,8 @@ export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistI
   return {
     id: 0,
     seconds: seconds,
-    notes: '',
+    internalNotes: '',
+    publicNotes: '',
 
     tag: 'Song',
     content: {

@@ -13,7 +13,8 @@ const validSongMetadata = {
 const validSong = {
   id: 1,
   seconds: 240,
-  notes: 'Great track',
+  internalNotes: 'Great track',
+  publicNotes: '',
   tag: 'Song',
   content: validSongMetadata
 };
@@ -21,7 +22,8 @@ const validSong = {
 const validAirBreak = {
   id: 2,
   seconds: 90,
-  notes: '',
+  internalNotes: '',
+  publicNotes: '',
   tag: 'AirBreak'
 };
 
@@ -65,7 +67,8 @@ test('invalid playlist item tag fails validation', () => {
   const invalidItem = {
     id: 1,
     seconds: 90,
-    notes: '',
+    internalNotes: '',
+    publicNotes: '',
     tag: 'InvalidTag'
   };
   expect(PlaylistItemSchema.safeParse(invalidItem).success).toBe(false);
