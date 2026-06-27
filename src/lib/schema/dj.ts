@@ -1,10 +1,13 @@
-export interface DJ {
-  // UUID
-  id: string;
+import { z } from 'zod';
 
-  name: string;
-  slug: string;
-  description: string;
-  public: boolean;
-  links: string[];
-}
+export const DJSchema = z.object({
+  id: z.uuid(),
+
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  public: z.boolean(),
+  links: z.array(z.string())
+});
+
+export type DJ = z.infer<typeof DJSchema>;

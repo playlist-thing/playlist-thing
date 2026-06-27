@@ -1,34 +1,47 @@
-interface BasePlaylistItem {
-  id: number;
-  seconds: number;
-  notes: string;
-}
+import { z } from 'zod';
 
-export interface SongMetadata {
-  artist: string;
-  title: string;
-  album: string;
-  released: string;
-  label: string;
+const BasePlaylistItemSchema = z.object({
+  id: z.number(),
+  seconds: z.number(),
+  notes: z.string()
+});
 
-  attributes: Record<string, string>;
-}
+export const SongMetadataSchema = z.object({
+  artist: z.string(),
+  title: z.string(),
+  album: z.string(),
+  released: z.string(),
+  label: z.string(),
 
-interface Song extends BasePlaylistItem {
-  tag: 'Song';
-  content: SongMetadata;
-}
+  attributes: z.record(z.string(), z.string())
+});
 
-interface AirBreak extends BasePlaylistItem {
-  tag: 'AirBreak';
-}
+export type SongMetadata = z.infer<typeof SongMetadataSchema>;
 
-interface AirBreakWithBackgroundMusic extends BasePlaylistItem {
-  tag: 'AirBreakWithBackgroundMusic';
-  content: SongMetadata;
-}
+const SongSchema = z.object({
+  ...BasePlaylistItemSchema.shape,
+  tag: z.literal('Song'),
+  content: SongMetadataSchema
+});
 
-export type PlaylistItem = Song | AirBreak | AirBreakWithBackgroundMusic;
+const AirBreakSchema = z.object({
+  ...BasePlaylistItemSchema.shape,
+  tag: z.literal('AirBreak')
+});
+
+const AirBreakWithBackgroundMusicSchema = z.object({
+  ...BasePlaylistItemSchema.shape,
+  tag: z.literal('AirBreakWithBackgroundMusic'),
+  content: SongMetadataSchema
+});
+
+export const PlaylistItemSchema = z.discriminatedUnion('tag', [
+  SongSchema,
+  AirBreakSchema,
+  AirBreakWithBackgroundMusicSchema
+]);
+
+export type PlaylistItem = z.infer<typeof PlaylistItemSchema>;
 
 export const emptySongMetadata: SongMetadata = {
   artist: '',
@@ -40,7 +53,7 @@ export const emptySongMetadata: SongMetadata = {
   attributes: {}
 };
 
-export const emptySong: Song = {
+export const emptySong: PlaylistItem = {
   id: 0,
   seconds: 0,
   notes: '',
@@ -49,7 +62,7 @@ export const emptySong: Song = {
   content: emptySongMetadata
 };
 
-export const emptyAirBreak: AirBreak = {
+export const emptyAirBreak: PlaylistItem = {
   id: 0,
   seconds: 90,
   notes: '',
@@ -57,33 +70,35 @@ export const emptyAirBreak: AirBreak = {
   tag: 'AirBreak'
 };
 
-export interface Broadcast {
+export const BroadcastSchema = z.object({
   // milliseconds since unix epoch (i.e. Date.getTime())
-  start: number;
+  start: z.number(),
   // milliseconds
-  duration: number;
-}
+  duration: z.number()
+});
 
-export interface Playlist {
-  // UUID
-  //
+export type Broadcast = z.infer<typeof BroadcastSchema>;
+
+export const PlaylistSchema = z.object({
   // not included in exports
-  id: string;
+  id: z.uuid(),
 
-  name: string;
-  slug: string;
-  description: string;
-  public: boolean;
-  broadcasts: Broadcast[];
-  createdAt: number;
-  lastModifiedAt: number;
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  public: z.boolean(),
+  broadcasts: z.array(BroadcastSchema),
+  createdAt: z.number(),
+  lastModifiedAt: z.number(),
 
-  items: PlaylistItem[];
-  queue: PlaylistItem[];
-
-  // M:N relationship
-  showId: string[];
+  items: z.array(PlaylistItemSchema),
+  queue: z.array(PlaylistItemSchema),
 
   // M:N relationship
-  djIds: string[];
-}
+  showIds: z.array(z.uuid()),
+
+  // M:N relationship
+  djIds: z.array(z.uuid())
+});
+
+export type Playlist = z.infer<typeof PlaylistSchema>;

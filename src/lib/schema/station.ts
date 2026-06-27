@@ -1,39 +1,45 @@
-type DomainVerification = AutomaticDomainVerification | ManualDomainVerification;
+import { z } from 'zod';
 
-interface AutomaticDomainVerification {
-  tag: 'AutomaticDomainVerification';
-  content: {
-    authenticationCode: string;
+const AutomaticDomainVerificationSchema = z.object({
+  tag: z.literal('AutomaticDomainVerification'),
+  content: z.object({
+    authenticationCode: z.string(),
     // milliseconds since unix epoch (i.e. Date.getTime())
-    lastCheckAt: number;
-    lastSuccessfulCheckAt: number;
-  };
-}
+    lastCheckAt: z.number(),
+    lastSuccessfulCheckAt: z.number()
+  })
+});
 
-interface ManualDomainVerification {
-  tag: 'ManualDomainVerification';
-  content: {
+const ManualDomainVerificationSchema = z.object({
+  tag: z.literal('ManualDomainVerification'),
+  content: z.object({
     // milliseconds since unix epoch (i.e. Date.getTime())
-    verifiedAt: number;
-  };
-}
+    verifiedAt: z.number()
+  })
+});
 
-interface Domain {
-  domain: string;
-  verification: null | DomainVerification;
-}
+const DomainVerificationSchema = z.discriminatedUnion('tag', [
+  AutomaticDomainVerificationSchema,
+  ManualDomainVerificationSchema
+]);
 
-export interface Station {
-  // UUID
-  id: string;
+const DomainSchema = z.object({
+  domain: z.string(),
+  verification: z.nullable(DomainVerificationSchema)
+});
 
-  name: string;
-  slug: string;
-  description: string;
-  public: boolean;
-  domains: Domain[];
-  links: string[];
+export const StationSchema = z.object({
+  id: z.uuid(),
+
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  public: z.boolean(),
+  domains: z.array(DomainSchema),
+  links: z.array(z.string()),
 
   // M:N relationship
-  djIds: string[];
-}
+  djIds: z.array(z.uuid())
+});
+
+export type Station = z.infer<typeof StationSchema>;

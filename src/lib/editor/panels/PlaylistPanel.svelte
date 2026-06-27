@@ -100,7 +100,7 @@
       createdAt,
       lastModifiedAt,
 
-      showId: showIds,
+      showIds,
       djIds
     } = parsed);
 
@@ -121,7 +121,7 @@
       items,
       queue,
 
-      showId: showIds,
+      showIds,
       djIds
     };
 

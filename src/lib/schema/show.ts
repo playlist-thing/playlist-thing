@@ -1,15 +1,19 @@
-export interface Show {
-  // UUID
-  id: string;
+import { z } from 'zod';
 
-  name: string;
-  slug: string;
-  description: string;
-  public: boolean;
-  links: string[];
+export const ShowSchema = z.object({
+  id: z.uuid(),
 
-  stationId: string | null;
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  public: z.boolean(),
+  links: z.array(z.string()),
+
+  // 1:N relationship
+  stationId: z.uuid().nullable(),
 
   // M:N relationship
-  djIds: string[];
-}
+  djIds: z.array(z.uuid())
+});
+
+export type Show = z.infer<typeof ShowSchema>;
