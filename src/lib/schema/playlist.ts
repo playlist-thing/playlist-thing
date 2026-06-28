@@ -108,6 +108,14 @@ export const PlaylistSchema = z.object({
 
 export type Playlist = z.infer<typeof PlaylistSchema>;
 
+export const PlaylistStorageSchema = PlaylistSchema.omit({
+  id: true
+}).extend({
+  id: z.uuid().optional()
+});
+
+export type PlaylistStorage = z.infer<typeof PlaylistStorageSchema>;
+
 export const emptyPlaylist: Playlist = {
   id: '',
 

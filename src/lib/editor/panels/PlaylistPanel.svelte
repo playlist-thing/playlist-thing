@@ -9,7 +9,7 @@
   import Options from './playlist/Options.svelte';
 
   import type { PlaylistItem, Playlist, Broadcast } from '$lib/schema/playlist';
-  import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
+  import { PlaylistStorageSchema, emptySong, emptyAirBreak } from '$lib/schema/playlist';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { getFile } from '$lib/editor/external/file';
@@ -87,8 +87,25 @@
     queue = [];
   }
 
-  async function fromJson(json: string) {
-    const parsed = JSON.parse(json);
+  function fromJson(json: string) {
+    let parsed;
+
+    try {
+      parsed = JSON.parse(json);
+    } catch (e) {
+      modals.showAddFileErrorModal = true;
+      console.log(e);
+      return;
+    }
+
+    const result = PlaylistStorageSchema.safeParse(parsed);
+    if (!result.success) {
+      modals.showAddFileErrorModal = true;
+      console.log(result.error);
+      return;
+    }
+
+    const playlist = result.data;
     clear();
 
     ({
@@ -102,10 +119,10 @@
 
       showIds,
       djIds
-    } = parsed);
+    } = playlist);
 
-    items = withFreshIds(parsed.items);
-    queue = withFreshIds(parsed.queue);
+    items = withFreshIds(playlist.items);
+    queue = withFreshIds(playlist.queue);
   }
 
   function toJson() {
