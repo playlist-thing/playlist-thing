@@ -1,16 +1,6 @@
 import { expect, test } from 'vitest';
 import { ShowSchema } from './show.ts';
-
-const validShow = {
-  id: 'b441163b-1ab0-473c-a8d7-e91473a755e8',
-  name: 'Test Show',
-  slug: 'test-show',
-  description: 'A test show',
-  public: true,
-  links: ['https://example.com'],
-  stationId: 'c2cb2819-6a7f-43ca-9ebe-8e38781bf079',
-  djIds: ['ca1d0b13-d870-4025-a77f-33e9960b20be', '9cf8e1cf-f63f-43f5-8e98-df3c940fc7f7']
-};
+import { validShow } from './examples.ts';
 
 test('valid show with null stationId passes validation', () => {
   expect(ShowSchema.safeParse({ ...validShow, stationId: null }).success).toBe(true);

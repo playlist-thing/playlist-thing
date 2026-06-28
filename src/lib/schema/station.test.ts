@@ -1,28 +1,6 @@
 import { expect, test } from 'vitest';
 import { StationSchema } from './station.ts';
-
-const validStation = {
-  id: '5574cf2f-56bc-4307-8de5-3320c7d8233a',
-  name: 'Test Station',
-  slug: 'test-station',
-  description: 'A test station',
-  public: true,
-  domains: [
-    {
-      domain: 'example.com',
-      verification: {
-        tag: 'AutomaticDomainVerification',
-        content: {
-          authenticationCode: 'abc123',
-          lastCheckAt: 1234567890,
-          lastSuccessfulCheckAt: 1234567890
-        }
-      }
-    }
-  ],
-  links: ['https://example.com'],
-  djIds: ['aa175706-80af-42ba-bbc3-61c35d4054c0']
-};
+import { validStation } from './examples.ts';
 
 const validStationWithManualVerification = {
   ...validStation,

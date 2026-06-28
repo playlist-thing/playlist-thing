@@ -1,14 +1,6 @@
 import { expect, test } from 'vitest';
 import { DJSchema } from './dj.ts';
-
-const validDJ = {
-  id: '5d883c03-bafb-4beb-aeef-881618723f43',
-  name: 'Test DJ',
-  slug: 'test-dj',
-  description: 'A test DJ',
-  public: true,
-  links: ['https://example.com']
-};
+import { validDJ } from './examples.ts';
 
 test('valid DJ passes validation', () => {
   expect(DJSchema.safeParse(validDJ).success).toBe(true);
