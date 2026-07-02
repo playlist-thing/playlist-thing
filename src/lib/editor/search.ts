@@ -14,7 +14,7 @@ export const defaultSearchProviders: SearchProvider[] = [
   { id: 4, name: 'Google', url: 'https://www.google.com/search?q=' }
 ];
 
-export function searchUrl(song: SongMetadata, searchUrl: string) {
+export function searchUrl(song: SongMetadata, baseUrl: string) {
   const searchTerm = `${song.title} ${song.artist}`;
-  return searchUrl + encodeURIComponent(searchTerm);
+  return baseUrl + encodeURIComponent(searchTerm);
 }

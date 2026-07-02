@@ -22,7 +22,7 @@ export default function localStorageStore<T>(key: string, defaultValue: T) {
     // this browsing context
     innerStore.set(value);
 
-    // save value to localStarage, this will call subscribers in other
+    // save value to localStorage, this will call subscribers in other
     // browsing contexts
     localStorage.setItem(key, JSON.stringify(value));
   }
