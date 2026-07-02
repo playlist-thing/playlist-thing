@@ -64,7 +64,9 @@ test('opens the database with the expected stores and indexes', async () => {
   expect(playlists.index('djId').multiEntry).toBe(true);
 
   const shows = db.transaction('shows', 'readonly').objectStore('shows');
-  expect(Array.from(shows.indexNames)).toEqual(expect.arrayContaining(['slug', 'stationId', 'djId']));
+  expect(Array.from(shows.indexNames)).toEqual(
+    expect.arrayContaining(['slug', 'stationId', 'djId'])
+  );
   expect(Array.from(shows.indexNames)).toHaveLength(3);
   expect(shows.index('djId').multiEntry).toBe(true);
 
