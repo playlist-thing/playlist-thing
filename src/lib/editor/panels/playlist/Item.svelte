@@ -193,6 +193,9 @@
             </div>
 
             <div>
+              {#if item.internalNotes != '' || item.publicNotes != ''}
+                <i class="bi-sticky"></i>
+              {/if}
               {#if 'file' in item.content.attributes}
                 <i class="bi-file-earmark"></i>
               {/if}
