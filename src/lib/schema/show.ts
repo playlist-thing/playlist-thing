@@ -9,8 +9,8 @@ export const ShowSchema = z.object({
   public: z.boolean(),
   links: z.array(z.string()),
 
-  // 1:N relationship
-  stationId: z.uuid().nullable(),
+  // M:N relationship
+  stationIds: z.array(z.uuid()),
 
   // M:N relationship
   djIds: z.array(z.uuid())

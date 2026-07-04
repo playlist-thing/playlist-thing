@@ -51,7 +51,7 @@ export const validShow: Show = {
   description: 'A test show',
   public: true,
   links: ['https://example.com'],
-  stationId: 'c2cb2819-6a7f-43ca-9ebe-8e38781bf079',
+  stationIds: ['c2cb2819-6a7f-43ca-9ebe-8e38781bf079'],
   djIds: ['ca1d0b13-d870-4025-a77f-33e9960b20be', '9cf8e1cf-f63f-43f5-8e98-df3c940fc7f7']
 };
 

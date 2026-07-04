@@ -62,7 +62,7 @@ export async function openDatabase() {
         keyPath: 'id'
       });
       shows.createIndex('slug', 'slug', { unique: true });
-      shows.createIndex('stationId', 'stationId', { unique: false });
+      shows.createIndex('stationId', 'stationIds', { unique: false, multiEntry: true });
       shows.createIndex('djId', 'djIds', { unique: false, multiEntry: true });
 
       const stations = db.createObjectStore('stations', {

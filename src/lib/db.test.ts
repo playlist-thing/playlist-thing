@@ -10,7 +10,7 @@ const playlist = {
   showIds: [validShow.id],
   djIds: [validDJ.id]
 };
-const show = { ...validShow, stationId: validStation.id, djIds: [validDJ.id] };
+const show = { ...validShow, stationIds: [validStation.id], djIds: [validDJ.id] };
 const station = {
   ...validStation,
   links: [],
@@ -68,6 +68,7 @@ test('opens the database with the expected stores and indexes', async () => {
     expect.arrayContaining(['slug', 'stationId', 'djId'])
   );
   expect(Array.from(shows.indexNames)).toHaveLength(3);
+  expect(shows.index('stationId').multiEntry).toBe(true);
   expect(shows.index('djId').multiEntry).toBe(true);
 
   const stations = db.transaction('stations', 'readonly').objectStore('stations');
