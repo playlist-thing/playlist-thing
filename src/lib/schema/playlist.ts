@@ -98,6 +98,8 @@ export const PlaylistSchema = z.object({
   queue: z.array(PlaylistItemSchema),
 
   // M:N relationship
+  //
+  // usually just one show, except when this playlist is a collaboration between multiple shows
   showIds: z.array(z.uuid()),
 
   // M:N relationship

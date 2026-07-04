@@ -10,6 +10,8 @@ export const ShowSchema = z.object({
   links: z.array(z.string()),
 
   // M:N relationship
+  //
+  // ususally just one station, except when this show is a collaboration between multiple stations
   stationIds: z.array(z.uuid()),
 
   // M:N relationship
