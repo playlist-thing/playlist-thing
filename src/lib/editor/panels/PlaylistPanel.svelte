@@ -295,13 +295,6 @@
     width: 100%;
   }
 
-  .autosave-indicator {
-    padding-right: 0.2em;
-
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
-  }
-
   .controls-bottom {
     display: flex;
     flex-direction: column;

@@ -86,6 +86,11 @@
   }
 
   .autosave-indicator {
+    padding-right: 0.2em;
+
     color: #666;
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
   }
 </style>
