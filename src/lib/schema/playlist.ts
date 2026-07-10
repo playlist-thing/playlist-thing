@@ -107,3 +107,21 @@ export const PlaylistSchema = z.object({
 });
 
 export type Playlist = z.infer<typeof PlaylistSchema>;
+
+export const emptyPlaylist: Playlist = {
+  id: '',
+
+  name: '',
+  slug: '',
+  description: '',
+  public: false,
+  broadcasts: [],
+  createdAt: 0,
+  lastModifiedAt: 0,
+
+  items: [],
+  queue: [],
+
+  showIds: [],
+  djIds: []
+};
