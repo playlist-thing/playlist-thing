@@ -3,7 +3,7 @@
 
   import AccountMenu from '$lib/AccountMenu.svelte';
 
-  import PlaylistPanel from '$lib/editor/panels/PlaylistPanel.svelte';
+  import EditorPanel from '$lib/editor/panels/EditorPanel.svelte';
   import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
 
   import URLInvalidModal from '$lib/editor/modals/URLInvalidModal.svelte';
@@ -75,10 +75,10 @@
 
   <div class="panels">
     {#if playlistAVisible}
-      <PlaylistPanel panelId={'A'} />
+      <EditorPanel panelId={'A'} />
     {/if}
     {#if playlistBVisible}
-      <PlaylistPanel panelId={'B'} />
+      <EditorPanel panelId={'B'} />
     {/if}
     {#if settingsVisible}
       <SettingsPanel close={toggleSettings} />
