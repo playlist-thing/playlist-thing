@@ -119,10 +119,6 @@
     font-weight: bold;
   }
 
-  .controls-top-error-indicator {
-    color: var(--danger);
-  }
-
   .panels {
     display: flex;
     justify-content: center;
