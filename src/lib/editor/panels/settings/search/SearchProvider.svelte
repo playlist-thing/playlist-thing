@@ -75,4 +75,8 @@
 
     padding: 7px;
   }
+
+  .search-provider:not(:last-child) {
+    padding-bottom: 5px;
+  }
 </style>

@@ -307,10 +307,4 @@
     -webkit-user-select: none; /* Safari */
     user-select: none;
   }
-
-  .controls-bottom-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
 </style>

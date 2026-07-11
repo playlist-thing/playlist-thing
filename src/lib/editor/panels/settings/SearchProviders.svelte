@@ -58,10 +58,6 @@
     flex-direction: column;
   }
 
-  .search-provider-list > :not(:last-child) {
-    padding-bottom: 5px;
-  }
-
   .controls-bottom {
     display: flex;
 
