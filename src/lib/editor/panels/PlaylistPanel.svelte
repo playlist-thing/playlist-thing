@@ -8,7 +8,7 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem, Playlist, Broadcast } from '$lib/schema/playlist';
+  import type { PlaylistItem, Broadcast, PlaylistStorage } from '$lib/schema/playlist';
   import { PlaylistStorageSchema, emptySong, emptyAirBreak } from '$lib/schema/playlist';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
@@ -126,7 +126,7 @@
   }
 
   function toJson() {
-    const data: Omit<Playlist, 'id'> = {
+    const data: PlaylistStorage = {
       name,
       slug,
       description,
@@ -135,8 +135,8 @@
       createdAt,
       lastModifiedAt,
 
-      items,
-      queue,
+      items: items.map(({ id, ...item }) => item),
+      queue: queue.map(({ id, ...item }) => item),
 
       showIds,
       djIds

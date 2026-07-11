@@ -44,6 +44,14 @@ export const PlaylistItemSchema = z.discriminatedUnion('tag', [
 
 export type PlaylistItem = z.infer<typeof PlaylistItemSchema>;
 
+export const PlaylistItemStorageSchema = z.discriminatedUnion('tag', [
+  SongSchema.partial({ id: true }),
+  AirBreakSchema.partial({ id: true }),
+  AirBreakWithBackgroundMusicSchema.partial({ id: true })
+]);
+
+export type PlaylistItemStorage = z.infer<typeof PlaylistItemStorageSchema>;
+
 export const emptySongMetadata: SongMetadata = {
   artist: '',
   title: '',
@@ -83,7 +91,6 @@ export const BroadcastSchema = z.object({
 export type Broadcast = z.infer<typeof BroadcastSchema>;
 
 export const PlaylistSchema = z.object({
-  // not included in exports
   id: z.uuid(),
 
   name: z.string(),
@@ -108,11 +115,14 @@ export const PlaylistSchema = z.object({
 
 export type Playlist = z.infer<typeof PlaylistSchema>;
 
-export const PlaylistStorageSchema = PlaylistSchema.omit({
-  id: true
-}).extend({
-  id: z.uuid().optional()
-});
+export const PlaylistStorageSchema = z
+  .object({
+    ...PlaylistSchema.shape,
+
+    items: z.array(PlaylistItemStorageSchema),
+    queue: z.array(PlaylistItemStorageSchema)
+  })
+  .partial({ id: true });
 
 export type PlaylistStorage = z.infer<typeof PlaylistStorageSchema>;
 
