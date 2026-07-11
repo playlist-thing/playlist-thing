@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/public';
 import * as openid from 'openid-client';
 import type { IDToken } from 'openid-client';
 
-import localStorageStore from '$lib/localStorageStore.ts';
+import localStorageStore from '$lib/localStorageStore';
 
 const scope = 'openid playlist:read playlist:write';
 

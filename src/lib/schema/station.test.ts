@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { StationSchema } from './station.ts';
-import { validStation } from './examples.ts';
+import { StationSchema } from './station';
+import { validStation } from './examples';
 
 const validStationWithManualVerification = {
   ...validStation,

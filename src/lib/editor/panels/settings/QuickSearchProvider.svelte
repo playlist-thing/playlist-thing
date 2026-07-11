@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { searchProviders, quickSearchProviderId } from '$lib/editor/settings.ts';
+  import { searchProviders, quickSearchProviderId } from '$lib/editor/settings';
 </script>
 
 {#if $searchProviders.length > 0}

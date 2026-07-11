@@ -2,9 +2,9 @@ import { get, derived } from 'svelte/store';
 
 import { fileSave } from 'browser-fs-access';
 
-import localStorageStore from '$lib/localStorageStore.ts';
+import localStorageStore from '$lib/localStorageStore';
 
-import { defaultSearchProviders } from './search.ts';
+import { defaultSearchProviders } from './search';
 
 // settings
 

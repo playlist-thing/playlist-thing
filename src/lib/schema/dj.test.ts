@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { DJSchema } from './dj.ts';
-import { validDJ } from './examples.ts';
+import { DJSchema } from './dj';
+import { validDJ } from './examples';
 
 test('valid DJ passes validation', () => {
   expect(DJSchema.safeParse(validDJ).success).toBe(true);

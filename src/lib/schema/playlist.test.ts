@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { PlaylistSchema, PlaylistItemSchema, SongMetadataSchema } from './playlist.ts';
-import { validAirBreak, validPlaylist, validSong, validSongMetadata } from './examples.ts';
+import { PlaylistSchema, PlaylistItemSchema, SongMetadataSchema } from './playlist';
+import { validAirBreak, validPlaylist, validSong, validSongMetadata } from './examples';
 
 test('valid song metadata passes validation', () => {
   expect(SongMetadataSchema.safeParse(validSongMetadata).success).toBe(true);

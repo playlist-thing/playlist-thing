@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { ShowSchema } from './show.ts';
-import { validShow } from './examples.ts';
+import { ShowSchema } from './show';
+import { validShow } from './examples';
 
 test('valid show passes validation', () => {
   expect(ShowSchema.safeParse(validShow).success).toBe(true);

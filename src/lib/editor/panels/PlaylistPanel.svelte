@@ -8,13 +8,13 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem, Playlist, Broadcast } from '$lib/schema/playlist.ts';
-  import { emptySong, emptyAirBreak } from '$lib/schema/playlist.ts';
-  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify.ts';
-  import { spotifyToken } from '$lib/auth/spotify.ts';
-  import { getFile } from '$lib/editor/external/file.ts';
-  import { withFreshIds, modals } from '$lib/editor/state.svelte.ts';
-  import { exportNotes } from '$lib/editor/export.ts';
+  import type { PlaylistItem, Playlist, Broadcast } from '$lib/schema/playlist';
+  import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
+  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
+  import { spotifyToken } from '$lib/auth/spotify';
+  import { getFile } from '$lib/editor/external/file';
+  import { withFreshIds, modals } from '$lib/editor/state.svelte';
+  import { exportNotes } from '$lib/editor/export';
 
   interface Props {
     panelId: string;

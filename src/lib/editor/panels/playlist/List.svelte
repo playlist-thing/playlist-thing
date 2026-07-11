@@ -4,10 +4,10 @@
   import Item from './Item.svelte';
   import type { PlaylistItem } from '$lib/schema/playlist';
   import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo';
-  import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
-  import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '$lib/timeInfo.ts';
-  import { formatSeconds } from '$lib/format.ts';
-  import { withFreshIds } from '$lib/editor/state.svelte.ts';
+  import { displaySizeMedium } from '$lib/editor/state.svelte';
+  import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '$lib/timeInfo';
+  import { formatSeconds } from '$lib/format';
+  import { withFreshIds } from '$lib/editor/state.svelte';
 
   interface Props {
     name: string;

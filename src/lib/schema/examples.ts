@@ -1,7 +1,7 @@
-import type { DJ } from './dj.ts';
-import type { Playlist, PlaylistItem, SongMetadata } from './playlist.ts';
-import type { Show } from './show.ts';
-import type { Station } from './station.ts';
+import type { DJ } from './dj';
+import type { Playlist, PlaylistItem, SongMetadata } from './playlist';
+import type { Show } from './show';
+import type { Station } from './station';
 
 export const validSongMetadata: SongMetadata = {
   artist: 'Kate Bush',

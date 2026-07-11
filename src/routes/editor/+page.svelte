@@ -10,7 +10,7 @@
   import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
 
-  import { displaySizeMedium } from '$lib/editor/state.svelte.ts';
+  import { displaySizeMedium } from '$lib/editor/state.svelte';
   import localStorageStore from '$lib/localStorageStore';
 
   let doublePlaylistView = localStorageStore('doublePlaylistView', false);

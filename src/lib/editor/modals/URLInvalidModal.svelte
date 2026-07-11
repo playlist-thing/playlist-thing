@@ -1,7 +1,7 @@
 <script lang="ts">
   import Modal from '$lib/ui/Modal.svelte';
 
-  import { modals } from '$lib/editor/state.svelte.ts';
+  import { modals } from '$lib/editor/state.svelte';
 </script>
 
 <Modal bind:showModal={modals.showURLInvalidModal} title="URL not recognized" buttonText="OK">

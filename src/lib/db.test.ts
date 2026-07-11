@@ -3,7 +3,7 @@ import 'fake-indexeddb/auto';
 import { indexedDB } from 'fake-indexeddb';
 
 import { DATABASE_NAME, openDatabase } from './db';
-import { validDJ, validPlaylist, validShow, validStation } from './schema/examples.ts';
+import { validDJ, validPlaylist, validShow, validStation } from './schema/examples';
 
 const playlist = {
   ...validPlaylist,

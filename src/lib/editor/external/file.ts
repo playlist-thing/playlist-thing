@@ -1,6 +1,6 @@
 import { parseBlob } from 'music-metadata';
 
-import type { PlaylistItem } from '$lib/schema/playlist.ts';
+import type { PlaylistItem } from '$lib/schema/playlist';
 
 export async function getFile(file: File): Promise<PlaylistItem> {
   const metadata = await parseBlob(file, {
