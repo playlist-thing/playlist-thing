@@ -45,9 +45,10 @@ interface DBv1 extends DBSchema {
 }
 
 export const DATABASE_NAME = 'playlist-thing';
+export const DATABASE_VERSION = 1;
 
 export async function openDatabase() {
-  const db = await openDB<DBv1>(DATABASE_NAME, 1, {
+  const db = await openDB<DBv1>(DATABASE_NAME, DATABASE_VERSION, {
     async upgrade(db, oldVersion) {
       const playlists = db.createObjectStore('playlists', {
         keyPath: 'id'
