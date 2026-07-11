@@ -54,12 +54,12 @@
 
   onMount(async () => {
     loadLocal();
-    autosaveCallback = setTimeout(autosave, 1000);
+    autosaveCallback = window.setTimeout(autosave, 1000);
   });
   onDestroy(async () => {
     if (!browser) return;
 
-    clearTimeout(autosaveCallback!);
+    window.clearTimeout(autosaveCallback!);
     saveLocal();
   });
 
@@ -119,7 +119,7 @@
       autosaved = true;
     }
 
-    autosaveCallback = setTimeout(autosave, 1000);
+    autosaveCallback = window.setTimeout(autosave, 1000);
   }
 
   function clear() {
