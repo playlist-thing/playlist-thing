@@ -10,7 +10,7 @@
   import { withFreshIds } from '$lib/editor/state.svelte';
 
   interface Props {
-    name: string;
+    name: 'Playlist' | 'Queue';
     items: PlaylistItem[];
   }
 
