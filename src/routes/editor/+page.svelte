@@ -75,10 +75,10 @@
 
   <div class="panels">
     {#if playlistAVisible}
-      <EditorPanel panelId={'A'} />
+      <EditorPanel panelId={'a'} />
     {/if}
     {#if playlistBVisible}
-      <EditorPanel panelId={'B'} />
+      <EditorPanel panelId={'b'} />
     {/if}
     {#if settingsVisible}
       <SettingsPanel close={toggleSettings} />

@@ -8,19 +8,20 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem, Broadcast, PlaylistStorage } from '$lib/schema/playlist';
+  import type { PlaylistItem, Broadcast, PlaylistStorage, Playlist } from '$lib/schema/playlist';
   import { PlaylistStorageSchema, emptySong, emptyAirBreak } from '$lib/schema/playlist';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { getFile } from '$lib/editor/external/file';
   import { withFreshIds, modals } from '$lib/editor/state.svelte';
   import { exportNotes } from '$lib/editor/export';
+  import { openDatabase } from '$lib/db';
 
   interface Props {
-    panelId: string;
+    playlistId: string | null;
   }
 
-  let { panelId }: Props = $props();
+  let { playlistId }: Props = $props();
 
   let name = $state('');
   let slug = $state('');
@@ -51,31 +52,70 @@
     autosaved = false;
   });
 
-  onMount(() => {
-    loadLocalStorage();
+  onMount(async () => {
+    loadLocal();
     autosaveCallback = setTimeout(autosave, 1000);
   });
-  onDestroy(() => {
+  onDestroy(async () => {
     if (!browser) return;
 
     clearTimeout(autosaveCallback!);
-    saveLocalStorage();
+    saveLocal();
   });
 
-  function saveLocalStorage() {
-    localStorage.setItem(`playlist${panelId}`, toJson());
+  async function saveLocal() {
+    const db = await openDatabase();
+
+    const playlist: Playlist = {
+      id: playlistId!,
+
+      name: $state.snapshot(name),
+      slug: $state.snapshot(slug),
+      description: $state.snapshot(description),
+      public: $state.snapshot(isPublic),
+      broadcasts: $state.snapshot(broadcasts),
+      createdAt: $state.snapshot(createdAt),
+      lastModifiedAt: $state.snapshot(lastModifiedAt),
+
+      items: $state.snapshot(items),
+      queue: $state.snapshot(queue),
+
+      showIds: $state.snapshot(showIds),
+      djIds: $state.snapshot(djIds)
+    };
+    await db.put('playlists', playlist);
   }
 
-  function loadLocalStorage() {
-    const restoredPlaylist = localStorage.getItem(`playlist${panelId}`);
-    if (restoredPlaylist !== null) {
-      fromJson(restoredPlaylist);
+  async function loadLocal() {
+    const db = await openDatabase();
+
+    const playlist = await db.get('playlists', playlistId!);
+
+    if (playlist === undefined) {
+      console.error(`playlist with ${playlistId} does not exist`);
+      return;
     }
+
+    ({
+      name,
+      slug,
+      description,
+      public: isPublic,
+      broadcasts,
+      createdAt,
+      lastModifiedAt,
+
+      showIds,
+      djIds
+    } = playlist);
+
+    items = withFreshIds(playlist.items);
+    queue = withFreshIds(playlist.queue);
   }
 
-  function autosave() {
+  async function autosave() {
     if (!autosaved) {
-      saveLocalStorage();
+      await saveLocal();
       autosaved = true;
     }
 
