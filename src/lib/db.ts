@@ -53,7 +53,7 @@ export async function openDatabase() {
       const playlists = db.createObjectStore('playlists', {
         keyPath: 'id'
       });
-      playlists.createIndex('slug', 'slug', { unique: true });
+      playlists.createIndex('slug', 'slug', { unique: false });
       playlists.createIndex('createdAt', 'createdAt', { unique: false });
       playlists.createIndex('lastModifiedAt', 'lastModifiedAt', { unique: false });
       playlists.createIndex('showId', 'showIds', { unique: false, multiEntry: true });
@@ -62,20 +62,20 @@ export async function openDatabase() {
       const shows = db.createObjectStore('shows', {
         keyPath: 'id'
       });
-      shows.createIndex('slug', 'slug', { unique: true });
+      shows.createIndex('slug', 'slug', { unique: false });
       shows.createIndex('stationId', 'stationIds', { unique: false, multiEntry: true });
       shows.createIndex('djId', 'djIds', { unique: false, multiEntry: true });
 
       const stations = db.createObjectStore('stations', {
         keyPath: 'id'
       });
-      stations.createIndex('slug', 'slug', { unique: true });
+      stations.createIndex('slug', 'slug', { unique: false });
       stations.createIndex('djId', 'djIds', { unique: false, multiEntry: true });
 
       const djs = db.createObjectStore('djs', {
         keyPath: 'id'
       });
-      djs.createIndex('slug', 'slug', { unique: true });
+      djs.createIndex('slug', 'slug', { unique: false });
     }
   });
   return db;
