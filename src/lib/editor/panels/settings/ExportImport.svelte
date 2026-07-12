@@ -38,6 +38,6 @@
   }
 
   .file-input {
-    opacity: 0;
+    display: none;
   }
 </style>
