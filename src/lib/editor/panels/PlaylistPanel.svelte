@@ -21,7 +21,7 @@
     playlistId: string | null;
   }
 
-  let { playlistId }: Props = $props();
+  let { playlistId = $bindable() }: Props = $props();
 
   let name = $state('');
   let slug = $state('');
@@ -49,6 +49,7 @@
     // changes
     const _ = toJson();
 
+    lastModifiedAt = Date.now();
     autosaved = false;
   });
 
@@ -93,6 +94,7 @@
 
     if (playlist === undefined) {
       console.error(`playlist with ${playlistId} does not exist`);
+      playlistId = null;
       return;
     }
 
@@ -195,6 +197,10 @@
     });
   }
 
+  function closePlaylist() {
+    playlistId = null;
+  }
+
   async function addItemsToQueue(newItems: PlaylistItem[]) {
     newItems = withFreshIds(newItems);
     queue.push(...newItems);
@@ -286,7 +292,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop bind:name bind:showOptions {autosaved} />
+    <ControlsTop bind:name bind:showOptions {autosaved} {closePlaylist} />
     {#if showOptions}
       <Options
         {clear}

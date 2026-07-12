@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { name = $bindable(), showOptions = $bindable(), autosaved } = $props();
+  let { name = $bindable(), showOptions = $bindable(), autosaved, closePlaylist } = $props();
 
   let editingName = $state(false);
 
@@ -55,6 +55,13 @@
           {/if}
         </span>
       {/if}
+    </div>
+
+    <div>
+      <button class="button transparent edit" onclick={closePlaylist}>
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+        <span class="visually-hidden">Close playlist</span>
+      </button>
     </div>
   </div>
 </div>
