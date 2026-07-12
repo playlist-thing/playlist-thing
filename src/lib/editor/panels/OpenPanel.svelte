@@ -89,6 +89,10 @@
 
     playlistId = newPlaylistId;
   }
+
+  function prettyDate(epochMilliseconds: number) {
+    return new Date(epochMilliseconds).toLocaleString();
+  }
 </script>
 
 <div class="outer-container">
@@ -141,7 +145,7 @@
                   </div>
 
                   <div>
-                    {new Date(playlist.lastModifiedAt)}
+                    {prettyDate(playlist.lastModifiedAt)}
                   </div>
                 </div>
               </button>
