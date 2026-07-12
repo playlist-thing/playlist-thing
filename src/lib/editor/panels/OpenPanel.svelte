@@ -2,16 +2,28 @@
   import { v4 as uuidv4 } from 'uuid';
 
   import { openDatabase } from '$lib/db';
-  import { emptyPlaylist, type Playlist } from '$lib/schema/playlist';
+  import { emptyPlaylist, PlaylistStorageSchema, type Playlist } from '$lib/schema/playlist';
   import { onMount } from 'svelte';
+  import { modals, withFreshIds } from '../state.svelte';
+
+  type PanelId = 'a' | 'b';
 
   interface Props {
+    panelId: PanelId;
     playlistId: string | null;
   }
 
-  let { playlistId = $bindable() }: Props = $props();
+  let { panelId, playlistId = $bindable() }: Props = $props();
+
+  let files: FileList | undefined = $state();
 
   let localPlaylists: Promise<Playlist[]> = $state(new Promise(() => {}));
+
+  $effect(() => {
+    if (files !== undefined && files.length === 1) {
+      openPlaylistFile(files[0]);
+    }
+  });
 
   async function load() {
     const db = await openDatabase();
@@ -42,6 +54,41 @@
 
     playlistId = newPlaylistId;
   }
+
+  async function openPlaylistFile(file: File) {
+    const db = await openDatabase();
+
+    const newPlaylistId = uuidv4();
+    const json = await file.text();
+
+    let parsed;
+
+    try {
+      parsed = JSON.parse(json);
+    } catch (e) {
+      modals.showAddFileErrorModal = true;
+      console.log(e);
+      return;
+    }
+
+    const result = PlaylistStorageSchema.safeParse(parsed);
+    if (!result.success) {
+      modals.showAddFileErrorModal = true;
+      console.log(result.error);
+      return;
+    }
+
+    const playlist = result.data;
+
+    await db.add('playlists', {
+      ...playlist,
+      id: newPlaylistId,
+      items: withFreshIds(playlist.items),
+      queue: withFreshIds(playlist.queue)
+    });
+
+    playlistId = newPlaylistId;
+  }
 </script>
 
 <div class="outer-container">
@@ -53,6 +100,18 @@
         <i class="bi bi-plus-lg" aria-hidden="true"></i>
         New playlist
       </button>
+
+      <label class="button" for={`upload-playlist-${panelId}`}>
+        <i class="bi-upload" aria-hidden="true"></i>
+        Upload from computer
+      </label>
+      <input
+        class="file-input"
+        accept="application/json"
+        id={`upload-playlist-${panelId}`}
+        type="file"
+        bind:files
+      />
     </div>
 
     <h2>Recent playlists</h2>
@@ -99,6 +158,10 @@
 <style>
   .outer-container {
     max-width: 800px;
+  }
+
+  .file-input {
+    display: none;
   }
 
   .playlist-list {
