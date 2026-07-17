@@ -54,14 +54,14 @@
   });
 
   onMount(async () => {
-    loadLocal();
+    await loadLocal();
     autosaveCallback = window.setTimeout(autosave, 1000);
   });
   onDestroy(async () => {
     if (!browser) return;
 
     window.clearTimeout(autosaveCallback!);
-    saveLocal();
+    await saveLocal();
   });
 
   async function saveLocal() {
