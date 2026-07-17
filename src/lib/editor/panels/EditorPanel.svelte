@@ -27,7 +27,7 @@
 
 {#if $playlistId !== undefined}
   {#if $playlistId[panelId] === null}
-    <OpenPanel bind:playlistId={$playlistId[panelId]} {panelId} />
+    <OpenPanel bind:playlistId={$playlistId[panelId]} />
   {:else}
     <PlaylistPanel bind:playlistId={$playlistId[panelId]} />
   {/if}

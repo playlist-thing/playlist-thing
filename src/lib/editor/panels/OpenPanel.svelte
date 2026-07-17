@@ -6,18 +6,17 @@
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
 
-  type PanelId = 'a' | 'b';
-
   interface Props {
-    panelId: PanelId;
     playlistId: string | null;
   }
 
-  let { panelId, playlistId = $bindable() }: Props = $props();
+  let { playlistId = $bindable() }: Props = $props();
 
   let files: FileList | undefined = $state();
 
   let localPlaylists: Promise<Playlist[]> = $state(new Promise(() => {}));
+
+  let componentId = $props.id();
 
   $effect(() => {
     if (files !== undefined && files.length === 1) {
@@ -105,14 +104,14 @@
         New playlist
       </button>
 
-      <label class="button" for={`upload-playlist-${panelId}`}>
+      <label class="button" for={`upload-playlist-${componentId}`}>
         <i class="bi-upload" aria-hidden="true"></i>
         Upload from computer
       </label>
       <input
         class="file-input"
         accept="application/json"
-        id={`upload-playlist-${panelId}`}
+        id={`upload-playlist-${componentId}`}
         type="file"
         bind:files
       />
