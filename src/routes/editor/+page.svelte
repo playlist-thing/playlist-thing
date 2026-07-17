@@ -12,11 +12,31 @@
 
   import { displaySizeMedium } from '$lib/editor/state.svelte';
   import localStorageStore from '$lib/localStorageStore';
+  import { onMount } from 'svelte';
 
   let doublePlaylistView = localStorageStore('doublePlaylistView', false);
+  let playlistIdPanelA = localStorageStore<string | null | undefined>(
+    'playlistIdPanelA',
+    undefined
+  );
+  let playlistIdPanelB = localStorageStore<string | null | undefined>(
+    'playlistIdPanelB',
+    undefined
+  );
+
   let settingsVisible = $state(false);
   let playlistAVisible = true;
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
+
+  onMount(() => {
+    if ($playlistIdPanelA === undefined) {
+      $playlistIdPanelA = null;
+    }
+
+    if ($playlistIdPanelB === undefined) {
+      $playlistIdPanelB = null;
+    }
+  });
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
@@ -74,11 +94,11 @@
   </div>
 
   <div class="panels">
-    {#if playlistAVisible}
-      <EditorPanel panelId={'a'} />
+    {#if playlistAVisible && $playlistIdPanelA !== undefined}
+      <EditorPanel bind:playlistId={$playlistIdPanelA} />
     {/if}
-    {#if playlistBVisible}
-      <EditorPanel panelId={'b'} />
+    {#if playlistBVisible && $playlistIdPanelB !== undefined}
+      <EditorPanel bind:playlistId={$playlistIdPanelB} />
     {/if}
     {#if settingsVisible}
       <SettingsPanel close={toggleSettings} />
