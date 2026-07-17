@@ -1,35 +1,30 @@
 <script lang="ts">
-  let showConfirmClear = $state(false);
+  let showConfirmDelete = $state(false);
 
   interface Props {
     close: () => void;
-    clear: () => void;
+    deletePlaylist: () => void;
     download: () => void;
     exportNotes: () => void;
   }
 
-  let { close, clear, download, exportNotes }: Props = $props();
-
-  function clearAndClose() {
-    clear();
-    close();
-  }
+  let { close, deletePlaylist, download, exportNotes }: Props = $props();
 </script>
 
-{#if showConfirmClear}
+{#if showConfirmDelete}
   <div class="outer-modal">
     <div>
       <div class="icon">
         <i class="bi-trash-fill"></i>
       </div>
 
-      <div class="text">Are you sure you want to remove all playlist items?</div>
+      <div class="text">Are you sure you want to delete this playlist?</div>
 
       <div class="modal-buttons">
-        <button class="button" onclick={() => (showConfirmClear = false)}>Cancel</button>
-        <button class="button danger" onclick={clearAndClose}>
+        <button class="button" onclick={() => (showConfirmDelete = false)}>Cancel</button>
+        <button class="button danger" onclick={deletePlaylist}>
           <i class="bi-trash-fill"></i>
-          Clear
+          Delete playlist
         </button>
       </div>
     </div>
@@ -61,8 +56,8 @@
       <section>
         <h2>Danger Zone</h2>
 
-        <button class="button danger" onclick={() => (showConfirmClear = true)}>
-          <i class="bi-trash" aria-hidden="true"></i> Delete all playlist items
+        <button class="button danger" onclick={() => (showConfirmDelete = true)}>
+          <i class="bi-trash" aria-hidden="true"></i> Delete playlist
         </button>
       </section>
     </div>

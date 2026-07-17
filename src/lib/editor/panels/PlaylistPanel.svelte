@@ -65,6 +65,10 @@
   });
 
   async function saveLocal() {
+    if (playlistId === null) {
+      return;
+    }
+
     const db = await openDatabase();
 
     const playlist: Playlist = {
@@ -201,6 +205,14 @@
     playlistId = null;
   }
 
+  async function deletePlaylist() {
+    const db = await openDatabase();
+
+    await db.delete('playlists', playlistId!);
+
+    playlistId = null;
+  }
+
   async function addItemsToQueue(newItems: PlaylistItem[]) {
     newItems = withFreshIds(newItems);
     queue.push(...newItems);
@@ -295,7 +307,7 @@
     <ControlsTop bind:name bind:showOptions {autosaved} {closePlaylist} />
     {#if showOptions}
       <Options
-        {clear}
+        {deletePlaylist}
         download={downloadJson}
         exportNotes={() => exportNotes(items, name)}
         close={() => (showOptions = false)}
