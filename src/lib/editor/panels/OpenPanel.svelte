@@ -8,9 +8,10 @@
 
   interface Props {
     playlistId: string | null;
+    openPlaylistIds: (string | null | undefined)[];
   }
 
-  let { playlistId = $bindable() }: Props = $props();
+  let { playlistId = $bindable(), openPlaylistIds }: Props = $props();
 
   let files: FileList | undefined = $state();
 
@@ -89,6 +90,10 @@
     playlistId = newPlaylistId;
   }
 
+  function playlistNotOpenable(id: string) {
+    return openPlaylistIds.includes(id);
+  }
+
   function prettyDate(epochMilliseconds: number) {
     return new Date(epochMilliseconds).toLocaleString();
   }
@@ -133,6 +138,8 @@
               <button
                 class="button transparent playlist-list-item"
                 onclick={() => (playlistId = playlist.id)}
+                disabled={playlistNotOpenable(playlist.id)}
+                class:disabled={playlistNotOpenable(playlist.id)}
               >
                 <div class="row">
                   <div>

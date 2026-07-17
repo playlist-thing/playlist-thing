@@ -4,13 +4,14 @@
 
   interface Props {
     playlistId: string | null;
+    openPlaylistIds: (string | null | undefined)[];
   }
 
-  let { playlistId = $bindable() }: Props = $props();
+  let { playlistId = $bindable(), openPlaylistIds }: Props = $props();
 </script>
 
 {#if playlistId === null}
-  <OpenPanel bind:playlistId />
+  <OpenPanel bind:playlistId {openPlaylistIds} />
 {:else}
   <PlaylistPanel bind:playlistId />
 {/if}

@@ -27,6 +27,7 @@
   let settingsVisible = $state(false);
   let playlistAVisible = true;
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
+  let openPlaylistIds = $derived([$playlistIdPanelA, $playlistIdPanelB]);
 
   onMount(() => {
     if ($playlistIdPanelA === undefined) {
@@ -95,10 +96,10 @@
 
   <div class="panels">
     {#if playlistAVisible && $playlistIdPanelA !== undefined}
-      <EditorPanel bind:playlistId={$playlistIdPanelA} />
+      <EditorPanel bind:playlistId={$playlistIdPanelA} {openPlaylistIds} />
     {/if}
     {#if playlistBVisible && $playlistIdPanelB !== undefined}
-      <EditorPanel bind:playlistId={$playlistIdPanelB} />
+      <EditorPanel bind:playlistId={$playlistIdPanelB} {openPlaylistIds} />
     {/if}
     {#if settingsVisible}
       <SettingsPanel close={toggleSettings} />
