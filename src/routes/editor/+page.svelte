@@ -10,8 +10,12 @@
   import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
 
+  import { openDatabase } from '$lib/db';
   import { displaySizeMedium } from '$lib/editor/state.svelte';
+  import { withFreshIds } from '$lib/editor/state.svelte';
+  import { PlaylistStorageSchema } from '$lib/schema/playlist';
   import localStorageStore from '$lib/localStorageStore';
+  import { v4 as uuidv4 } from 'uuid';
   import { onMount } from 'svelte';
 
   let doublePlaylistView = localStorageStore('doublePlaylistView', false);
@@ -29,7 +33,70 @@
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
   let openPlaylistIds = $derived([$playlistIdPanelA, $playlistIdPanelB]);
 
-  onMount(() => {
+  // TODO remove 2027-08 (one year after migration)
+  async function migrateFromLocalStorageToIdb() {
+    const storedPlaylistA = localStorage.getItem('playlistA');
+    const storedPlaylistB = localStorage.getItem('playlistB');
+
+    if (storedPlaylistA === null && storedPlaylistB === null) {
+      return;
+    }
+
+    const db = await openDatabase();
+
+    async function migratePlaylist(
+      storageKey: 'playlistA' | 'playlistB',
+      storedPlaylist: string | null,
+      currentPlaylistId: string | null | undefined,
+      setPlaylistId: (playlistId: string) => void
+    ) {
+      if (storedPlaylist === null) {
+        return;
+      }
+
+      if (currentPlaylistId !== null) {
+        localStorage.removeItem(storageKey);
+        return;
+      }
+
+      let parsed;
+
+      try {
+        parsed = JSON.parse(storedPlaylist);
+      } catch (error) {
+        console.log(error);
+        localStorage.removeItem(storageKey);
+        return;
+      }
+
+      const result = PlaylistStorageSchema.safeParse(parsed);
+      if (!result.success) {
+        console.log(result.error);
+        localStorage.removeItem(storageKey);
+        return;
+      }
+
+      const playlistId = uuidv4();
+      await db.add('playlists', {
+        ...result.data,
+        id: playlistId,
+        items: withFreshIds(result.data.items),
+        queue: withFreshIds(result.data.queue)
+      });
+
+      setPlaylistId(playlistId);
+      localStorage.removeItem(storageKey);
+    }
+
+    await migratePlaylist('playlistA', storedPlaylistA, $playlistIdPanelA, (playlistId) => {
+      $playlistIdPanelA = playlistId;
+    });
+    await migratePlaylist('playlistB', storedPlaylistB, $playlistIdPanelB, (playlistId) => {
+      $playlistIdPanelB = playlistId;
+    });
+  }
+
+  onMount(async () => {
     if ($playlistIdPanelA === undefined) {
       $playlistIdPanelA = null;
     }
@@ -37,6 +104,8 @@
     if ($playlistIdPanelB === undefined) {
       $playlistIdPanelB = null;
     }
+
+    await migrateFromLocalStorageToIdb();
   });
 
   function toggleSettings() {
