@@ -201,7 +201,8 @@
     });
   }
 
-  function closePlaylist() {
+  async function closePlaylist() {
+    await saveLocal();
     playlistId = null;
   }
 
