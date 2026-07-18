@@ -33,6 +33,24 @@
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
   let openPlaylistIds = $derived([$playlistIdPanelA, $playlistIdPanelB]);
 
+  $effect(() => {
+    if (!playlistBVisible) {
+      $playlistIdPanelB = null;
+    }
+  });
+
+  onMount(async () => {
+    if ($playlistIdPanelA === undefined) {
+      $playlistIdPanelA = null;
+    }
+
+    if ($playlistIdPanelB === undefined) {
+      $playlistIdPanelB = null;
+    }
+
+    await migrateFromLocalStorageToIdb();
+  });
+
   // TODO remove 2027-08 (one year after migration)
   async function migrateFromLocalStorageToIdb() {
     const storedPlaylistA = localStorage.getItem('playlistA');
@@ -95,18 +113,6 @@
       $playlistIdPanelB = playlistId;
     });
   }
-
-  onMount(async () => {
-    if ($playlistIdPanelA === undefined) {
-      $playlistIdPanelA = null;
-    }
-
-    if ($playlistIdPanelB === undefined) {
-      $playlistIdPanelB = null;
-    }
-
-    await migrateFromLocalStorageToIdb();
-  });
 
   function toggleSettings() {
     settingsVisible = !settingsVisible;
