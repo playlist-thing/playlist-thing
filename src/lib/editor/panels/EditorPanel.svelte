@@ -8,10 +8,14 @@
   }
 
   let { playlistId = $bindable(), currentlyOpenPlaylistIds }: Props = $props();
+
+  function openPlaylist(newPlaylistId: string) {
+    playlistId = newPlaylistId;
+  }
 </script>
 
 {#if playlistId === null}
-  <OpenPanel bind:playlistId {currentlyOpenPlaylistIds} />
+  <OpenPanel {openPlaylist} {currentlyOpenPlaylistIds} />
 {:else}
   <PlaylistPanel bind:playlistId />
 {/if}

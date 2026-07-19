@@ -7,11 +7,11 @@
   import { modals, withFreshIds } from '../state.svelte';
 
   interface Props {
-    playlistId: string | null;
+    openPlaylist: (playlistId: string) => void;
     currentlyOpenPlaylistIds: (string | null | undefined)[];
   }
 
-  let { playlistId = $bindable(), currentlyOpenPlaylistIds }: Props = $props();
+  let { openPlaylist, currentlyOpenPlaylistIds }: Props = $props();
 
   let files: FileList | undefined = $state();
 
@@ -52,7 +52,7 @@
       lastModifiedAt: now
     });
 
-    playlistId = newPlaylistId;
+    openPlaylist(newPlaylistId);
   }
 
   async function openPlaylistFile(file: File) {
@@ -87,7 +87,7 @@
       queue: withFreshIds(playlist.queue)
     });
 
-    playlistId = newPlaylistId;
+    openPlaylist(newPlaylistId);
   }
 
   function playlistNotOpenable(id: string) {
@@ -137,7 +137,7 @@
             <li>
               <button
                 class="button transparent playlist-list-item"
-                onclick={() => (playlistId = playlist.id)}
+                onclick={() => openPlaylist(playlist.id)}
                 disabled={playlistNotOpenable(playlist.id)}
                 class:disabled={playlistNotOpenable(playlist.id)}
               >
