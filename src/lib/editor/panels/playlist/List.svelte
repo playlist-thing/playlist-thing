@@ -63,9 +63,9 @@
 {/snippet}
 
 <div class="row top">
-  <span ondragstart={dragstartHandler} draggable="true" class="name">
+  <h3 ondragstart={dragstartHandler} draggable="true" class="list-name">
     {name}
-  </span>
+  </h3>
 </div>
 
 {#if items.length > 0}
@@ -116,16 +116,16 @@
     padding-bottom: 0.2em;
   }
 
-  .row.top {
-    padding-top: 10px;
-  }
-
   .row.duration-info {
     flex-wrap: wrap-reverse;
   }
 
-  .name {
+  .list-name {
+    display: flex;
+
     font-size: 1.3em;
+    margin-top: 15px;
+    margin-bottom: 15px;
 
     -webkit-user-select: none; /* Safari */
     user-select: none;
