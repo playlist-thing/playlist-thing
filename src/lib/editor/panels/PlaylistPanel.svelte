@@ -41,7 +41,7 @@
   let autosaved = $state(false);
   let showOptions = $state(false);
 
-  let playlistContainer: HTMLElement;
+  let playlistContainer: HTMLElement | undefined = $state();
 
   $effect(() => {
     // this makes us "track" all relevant information and call this
@@ -219,7 +219,7 @@
     queue.push(...newItems);
 
     await tick();
-    playlistContainer.scrollTo(0, playlistContainer.scrollHeight);
+    playlistContainer!.scrollTo(0, playlistContainer!.scrollHeight);
   }
 
   async function addEmpty() {
