@@ -8,10 +8,10 @@
 
   interface Props {
     playlistId: string | null;
-    openPlaylistIds: (string | null | undefined)[];
+    currentlyOpenPlaylistIds: (string | null | undefined)[];
   }
 
-  let { playlistId = $bindable(), openPlaylistIds }: Props = $props();
+  let { playlistId = $bindable(), currentlyOpenPlaylistIds }: Props = $props();
 
   let files: FileList | undefined = $state();
 
@@ -91,7 +91,7 @@
   }
 
   function playlistNotOpenable(id: string) {
-    return openPlaylistIds.includes(id);
+    return currentlyOpenPlaylistIds.includes(id);
   }
 
   function prettyDate(epochMilliseconds: number) {
