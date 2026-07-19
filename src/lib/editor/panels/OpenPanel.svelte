@@ -90,6 +90,28 @@
     openPlaylist(newPlaylistId);
   }
 
+  function dragoverHandler(ev: DragEvent) {
+    ev.preventDefault();
+    ev.dataTransfer!.dropEffect = 'copy';
+  }
+
+  async function dropHandler(ev: DragEvent) {
+    ev.preventDefault();
+
+    const dataTransferItems = ev.dataTransfer!.items;
+    if (!dataTransferItems || dataTransferItems.length !== 1) {
+      return;
+    }
+
+    const item = dataTransferItems[0];
+    if (item.kind === 'file') {
+      const file = item.getAsFile()!;
+      if (file.name.endsWith('.json')) {
+        openPlaylistFile(file);
+      }
+    }
+  }
+
   function playlistNotOpenable(id: string) {
     return currentlyOpenPlaylistIds.includes(id);
   }
@@ -100,7 +122,12 @@
 </script>
 
 <div class="outer-container">
-  <div class="inner-container overflow">
+  <div
+    class="inner-container overflow"
+    role="presentation"
+    ondragover={dragoverHandler}
+    ondrop={dropHandler}
+  >
     <h1>Open a playlist</h1>
 
     <div>
@@ -121,6 +148,8 @@
         bind:files
       />
     </div>
+
+    <p class="drop-notice">You can also drop a playlist file here to open it.</p>
 
     <h2>Recent playlists</h2>
 
@@ -172,6 +201,15 @@
 
   .file-input {
     display: none;
+  }
+
+  .drop-notice {
+    margin: 8px 0 0 4px;
+    color: #666;
+    font-size: 0.85em;
+
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .playlist-list {
