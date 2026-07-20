@@ -130,7 +130,7 @@
   }
 </script>
 
-<div role="listitem" class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
+<li class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
   <div class="row">
     <div class="time-and-metadata">
       {#if !displaySizeMedium.current}
@@ -253,7 +253,7 @@
   {#if editing}
     <ItemEditor bind:item />
   {/if}
-</div>
+</li>
 
 <style>
   .row {

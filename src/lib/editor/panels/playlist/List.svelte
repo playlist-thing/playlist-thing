@@ -86,25 +86,18 @@
 {/if}
 
 {#if displaySizeMedium.current}
-  <div
-    class="playlist"
-    role="list"
-    use:dndzone={dndOptions}
-    onconsider={handleSort}
-    onfinalize={handleSort}
-  >
+  <ol class="playlist" use:dndzone={dndOptions} onconsider={handleSort} onfinalize={handleSort}>
     {@render playlistItems(items)}
-  </div>
+  </ol>
 {:else}
-  <div
+  <ol
     class="playlist"
-    role="list"
     use:dragHandleZone={dndOptions}
     onconsider={handleSort}
     onfinalize={handleSort}
   >
     {@render playlistItems(items)}
-  </div>
+  </ol>
 {/if}
 
 <style>
@@ -136,6 +129,10 @@
   .playlist {
     display: flex;
     flex-direction: column;
+
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
   }
 
   .empty-item {
