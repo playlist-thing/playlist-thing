@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
   import { fileSave } from 'browser-fs-access';
   import toSlug from 'slug';
+  import { SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 
   import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
@@ -48,6 +49,10 @@
     // function again when anything inside the data touched by toJson
     // changes
     const _ = toJson();
+
+    // don't save when currently in a drag and drop operation
+    if (items.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
+    if (queue.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
 
     lastModifiedAt = Date.now();
     autosaved = false;
