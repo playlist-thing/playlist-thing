@@ -15,7 +15,8 @@ export const displaySizeMedium = new MediaQuery('min-width: 768px', false);
 export const modals = $state({
   showURLInvalidModal: false,
   showSpotifyConnectModal: false,
-  showAddFileErrorModal: false
+  showAddFileErrorModal: false,
+  showOpenPlaylistErrorModal: false
 });
 
 export function withFreshIds(items: PlaylistItemStorage[]) {

@@ -66,14 +66,14 @@
     try {
       parsed = JSON.parse(json);
     } catch (e) {
-      modals.showAddFileErrorModal = true;
+      modals.showOpenPlaylistErrorModal = true;
       console.log(e);
       return;
     }
 
     const result = PlaylistStorageSchema.safeParse(parsed);
     if (!result.success) {
-      modals.showAddFileErrorModal = true;
+      modals.showOpenPlaylistErrorModal = true;
       console.log(result.error);
       return;
     }

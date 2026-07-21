@@ -9,6 +9,7 @@
   import URLInvalidModal from '$lib/editor/modals/URLInvalidModal.svelte';
   import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
   import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
+  import OpenPlaylistErrorModal from '$lib/editor/modals/OpenPlaylistErrorModal.svelte';
 
   import { openDatabase } from '$lib/db';
   import { displaySizeMedium } from '$lib/editor/state.svelte';
@@ -185,6 +186,7 @@
 <URLInvalidModal />
 <AddFileErrorModal />
 <SpotifyConnectModal />
+<OpenPlaylistErrorModal />
 
 <style>
   .app {

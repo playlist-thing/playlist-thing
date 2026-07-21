@@ -1,0 +1,13 @@
+<script lang="ts">
+  import Modal from '$lib/ui/Modal.svelte';
+
+  import { modals } from '$lib/editor/state.svelte';
+</script>
+
+<Modal
+  bind:showModal={modals.showOpenPlaylistErrorModal}
+  title="Error opening playlist"
+  buttonText="OK"
+>
+  Sorry, the file you provided could not be opened.
+</Modal>
