@@ -7,8 +7,8 @@
     showModal: boolean;
     title: string;
     children: Snippet;
-    buttonCancelText: string;
-    buttonOkText: string;
+    buttonCancelContent: Snippet;
+    buttonOkContent: Snippet;
     onOk: () => void;
   }
 
@@ -16,8 +16,8 @@
     showModal = $bindable(),
     title,
     children,
-    buttonCancelText,
-    buttonOkText,
+    buttonCancelContent,
+    buttonOkContent,
     onOk
   }: Props = $props();
 
@@ -50,8 +50,12 @@
 
     <div class="modal-footer">
       <!-- svelte-ignore a11y_autofocus -->
-      <button autofocus onclick={ok} class="button ok">{buttonOkText}</button>
-      <button onclick={() => dialog!.close()} class="button">{buttonCancelText}</button>
+      <button autofocus onclick={ok} class="button ok">
+        {@render buttonOkContent()}
+      </button>
+      <button onclick={() => dialog!.close()} class="button">
+        {@render buttonCancelContent()}
+      </button>
     </div>
   </div>
 </dialog>

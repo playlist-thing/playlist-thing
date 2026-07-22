@@ -36,8 +36,6 @@
 <OkCancelModal
   bind:showModal
   title="Edit search provider"
-  buttonCancelText="Cancel"
-  buttonOkText="Save"
   onOk={() => saveSearchProvider({ id: searchProvider.id, name, url })}
 >
   <div class="input-block">
@@ -59,6 +57,16 @@
       <p><a href={exampleSongSearchUrl}>{exampleSongSearchUrl}</a></p>
     </div>
   </div>
+
+  {#snippet buttonOkContent()}
+    <i class="bi-floppy" aria-hidden="true"></i>
+    Save
+  {/snippet}
+
+  {#snippet buttonCancelContent()}
+    <i class="bi-x-lg" aria-hidden="true"></i>
+    Cancel
+  {/snippet}
 </OkCancelModal>
 
 <style>
