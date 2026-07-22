@@ -2,13 +2,24 @@
   let showConfirmDelete = $state(false);
 
   interface Props {
+    name: string;
+    description: string;
+    isPublic: boolean;
     close: () => void;
     deletePlaylist: () => void;
     download: () => void;
     exportNotes: () => void;
   }
 
-  let { close, deletePlaylist, download, exportNotes }: Props = $props();
+  let {
+    name = $bindable(),
+    description = $bindable(),
+    isPublic = $bindable(),
+    close,
+    deletePlaylist,
+    download,
+    exportNotes
+  }: Props = $props();
 </script>
 
 {#if showConfirmDelete}
@@ -40,6 +51,29 @@
           <span class="visually-hidden">Close options</span>
         </button>
       </div>
+
+      <section>
+        <div class="input-block">
+          <div class="input-block-item">
+            <label class="label" for="name">Playlist name</label>
+            <input class="input-text" id="name" type="text" bind:value={name} />
+          </div>
+
+          <div class="input-block-item">
+            <label class="label" for="description">Description</label>
+            <textarea class="input-text" id="description" rows="5" bind:value={description}
+            ></textarea>
+          </div>
+
+          <div class="input-block-item">
+            <label class="label" for="visibility">Visibility</label>
+            <select class="button" id="visibility" bind:value={isPublic}>
+              <option value={false}>Private</option>
+              <option value={true}>Public</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
       <section>
         <h2>Download</h2>
@@ -102,5 +136,21 @@
   .padding-container {
     width: 100%;
     max-width: 400px;
+  }
+
+  .input-block {
+    display: flex;
+    flex-direction: column;
+
+    max-width: 600px;
+  }
+
+  .input-block-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input-block-item:not(:last-child) {
+    padding-bottom: 7px;
   }
 </style>

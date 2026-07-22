@@ -313,6 +313,9 @@
     <ControlsTop bind:name bind:showOptions {autosaved} {closePlaylist} />
     {#if showOptions}
       <Options
+        bind:name
+        bind:description
+        bind:isPublic
         {deletePlaylist}
         download={downloadJson}
         exportNotes={() => exportNotes(items, name)}
