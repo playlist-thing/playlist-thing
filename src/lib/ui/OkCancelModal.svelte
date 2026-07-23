@@ -10,6 +10,7 @@
     buttonCancelContent: Snippet;
     buttonOkContent: Snippet;
     onOk: () => void;
+    extraButtonOkClasses?: string;
   }
 
   let {
@@ -18,7 +19,8 @@
     children,
     buttonCancelContent,
     buttonOkContent,
-    onOk
+    onOk,
+    extraButtonOkClasses = ''
   }: Props = $props();
 
   let dialog: HTMLDialogElement | undefined = $state();
@@ -50,7 +52,7 @@
 
     <div class="modal-footer">
       <!-- svelte-ignore a11y_autofocus -->
-      <button autofocus onclick={ok} class="button ok">
+      <button autofocus onclick={ok} class={['button ok', extraButtonOkClasses]}>
         {@render buttonOkContent()}
       </button>
       <button onclick={() => dialog!.close()} class="button">
