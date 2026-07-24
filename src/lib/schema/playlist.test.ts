@@ -1,10 +1,5 @@
 import { expect, test } from 'vitest';
-import {
-  PlaylistSchema,
-  PlaylistStorageSchema,
-  PlaylistItemSchema,
-  SongMetadataSchema
-} from './playlist';
+import { PlaylistSchema, PlaylistItemSchema, SongMetadataSchema } from './playlist';
 import { validAirBreak, validPlaylist, validSong, validSongMetadata } from './examples';
 
 test('valid song metadata passes validation', () => {
@@ -21,15 +16,6 @@ test('valid airbreak playlist item passes validation', () => {
 
 test('valid playlist passes validation', () => {
   expect(PlaylistSchema.safeParse(validPlaylist).success).toBe(true);
-});
-
-test('valid stored playlist passes validation without id', () => {
-  const { id, ...storedPlaylist } = validPlaylist;
-  expect(PlaylistStorageSchema.safeParse(storedPlaylist).success).toBe(true);
-});
-
-test('valid stored playlist passes validation with id', () => {
-  expect(PlaylistStorageSchema.safeParse(validPlaylist).success).toBe(true);
 });
 
 test('invalid UUID fails validation', () => {

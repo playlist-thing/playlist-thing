@@ -1,5 +1,6 @@
 import { MediaQuery } from 'svelte/reactivity';
-import type { PlaylistItem, PlaylistItemStorage } from '$lib/schema/playlist';
+import type { PlaylistItem } from '$lib/schema/playlist';
+import type { PlaylistItemStorage } from '$lib/schema/storage/playlist';
 
 /**
  * Storage of temporary state (not lasting beyond this browser tab/window)

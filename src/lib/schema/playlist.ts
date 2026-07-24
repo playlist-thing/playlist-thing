@@ -19,18 +19,18 @@ export const SongMetadataSchema = z.object({
 
 export type SongMetadata = z.infer<typeof SongMetadataSchema>;
 
-const SongSchema = z.object({
+export const SongSchema = z.object({
   ...BasePlaylistItemSchema.shape,
   tag: z.literal('Song'),
   content: SongMetadataSchema
 });
 
-const AirBreakSchema = z.object({
+export const AirBreakSchema = z.object({
   ...BasePlaylistItemSchema.shape,
   tag: z.literal('AirBreak')
 });
 
-const AirBreakWithBackgroundMusicSchema = z.object({
+export const AirBreakWithBackgroundMusicSchema = z.object({
   ...BasePlaylistItemSchema.shape,
   tag: z.literal('AirBreakWithBackgroundMusic'),
   content: SongMetadataSchema
@@ -43,14 +43,6 @@ export const PlaylistItemSchema = z.discriminatedUnion('tag', [
 ]);
 
 export type PlaylistItem = z.infer<typeof PlaylistItemSchema>;
-
-export const PlaylistItemStorageSchema = z.discriminatedUnion('tag', [
-  SongSchema.partial({ id: true }),
-  AirBreakSchema.partial({ id: true }),
-  AirBreakWithBackgroundMusicSchema.partial({ id: true })
-]);
-
-export type PlaylistItemStorage = z.infer<typeof PlaylistItemStorageSchema>;
 
 export const emptySongMetadata: SongMetadata = {
   artist: '',
@@ -114,17 +106,6 @@ export const PlaylistSchema = z.object({
 });
 
 export type Playlist = z.infer<typeof PlaylistSchema>;
-
-export const PlaylistStorageSchema = z
-  .object({
-    ...PlaylistSchema.shape,
-
-    items: z.array(PlaylistItemStorageSchema),
-    queue: z.array(PlaylistItemStorageSchema)
-  })
-  .partial({ id: true });
-
-export type PlaylistStorage = z.infer<typeof PlaylistStorageSchema>;
 
 export const emptyPlaylist: Playlist = {
   id: '',

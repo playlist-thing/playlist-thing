@@ -9,8 +9,9 @@
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
 
-  import type { PlaylistItem, Broadcast, PlaylistStorage, Playlist } from '$lib/schema/playlist';
-  import { PlaylistStorageSchema, emptySong, emptyAirBreak } from '$lib/schema/playlist';
+  import type { PlaylistItem, Broadcast, Playlist } from '$lib/schema/playlist';
+  import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
+  import { PlaylistStorageSchema, type PlaylistStorage } from '$lib/schema/storage/playlist';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { getFile } from '$lib/editor/external/file';

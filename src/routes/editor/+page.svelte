@@ -14,7 +14,7 @@
   import { openDatabase } from '$lib/db';
   import { displaySizeMedium } from '$lib/editor/state.svelte';
   import { withFreshIds } from '$lib/editor/state.svelte';
-  import { PlaylistStorageSchema } from '$lib/schema/playlist';
+  import { PlaylistStorageSchema } from '$lib/schema/storage/playlist';
   import localStorageStore from '$lib/localStorageStore';
   import { v4 as uuidv4 } from 'uuid';
   import { onMount } from 'svelte';

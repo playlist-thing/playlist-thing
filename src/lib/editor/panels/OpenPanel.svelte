@@ -2,7 +2,8 @@
   import { v4 as uuidv4 } from 'uuid';
 
   import { openDatabase } from '$lib/db';
-  import { emptyPlaylist, PlaylistStorageSchema, type Playlist } from '$lib/schema/playlist';
+  import { emptyPlaylist, type Playlist } from '$lib/schema/playlist';
+  import { PlaylistStorageSchema } from '$lib/schema/storage/playlist';
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
 
