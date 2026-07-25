@@ -16,8 +16,8 @@
 <div class="outer-container">
   <div class="inner-container overflow">
     <div class="padding-container">
-      <div class="header">
-        <h1 class="title">Settings</h1>
+      <div class="panel-header">
+        <h1 class="panel-title">Settings</h1>
 
         <button class="button transparent close" onclick={close}>
           <i class="bi-x-lg" aria-hidden="true"></i>

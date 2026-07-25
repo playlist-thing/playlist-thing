@@ -26,8 +26,8 @@
 
 <div class="middle-container">
   <div class="padding-container">
-    <div class="header">
-      <h1 class="title">Options</h1>
+    <div class="panel-header">
+      <h1 class="panel-title">Options</h1>
 
       <button class="button transparent close" onclick={close}>
         <i class="bi-x-lg" aria-hidden="true"></i>

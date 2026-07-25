@@ -129,7 +129,9 @@
     ondragover={dragoverHandler}
     ondrop={dropHandler}
   >
-    <h1>Open a playlist</h1>
+    <div class="panel-header">
+      <h1 class="panel-title">Open a playlist</h1>
+    </div>
 
     <div>
       <button class="button" onclick={openNewPlaylist}>
