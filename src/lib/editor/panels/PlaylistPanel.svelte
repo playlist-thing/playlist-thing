@@ -41,6 +41,7 @@
 
   let autosaveCallback: number | null;
   let autosaved = $state(false);
+  let justLoaded = false;
   let showOptions = $state(false);
 
   let playlistContainer: HTMLElement | undefined = $state();
@@ -50,6 +51,13 @@
     // function again when anything inside the data touched by toJson
     // changes
     const _ = toJson();
+
+    // don't save when playlist was just loaded from db (and thus modified)
+    if (justLoaded) {
+      autosaved = true;
+      justLoaded = false;
+      return;
+    }
 
     // don't save when currently in a drag and drop operation
     if (items.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
@@ -123,6 +131,8 @@
 
     items = withFreshIds(playlist.items);
     queue = withFreshIds(playlist.queue);
+
+    justLoaded = true;
   }
 
   async function autosave() {
