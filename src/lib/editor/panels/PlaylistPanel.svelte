@@ -8,6 +8,7 @@
   import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
+  import AddItemControls from './playlist/AddItemControls.svelte';
 
   import type { PlaylistItem, Broadcast, Playlist } from '$lib/schema/playlist';
   import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
@@ -242,7 +243,7 @@
     await addItemsToQueue([emptySong]);
   }
 
-  async function addPause() {
+  async function addAirBreak() {
     await addItemsToQueue([emptyAirBreak]);
   }
 
@@ -260,7 +261,7 @@
     }
   }
 
-  async function addFile(file: File) {
+  async function addSongFile(file: File) {
     try {
       const track = await getFile(file);
       await addItemsToQueue([track]);
@@ -270,9 +271,27 @@
     }
   }
 
-  async function openPlaylistFile(file: File) {
+  async function addPlaylistFile(file: File) {
     const json = await file.text();
     fromJson(json);
+  }
+
+  async function addFile(file: File) {
+    if (file.name.endsWith('.json')) {
+      await addPlaylistFile(file);
+    } else {
+      await addSongFile(file);
+    }
+  }
+
+  async function addUrl(url: string) {
+    const spotifyTrackId = spotifyTrackIdFromUrl(url);
+    if (spotifyTrackId) {
+      await addSpotifyTrack(spotifyTrackId);
+      return;
+    }
+
+    throw new Error('URL not recognized');
   }
 
   function dragoverHandler(ev: DragEvent) {
@@ -288,12 +307,7 @@
       for (const item of dataTransferItems) {
         if (item.kind === 'file') {
           const file = item.getAsFile()!;
-
-          if (file.name.endsWith('.json')) {
-            await openPlaylistFile(file);
-          } else {
-            await addFile(file);
-          }
+          await addFile(file);
         } else if (item.kind === 'string') {
           if (item.type === 'text/plain') {
             // when dragging from spotify, multiple lines in
@@ -302,11 +316,11 @@
             item.getAsString(async (lines) => {
               const split = lines.split('\n');
               for (const line of split) {
-                const spotifyTrackId = spotifyTrackIdFromUrl(line);
-                if (spotifyTrackId) {
-                  await addSpotifyTrack(spotifyTrackId);
-                } else {
+                try {
+                  await addUrl(line);
+                } catch (e) {
                   modals.showURLInvalidModal = true;
+                  console.log(e);
                 }
               }
             });
@@ -335,29 +349,14 @@
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
         <List name={'Playlist'} bind:items />
-        <List name={'Queue'} bind:items={queue} />
 
-        <div class="add-item-buttons">
-          <button class="button" onclick={addEmpty}>
-            <i class="bi bi-music-note" aria-hidden="true"></i>
-            Add song
-          </button>
-          <button class="button" onclick={addPause}>
-            <i class="bi bi-mic" aria-hidden="true"></i>
-            Add air break
-          </button>
-        </div>
-
-        <div></div>
-      </div>
-
-      <div class="controls-bottom">
-        <!-- TODO aria role -->
-        <div ondragover={dragoverHandler} ondrop={dropHandler} class="drop-zone">
-          <i class="bi-plus-lg"></i>
-          Drop new songs or playlists here
+        <div role="list" ondragover={dragoverHandler} ondrop={dropHandler}>
+          <List name={'Queue'} bind:items={queue} />
+          <AddItemControls {addEmpty} {addAirBreak} {addUrl} {addFile} />
         </div>
       </div>
+
+      <div class="controls-bottom"></div>
     {/if}
   </div>
 </div>
@@ -376,30 +375,8 @@
     position: relative;
   }
 
-  .add-item-buttons {
-    display: flex;
-
-    padding: 6px;
-  }
-
-  .add-item-buttons > :not(:last-child) {
-    margin-right: 4px;
-  }
-
-  .add-item-buttons > .button {
-    width: 100%;
-  }
-
   .controls-bottom {
     display: flex;
     flex-direction: column;
-  }
-
-  .drop-zone {
-    padding: 1em;
-    color: #666;
-
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
   }
 </style>
