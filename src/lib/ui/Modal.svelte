@@ -29,9 +29,9 @@
   class="modal"
 >
   <div class="modal-content">
-    <h1>
+    <h2>
       {title}
-    </h1>
+    </h2>
     {@render children?.()}
 
     <div class="modal-footer">

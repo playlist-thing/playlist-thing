@@ -63,9 +63,9 @@
 {/snippet}
 
 <div class="row top">
-  <h3 ondragstart={dragstartHandler} draggable="true" class="list-name">
+  <h4 ondragstart={dragstartHandler} draggable="true" class="list-name">
     {name}
-  </h3>
+  </h4>
 </div>
 
 {#if items.length > 0}

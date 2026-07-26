@@ -41,6 +41,9 @@
 
 .panel-title {
   margin: 0px;
+
+  font-size: 2em;
+  font-weight: bold;
 }
 
 .button.close {

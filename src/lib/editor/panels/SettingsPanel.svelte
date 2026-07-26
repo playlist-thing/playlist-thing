@@ -17,7 +17,7 @@
   <div class="inner-container overflow">
     <div class="padding-container">
       <div class="panel-header">
-        <h1 class="panel-title">Settings</h1>
+        <h2 class="panel-title">Settings</h2>
 
         <button class="button transparent close" onclick={close}>
           <i class="bi-x-lg" aria-hidden="true"></i>
@@ -28,15 +28,15 @@
       <p>Settings are stored locally in your browser.</p>
 
       <section>
-        <h2>Search</h2>
+        <h3>Search</h3>
         <p>
           Search for track title and artist on external services to get links and IDs for tracks.
         </p>
 
-        <h3>Search providers</h3>
+        <h4>Search providers</h4>
         <SearchProviders />
 
-        <h3>Quick search</h3>
+        <h4>Quick search</h4>
         <p>
           Search for items quickly using the
           <button class="button" disabled>
@@ -49,7 +49,7 @@
       </section>
 
       <section>
-        <h2>Integrations</h2>
+        <h3>Integrations</h3>
 
         <p>
           Integrations fetch track metadata from external sources using IDs of the respective
@@ -57,20 +57,20 @@
         </p>
 
         {#if env.PUBLIC_SPOTIFY_CLIENT_ID}
-          <h3>Spotify</h3>
+          <h4>Spotify</h4>
           <Spotify />
         {/if}
       </section>
 
       <section>
-        <h2>Export and import</h2>
+        <h3>Export and import</h3>
 
         <p>Save all settings to a file and restore them at a later point.</p>
         <ExportImport />
       </section>
 
       <section>
-        <h2>About playlist-thing</h2>
+        <h3>About playlist-thing</h3>
 
         <ul class="links-bottom">
           <li class="links-bottom-item">

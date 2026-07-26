@@ -27,7 +27,7 @@
 <div class="middle-container">
   <div class="padding-container">
     <div class="panel-header">
-      <h1 class="panel-title">Options</h1>
+      <h2 class="panel-title">Options</h2>
 
       <button class="button transparent close" onclick={close}>
         <i class="bi-x-lg" aria-hidden="true"></i>
@@ -59,7 +59,7 @@
     </section>
 
     <section>
-      <h2>Download</h2>
+      <h3>Download</h3>
 
       <button class="button" onclick={download}>
         <i class="bi-download" aria-hidden="true"></i> Download playlist
@@ -71,7 +71,7 @@
     </section>
 
     <section>
-      <h2>Danger Zone</h2>
+      <h3>Danger Zone</h3>
 
       <button class="button danger" onclick={() => (showConfirmDeleteModal = true)}>
         <i class="bi-trash" aria-hidden="true"></i> Delete playlist

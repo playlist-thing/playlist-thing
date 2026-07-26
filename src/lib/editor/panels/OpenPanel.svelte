@@ -26,7 +26,7 @@
     }
   });
 
-  async function load() {
+  async function loadLocalPlaylists() {
     const db = await openDatabase();
     const index = db.transaction('playlists').store.index('lastModifiedAt');
 
@@ -38,7 +38,7 @@
   }
 
   onMount(() => {
-    localPlaylists = load();
+    localPlaylists = loadLocalPlaylists();
   });
 
   async function openNewPlaylist() {
@@ -130,7 +130,7 @@
     ondrop={dropHandler}
   >
     <div class="panel-header">
-      <h1 class="panel-title">Open a playlist</h1>
+      <h2 class="panel-title">Open a playlist</h2>
     </div>
 
     <div>
@@ -154,7 +154,7 @@
 
     <p class="drop-notice">You can also drop a playlist file here to open it.</p>
 
-    <h2>Recent playlists</h2>
+    <h3>Recent playlists</h3>
 
     {#await localPlaylists then playlists}
       {#if playlists.length > 0}
