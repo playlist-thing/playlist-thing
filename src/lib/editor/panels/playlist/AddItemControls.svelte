@@ -66,8 +66,6 @@
         </button>
       </div>
     </div>
-
-    <div class="add-item-buttons"></div>
   </div>
 
   <div class="bottom-hint">Only song metadata is stored, no audio is stored.</div>
