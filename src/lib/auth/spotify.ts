@@ -54,10 +54,6 @@ export async function redirectToSpotifyAuthorize() {
 }
 
 function saveToken(response: openid.TokenEndpointResponse) {
-  if (!response.refresh_token) {
-    throw new Error('Response has no refresh_token');
-  }
-
   if (!response.expires_in) {
     throw new Error('Response has no expires_in');
   }
@@ -65,8 +61,11 @@ function saveToken(response: openid.TokenEndpointResponse) {
   const expiry = Date.now() + response.expires_in * 1000;
 
   spotifyToken.set(response.access_token);
-  spotifyTokenRefresh.set(response.refresh_token);
   spotifyTokenExpiry.set(expiry);
+
+  if (response.refresh_token) {
+    spotifyTokenRefresh.set(response.refresh_token);
+  }
 }
 
 export async function getToken(url: URL) {
