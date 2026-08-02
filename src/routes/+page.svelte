@@ -10,7 +10,7 @@
   <div class="content">
     <h1>playlist-thing</h1>
 
-    <p><strong>playlist-thing</strong> is a playlist manager primarily for radio DJs.</p>
+    <p><strong>playlist-thing</strong> is a playlist manager for radio DJs.</p>
 
     <ul class="showcase">
       <li class="showcase-item">
