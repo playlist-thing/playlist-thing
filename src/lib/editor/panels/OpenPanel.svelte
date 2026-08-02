@@ -6,6 +6,7 @@
   import { PlaylistStorageSchema } from '$lib/schema/storage/playlist';
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
+  import PlaylistListItem from './open/PlaylistListItem.svelte';
 
   interface Props {
     openPlaylist: (playlistId: string) => void;
@@ -116,10 +117,6 @@
   function playlistNotOpenable(id: string) {
     return currentlyOpenPlaylistIds.includes(id);
   }
-
-  function prettyDate(epochMilliseconds: number) {
-    return new Date(epochMilliseconds).toLocaleString();
-  }
 </script>
 
 <div class="outer-container">
@@ -166,28 +163,11 @@
 
         <ol class="playlist-list">
           {#each playlists as playlist}
-            <li>
-              <button
-                class="button transparent playlist-list-item"
-                onclick={() => openPlaylist(playlist.id)}
-                disabled={playlistNotOpenable(playlist.id)}
-                class:disabled={playlistNotOpenable(playlist.id)}
-              >
-                <div class="row">
-                  <div>
-                    {#if playlist.name}
-                      {playlist.name}
-                    {:else}
-                      <i>Untitled playlist</i>
-                    {/if}
-                  </div>
-
-                  <div>
-                    {prettyDate(playlist.lastModifiedAt)}
-                  </div>
-                </div>
-              </button>
-            </li>
+            <PlaylistListItem
+              {playlist}
+              playlistNotOpenable={playlistNotOpenable(playlist.id)}
+              openPlaylist={() => openPlaylist(playlist.id)}
+            />
           {/each}
         </ol>
       {:else}
@@ -222,10 +202,6 @@
     list-style: none;
     padding: 0px;
     margin: 0px;
-  }
-
-  .playlist-list-item {
-    width: 100%;
   }
 
   .row {
