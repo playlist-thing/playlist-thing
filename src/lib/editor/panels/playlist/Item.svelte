@@ -25,6 +25,7 @@
 
   let editing = $state(false);
   let showMenu = $state(false);
+  let draggingOverDepth = $state(0);
 
   function rowClass(item: PlaylistItem) {
     if (!item.seconds) {
@@ -84,6 +85,9 @@
 
   function dropHandler(ev: DragEvent) {
     ev.preventDefault();
+    ev.stopPropagation();
+
+    draggingOverDepth = 0;
 
     const dataTransferItems = ev.dataTransfer!.items;
     if (dataTransferItems) {
@@ -128,9 +132,30 @@
       }
     }
   }
+
+  function dragEnterHandler() {
+    draggingOverDepth += 1;
+  }
+
+  function dragLeaveHandler() {
+    draggingOverDepth -= 1;
+  }
 </script>
 
-<li class={rowClass(item)} ondragover={dragoverHandler} ondrop={dropHandler}>
+<li
+  class={rowClass(item)}
+  class:dragged-over={draggingOverDepth > 0}
+  ondragover={dragoverHandler}
+  ondrop={dropHandler}
+  ondragenter={dragEnterHandler}
+  ondragleave={dragLeaveHandler}
+>
+  {#if draggingOverDepth > 0}
+    <div class="drop-hint-top">
+      <i class="bi-plus-lg" aria-hidden="true"></i>
+      Drop here to add metadata to this song
+    </div>
+  {/if}
   <div class="row">
     <div class="time-and-metadata">
       {#if !displaySizeMedium.current}
@@ -256,6 +281,18 @@
 </li>
 
 <style>
+  .dragged-over {
+    padding: 10px;
+  }
+
+  .drop-hint-top {
+    padding-left: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    color: #666;
+  }
+
   .row {
     display: flex;
     justify-content: space-between;
