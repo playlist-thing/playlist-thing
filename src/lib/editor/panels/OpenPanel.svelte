@@ -92,6 +92,37 @@
     openPlaylist(newPlaylistId);
   }
 
+  async function duplicatePlaylist(id: string) {
+    const db = await openDatabase();
+
+    const newPlaylistId = uuidv4();
+
+    const tx = db.transaction('playlists', 'readwrite');
+
+    const playlist = await tx.store.get(id);
+    if (!playlist) {
+      console.log(`playlist ${id} does not exist anymore`);
+      return;
+    }
+
+    const newPlaylist = { ...playlist, id: newPlaylistId };
+    await tx.store.add(newPlaylist);
+
+    await tx.done;
+
+    localPlaylists = Promise.resolve([newPlaylist, ...(await localPlaylists)]);
+  }
+
+  async function deletePlaylist(id: string) {
+    const db = await openDatabase();
+
+    await db.delete('playlists', id);
+
+    localPlaylists = Promise.resolve(
+      (await localPlaylists).filter((playlist) => playlist.id !== id)
+    );
+  }
+
   function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
     ev.dataTransfer!.dropEffect = 'copy';
@@ -167,6 +198,8 @@
               {playlist}
               playlistNotOpenable={playlistNotOpenable(playlist.id)}
               openPlaylist={() => openPlaylist(playlist.id)}
+              duplicatePlaylist={() => duplicatePlaylist(playlist.id)}
+              deletePlaylist={() => deletePlaylist(playlist.id)}
             />
           {/each}
         </ol>
