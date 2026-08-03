@@ -28,6 +28,8 @@
 
   let durationInputElement: HTMLInputElement;
 
+  let componentId = $props.id();
+
   function addBackgroundMusic() {
     item = {
       id: item.id,
@@ -167,36 +169,61 @@
     <div class="input-block">
       {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
         <div class="input-block-item">
-          <label class="label" for="title">Title</label>
-          <input class="input-text" id="title" type="text" bind:value={item.content.title} />
+          <label class="label" for={`title-${componentId}`}>Title</label>
+          <input
+            class="input-text"
+            id={`title-${componentId}`}
+            type="text"
+            bind:value={item.content.title}
+          />
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="artist">Artist</label>
-          <input class="input-text" id="artist" type="text" bind:value={item.content.artist} />
+          <label class="label" for={`artist-${componentId}`}>Artist</label>
+          <input
+            class="input-text"
+            id={`artist-${componentId}`}
+            type="text"
+            bind:value={item.content.artist}
+          />
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="album">Album</label>
-          <input class="input-text" id="album" type="text" bind:value={item.content.album} />
+          <label class="label" for={`album-${componentId}`}>Album</label>
+          <input
+            class="input-text"
+            id={`album-${componentId}`}
+            type="text"
+            bind:value={item.content.album}
+          />
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="released">Released</label>
-          <input class="input-text" id="released" type="text" bind:value={item.content.released} />
+          <label class="label" for={`released-${componentId}`}>Released</label>
+          <input
+            class="input-text"
+            id={`released-${componentId}`}
+            type="text"
+            bind:value={item.content.released}
+          />
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="label">Label</label>
-          <input class="input-text" id="label" type="text" bind:value={item.content.label} />
+          <label class="label" for={`content-label-${componentId}`}>Label</label>
+          <input
+            class="input-text"
+            id={`content-label-${componentId}`}
+            type="text"
+            bind:value={item.content.label}
+          />
         </div>
       {/if}
 
       <div class="input-block-item">
-        <label class="label" for="duration">Duration</label>
+        <label class="label" for={`duration-${componentId}`}>Duration</label>
         <input
           class="input-text"
-          id="duration"
+          id={`duration-${componentId}`}
           type="text"
           bind:this={durationInputElement}
           value={formatSeconds(item.seconds)}
@@ -225,15 +252,21 @@
       {/if}
 
       <div class="input-block-item">
-        <label class="label" for="internal-notes">Internal notes</label>
-        <textarea class="input-text" id="internal-notes" rows="5" bind:value={item.internalNotes}
-        ></textarea>
+        <label class="label" for={`internal-notes-${componentId}`}>Internal notes</label>
+        <textarea
+          class="input-text"
+          id={`internal-notes-${componentId}`}
+          rows="5"
+          bind:value={item.internalNotes}></textarea>
       </div>
 
       <div class="input-block-item">
-        <label class="label" for="public-notes">Public notes</label>
-        <textarea class="input-text" id="public-notes" rows="5" bind:value={item.publicNotes}
-        ></textarea>
+        <label class="label" for={`public-notes-${componentId}`}>Public notes</label>
+        <textarea
+          class="input-text"
+          id={`public-notes-${componentId}`}
+          rows="5"
+          bind:value={item.publicNotes}></textarea>
       </div>
 
       {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}

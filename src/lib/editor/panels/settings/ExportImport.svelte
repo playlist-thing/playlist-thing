@@ -3,6 +3,8 @@
 
   let files: FileList | undefined = $state();
 
+  let componentId = $props.id();
+
   $effect(() => {
     if (files !== undefined && files.length === 1) {
       importSettings(files[0]);
@@ -24,11 +26,17 @@
 <p><strong>Warning: this will overwrite all current settings.</strong></p>
 
 <div class="input-block">
-  <label class="button" for="import-file">
+  <label class="button" for={`import-file-${componentId}`}>
     <i class="bi-box-arrow-in-down-right" aria-hidden="true"></i>
     Import settings file
   </label>
-  <input class="file-input" accept="application/json" id="import-file" type="file" bind:files />
+  <input
+    class="file-input"
+    accept="application/json"
+    id={`import-file-${componentId}`}
+    type="file"
+    bind:files
+  />
 </div>
 
 <style>

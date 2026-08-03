@@ -9,13 +9,15 @@
   let { showModal = $bindable(), addUrl }: Props = $props();
 
   let url = $state('');
+
+  let componentId = $props.id();
 </script>
 
 <OkCancelModal bind:showModal title="Add Song from URL" onOk={() => addUrl(url)}>
   <div class="input-block">
     <div class="input-block-item">
-      <label class="label" for="url">URL</label>
-      <input class="input-text" id="url" type="text" bind:value={url} />
+      <label class="label" for={`url-${componentId}`}>URL</label>
+      <input class="input-text" id={`url-${componentId}`} type="text" bind:value={url} />
     </div>
 
     <div class="hint">

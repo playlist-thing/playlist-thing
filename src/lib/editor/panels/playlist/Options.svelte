@@ -22,6 +22,8 @@
     download,
     exportNotes
   }: Props = $props();
+
+  let componentId = $props.id();
 </script>
 
 <div class="middle-container">
@@ -38,19 +40,22 @@
     <section>
       <div class="input-block">
         <div class="input-block-item">
-          <label class="label" for="name">Playlist name</label>
-          <input class="input-text" id="name" type="text" bind:value={name} />
+          <label class="label" for={`name-${componentId}`}>Playlist name</label>
+          <input class="input-text" id={`name-${componentId}`} type="text" bind:value={name} />
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="description">Description</label>
-          <textarea class="input-text" id="description" rows="5" bind:value={description}
-          ></textarea>
+          <label class="label" for={`description-${componentId}`}>Description</label>
+          <textarea
+            class="input-text"
+            id={`description-${componentId}`}
+            rows="5"
+            bind:value={description}></textarea>
         </div>
 
         <div class="input-block-item">
-          <label class="label" for="visibility">Visibility</label>
-          <select class="button" id="visibility" bind:value={isPublic}>
+          <label class="label" for={`visibility-${componentId}`}>Visibility</label>
+          <select class="button" id={`visibility-${componentId}`} bind:value={isPublic}>
             <option value={false}>Private</option>
             <option value={true}>Public</option>
           </select>

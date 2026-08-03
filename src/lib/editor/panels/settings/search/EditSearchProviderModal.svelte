@@ -25,6 +25,8 @@
 
   let exampleSongSearchUrl = $derived(searchUrl(exampleSong, url));
 
+  let componentId = $props.id();
+
   $effect(() => {
     if (showModal) {
       name = searchProvider.name;
@@ -40,13 +42,13 @@
 >
   <div class="input-block">
     <div class="input-block-item">
-      <label class="label" for="name">Name</label>
-      <input class="input-text" id="name" type="text" bind:value={name} />
+      <label class="label" for={`name-${componentId}`}>Name</label>
+      <input class="input-text" id={`name-${componentId}`} type="text" bind:value={name} />
     </div>
 
     <div class="input-block-item">
-      <label class="label" for="url">URL</label>
-      <input class="input-text" id="url" type="text" bind:value={url} />
+      <label class="label" for={`url-${componentId}`}>URL</label>
+      <input class="input-text" id={`url-${componentId}`} type="text" bind:value={url} />
     </div>
 
     <div class="hint">
