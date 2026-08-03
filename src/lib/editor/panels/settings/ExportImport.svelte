@@ -3,11 +3,14 @@
 
   let files: FileList | undefined = $state();
 
+  let importSuccess = $state(false);
+
   let componentId = $props.id();
 
   $effect(() => {
     if (files !== undefined && files.length === 1) {
       importSettings(files[0]);
+      importSuccess = true;
     }
   });
 </script>
@@ -38,6 +41,13 @@
     bind:files
   />
 </div>
+
+{#if importSuccess}
+  <p>
+    <i class="bi-check-lg"></i>
+    Import successful
+  </p>
+{/if}
 
 <style>
   .input-block {
