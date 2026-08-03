@@ -1,10 +1,19 @@
 import { get, derived } from 'svelte/store';
 
+import { z } from 'zod';
+
 import { fileSave } from 'browser-fs-access';
 
 import localStorageStore from '$lib/localStorageStore';
 
-import { defaultSearchProviders } from './search';
+import { defaultSearchProviders, SearchProviderSchema, type SearchProvider } from './search';
+
+const SettingsSchema = z.object({
+  searchProviders: z.array(SearchProviderSchema),
+  quickSearchProviderId: z.number()
+});
+
+type Settings = z.infer<typeof SettingsSchema>;
 
 // settings
 
@@ -33,7 +42,7 @@ export const quickSearchUrl = derived(
 );
 
 export async function exportSettings() {
-  const settings = {
+  const settings: Settings = {
     searchProviders: get(searchProviders),
     quickSearchProviderId: get(quickSearchProviderId)
   };
@@ -48,8 +57,15 @@ export async function exportSettings() {
 }
 
 export async function importSettings(file: File) {
-  const settings = JSON.parse(await file.text());
+  const parsed = JSON.parse(await file.text());
+  const result = SettingsSchema.safeParse(parsed);
 
+  if (!result.success) {
+    console.error(result.error);
+    throw new Error('Failed to parse settings');
+  }
+
+  const settings = result.data;
   searchProviders.set(settings.searchProviders);
   quickSearchProviderId.set(settings.quickSearchProviderId);
 }

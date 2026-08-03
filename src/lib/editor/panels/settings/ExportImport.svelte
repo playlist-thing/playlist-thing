@@ -7,10 +7,14 @@
 
   let componentId = $props.id();
 
+  async function importSettingsFile(file: File) {
+    await importSettings(file);
+    importSuccess = true;
+  }
+
   $effect(() => {
     if (files !== undefined && files.length === 1) {
-      importSettings(files[0]);
-      importSuccess = true;
+      importSettingsFile(files[0]);
     }
   });
 </script>
