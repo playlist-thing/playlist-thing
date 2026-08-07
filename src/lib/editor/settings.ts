@@ -6,9 +6,10 @@ import { fileSave } from 'browser-fs-access';
 
 import localStorageStore from '$lib/localStorageStore';
 
-import { defaultSearchProviders, SearchProviderSchema, type SearchProvider } from './search';
+import { defaultSearchProviders, SearchProviderSchema } from './search';
 
 const SettingsSchema = z.object({
+  airBreakDurationSeconds: z.number(),
   searchProviders: z.array(SearchProviderSchema),
   quickSearchProviderId: z.number()
 });
@@ -17,6 +18,7 @@ type Settings = z.infer<typeof SettingsSchema>;
 
 // settings
 
+export const airBreakDurationSeconds = localStorageStore('airBreakDurationSeconds', 90);
 export const searchProviders = localStorageStore('searchProviders', defaultSearchProviders);
 export const quickSearchProviderId = localStorageStore('quickSearchProviderId', 0);
 
@@ -43,6 +45,7 @@ export const quickSearchUrl = derived(
 
 export async function exportSettings() {
   const settings: Settings = {
+    airBreakDurationSeconds: get(airBreakDurationSeconds),
     searchProviders: get(searchProviders),
     quickSearchProviderId: get(quickSearchProviderId)
   };
@@ -66,6 +69,7 @@ export async function importSettings(file: File) {
   }
 
   const settings = result.data;
+  airBreakDurationSeconds.set(settings.airBreakDurationSeconds);
   searchProviders.set(settings.searchProviders);
   quickSearchProviderId.set(settings.quickSearchProviderId);
 }

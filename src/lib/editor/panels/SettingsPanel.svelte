@@ -1,6 +1,7 @@
 <script lang="ts">
   import { env } from '$env/dynamic/public';
 
+  import Playlists from './settings/Playlists.svelte';
   import SearchProviders from './settings/SearchProviders.svelte';
   import QuickSearchProvider from './settings/QuickSearchProvider.svelte';
   import Spotify from './settings/Spotify.svelte';
@@ -26,6 +27,11 @@
       </div>
 
       <p>Settings are stored locally in your browser.</p>
+
+      <section>
+        <h3>Playlists</h3>
+        <Playlists />
+      </section>
 
       <section>
         <h3>Search</h3>

@@ -18,6 +18,7 @@
   import { getFile } from '$lib/editor/external/file';
   import { withFreshIds, modals } from '$lib/editor/state.svelte';
   import { exportNotes } from '$lib/editor/export';
+  import { airBreakDurationSeconds } from '$lib/editor/settings';
   import { openDatabase } from '$lib/db';
 
   interface Props {
@@ -244,7 +245,8 @@
   }
 
   async function addAirBreak() {
-    await addItemsToQueue([emptyAirBreak]);
+    const airBreak = { ...emptyAirBreak, seconds: $airBreakDurationSeconds };
+    await addItemsToQueue([airBreak]);
   }
 
   async function addSpotifyTrack(spotifyTrackId: string) {
