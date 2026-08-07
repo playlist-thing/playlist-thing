@@ -52,7 +52,7 @@
   }
 
   function duplicate() {
-    insertItems([item]);
+    insertItems([$state.snapshot(item)]);
     showMenu = false;
   }
 
