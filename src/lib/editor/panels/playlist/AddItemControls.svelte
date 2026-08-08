@@ -31,7 +31,7 @@
   }
 
   function dropHandler() {
-    // event will bubble up and by parent component(s)
+    // event will bubble up and will be handled by parent component(s)
     draggingOverDepth -= 1;
   }
 </script>
