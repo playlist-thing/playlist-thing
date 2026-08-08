@@ -29,9 +29,20 @@
   function dragLeaveHandler() {
     draggingOverDepth -= 1;
   }
+
+  function dropHandler() {
+    // event will bubble up and by parent component(s)
+    draggingOverDepth -= 1;
+  }
 </script>
 
-<div class="bottom" role="list" ondragenter={dragEnterHandler} ondragleave={dragLeaveHandler}>
+<div
+  class="bottom"
+  role="list"
+  ondragenter={dragEnterHandler}
+  ondragleave={dragLeaveHandler}
+  ondrop={dropHandler}
+>
   <div class="bottom-header">
     <i class="bi-plus-lg"></i>
     {#if draggingOverDepth > 0}
