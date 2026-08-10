@@ -12,7 +12,11 @@
 
   import type { PlaylistItem, Broadcast, Playlist } from '$lib/schema/playlist';
   import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
-  import { PlaylistStorageSchema, type PlaylistStorage } from '$lib/schema/storage/playlist';
+  import {
+    PlaylistStorageSchema,
+    type PlaylistItemStorage,
+    type PlaylistStorage
+  } from '$lib/schema/storage/playlist';
   import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { getFile } from '$lib/editor/external/file';
@@ -146,49 +150,6 @@
     autosaveCallback = window.setTimeout(autosave, 1000);
   }
 
-  function clear() {
-    items = [];
-    queue = [];
-  }
-
-  function fromJson(json: string) {
-    let parsed;
-
-    try {
-      parsed = JSON.parse(json);
-    } catch (e) {
-      modals.showAddFileErrorModal = true;
-      console.log(e);
-      return;
-    }
-
-    const result = PlaylistStorageSchema.safeParse(parsed);
-    if (!result.success) {
-      modals.showAddFileErrorModal = true;
-      console.log(result.error);
-      return;
-    }
-
-    const playlist = result.data;
-    clear();
-
-    ({
-      name,
-      slug,
-      description,
-      public: isPublic,
-      broadcasts,
-      createdAt,
-      lastModifiedAt,
-
-      showIds,
-      djIds
-    } = playlist);
-
-    items = withFreshIds(playlist.items);
-    queue = withFreshIds(playlist.queue);
-  }
-
   function toJson() {
     const data: PlaylistStorage = {
       name,
@@ -232,9 +193,8 @@
     playlistId = null;
   }
 
-  async function addItemsToQueue(newItems: PlaylistItem[]) {
-    newItems = withFreshIds(newItems);
-    queue.push(...newItems);
+  async function addItemsToQueue(newItems: PlaylistItemStorage[]) {
+    queue.push(...withFreshIds(newItems));
 
     await tick();
     playlistContainer!.scrollTo(0, playlistContainer!.scrollHeight);
@@ -275,7 +235,26 @@
 
   async function addPlaylistFile(file: File) {
     const json = await file.text();
-    fromJson(json);
+    let parsed;
+
+    try {
+      parsed = JSON.parse(json);
+    } catch (e) {
+      modals.showAddFileErrorModal = true;
+      console.log(e);
+      return;
+    }
+
+    const result = PlaylistStorageSchema.safeParse(parsed);
+    if (!result.success) {
+      modals.showAddFileErrorModal = true;
+      console.log(result.error);
+      return;
+    }
+
+    const playlist = result.data;
+    await addItemsToQueue(playlist.items);
+    await addItemsToQueue(playlist.queue);
   }
 
   async function addFile(file: File) {
