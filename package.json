@@ -30,7 +30,7 @@
     "svelte": "^5.56.9",
     "svelte-dnd-action": "^0.9.79",
     "svelte-outclick": "^4.2.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "uuid": "^14.0.1",
     "vite": "^8.2.2",
     "vitest": "^4.1.10",
