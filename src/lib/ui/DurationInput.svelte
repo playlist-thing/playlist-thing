@@ -4,7 +4,7 @@
 
   interface Props extends HTMLInputAttributes {
     value: number;
-    onNewValue: (newValue: number) => {};
+    onNewValue: (newValue: number) => void;
   }
 
   let { value, onNewValue, ...rest }: Props = $props();
