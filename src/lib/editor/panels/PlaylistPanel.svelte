@@ -56,7 +56,7 @@
     // this makes us "track" all relevant information and call this
     // function again when anything inside the data touched by toJson
     // changes
-    const _ = toJson();
+    toJson();
 
     // don't save when playlist was just loaded from db (and thus modified)
     if (justLoaded) {
@@ -160,7 +160,9 @@
       createdAt,
       lastModifiedAt,
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       items: items.map(({ id, ...item }) => item),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       queue: queue.map(({ id, ...item }) => item),
 
       showIds,
@@ -329,10 +331,10 @@
       />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
-        <List name={'Playlist'} bind:items />
+        <List name="Playlist" bind:items />
 
         <div role="list" ondragover={dragoverHandler} ondrop={dropHandler}>
-          <List name={'Queue'} bind:items={queue} />
+          <List name="Queue" bind:items={queue} />
           <AddItemControls {addEmpty} {addAirBreak} {addUrl} {addFile} />
         </div>
       </div>

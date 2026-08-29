@@ -49,7 +49,7 @@ export const DATABASE_VERSION = 1;
 
 export async function openDatabase() {
   const db = await openDB<DBv1>(DATABASE_NAME, DATABASE_VERSION, {
-    async upgrade(db, oldVersion) {
+    async upgrade(db) {
       const playlists = db.createObjectStore('playlists', {
         keyPath: 'id'
       });
