@@ -82,7 +82,7 @@ export async function getToken(url: URL) {
   }
   sessionStorage.removeItem('spotifyState');
 
-  let response = await openid.authorizationCodeGrant(await config(), url, {
+  const response = await openid.authorizationCodeGrant(await config(), url, {
     pkceCodeVerifier: codeVerifier,
     expectedState: state
   });
@@ -96,7 +96,7 @@ export async function refreshToken() {
     throw new Error('No refresh token');
   }
 
-  let response = await openid.refreshTokenGrant(await config(), refreshToken);
+  const response = await openid.refreshTokenGrant(await config(), refreshToken);
 
   saveToken(response);
 }

@@ -4,7 +4,7 @@ import slug from 'slug';
 import type { PlaylistItem } from '$lib/schema/playlist';
 
 export async function exportNotes(items: PlaylistItem[], name: string) {
-  let output: string[] = [];
+  const output: string[] = [];
 
   for (const item of items) {
     if (item.tag === 'AirBreak') {

@@ -21,7 +21,7 @@ export const modals = $state({
 });
 
 export function withFreshIds(items: PlaylistItemStorage[]) {
-  let result: PlaylistItem[] = [];
+  const result: PlaylistItem[] = [];
 
   for (const item of items) {
     result.push({ ...item, id: nextId++ });

@@ -1,7 +1,7 @@
 import type { PlaylistItem } from '$lib/schema/playlist';
 
 function calculateBeginsAt(items: PlaylistItem[]) {
-  let result: number[] = [];
+  const result: number[] = [];
   let sum = 0;
 
   for (const item of items) {
@@ -13,7 +13,7 @@ function calculateBeginsAt(items: PlaylistItem[]) {
 }
 
 function calculateTimeUntilEnd(items: PlaylistItem[]) {
-  let result: number[] = [];
+  const result: number[] = [];
   let sum = 0;
 
   for (let i = items.length; i > 0; i--) {
