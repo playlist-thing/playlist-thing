@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { env } from '$env/dynamic/public';
 </script>
 
@@ -67,7 +68,7 @@
     </ul>
 
     <div class="call-to-action">
-      <a class="button" href="/editor">
+      <a class="button" href={resolve('/editor')}>
         <i class="bi-music-note-list" aria-hidden="true"></i>
         Open Editor
       </a>

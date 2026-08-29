@@ -1,5 +1,6 @@
 <script lang="ts">
   import { dev } from '$app/environment';
+  import { resolve } from '$app/paths';
 
   import AccountMenu from '$lib/AccountMenu.svelte';
 
@@ -129,7 +130,7 @@
     <div class="controls-top-row">
       <div class="logo-banner">
         <!-- TODO logo -->
-        <a href="/" class="button transparent">
+        <a href={resolve('/')} class="button transparent">
           <span class="banner-text">playlist-thing</span>
         </a>
       </div>

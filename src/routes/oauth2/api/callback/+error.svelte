@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
 </script>
 
@@ -29,7 +30,7 @@
     </p>
 
     <p>
-      <a href="/editor">Back to editor</a>
+      <a href={resolve('/editor')}>Back to editor</a>
     </p>
   </div>
 </div>
