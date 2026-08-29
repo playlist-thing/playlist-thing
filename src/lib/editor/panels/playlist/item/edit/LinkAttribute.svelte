@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
-    children: any;
+    children: Snippet;
     attribute: string;
     urlFromAttribute: (attribute: string) => string;
     onadd: (input: string) => void;

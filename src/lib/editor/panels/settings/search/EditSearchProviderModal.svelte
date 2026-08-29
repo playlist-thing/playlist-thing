@@ -56,7 +56,7 @@
         Song title and artist will be appended to this URL to form the search URL. For example, the
         search URL for {exampleSong.artist} - {exampleSong.title} would be
       </p>
-      <p><a href={exampleSongSearchUrl}>{exampleSongSearchUrl}</a></p>
+      <p><a href={exampleSongSearchUrl} rel="external">{exampleSongSearchUrl}</a></p>
     </div>
   </div>
 

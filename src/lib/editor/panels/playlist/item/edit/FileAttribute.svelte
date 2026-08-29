@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
-    children: any;
+    children: Snippet;
     attribute: string;
     onadd: (files: FileList | undefined) => void;
     onremove: () => void;

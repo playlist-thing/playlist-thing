@@ -40,7 +40,11 @@
             {username}
           </div>
 
-          <a href={env.PUBLIC_ACCOUNT_MANAGER_URL} class="button transparent align-left">
+          <a
+            href={env.PUBLIC_ACCOUNT_MANAGER_URL}
+            rel="external"
+            class="button transparent align-left"
+          >
             <i class="bi-person" aria-hidden="true"></i> Manage account
           </a>
           <button class="button transparent align-left" onclick={redirectToSSOLogout}>
