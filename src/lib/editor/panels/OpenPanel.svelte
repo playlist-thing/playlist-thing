@@ -193,7 +193,7 @@
         </div>
 
         <ol class="playlist-list">
-          {#each playlists as playlist}
+          {#each playlists as playlist (playlist.id)}
             <PlaylistListItem
               {playlist}
               playlistNotOpenable={playlistNotOpenable(playlist.id)}
