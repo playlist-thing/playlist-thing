@@ -66,7 +66,9 @@
     }
 
     // don't save when currently in a drag and drop operation
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (items.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (queue.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
 
     lastModifiedAt = Date.now();

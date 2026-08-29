@@ -33,6 +33,7 @@ export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistI
 
   const json = await response.json();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const artist = json.artists.map((x: any) => x.name).join(', ');
   const title = json.name;
   const album = json.album.name;
