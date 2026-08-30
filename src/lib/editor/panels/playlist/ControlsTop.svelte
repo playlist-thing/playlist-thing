@@ -14,7 +14,12 @@
 
 <div class="controls-top">
   <div class="row">
-    <div>
+    <div class="row-left">
+      <button class="button transparent back" onclick={closePlaylist}>
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        <span class="visually-hidden">Close playlist</span>
+      </button>
+
       {#if editingName}
         <form onsubmit={toggleEdit}>
           <span class="playlist-name">
@@ -48,20 +53,15 @@
           <i class="bi bi-three-dots" aria-hidden="true"></i>
           <span class="visually-hidden">Playlist options</span>
         </button>
-
-        <span class="autosave-indicator">
-          {#if autosaved}
-            autosaved
-          {/if}
-        </span>
       {/if}
     </div>
 
     <div>
-      <button class="button transparent edit" onclick={closePlaylist}>
-        <i class="bi bi-x-lg" aria-hidden="true"></i>
-        <span class="visually-hidden">Close playlist</span>
-      </button>
+      <span class="autosave-indicator">
+        {#if autosaved}
+          autosaved
+        {/if}
+      </span>
     </div>
   </div>
 </div>
@@ -82,6 +82,20 @@
     align-items: center;
 
     padding-bottom: 0.2em;
+  }
+
+  .row-left {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .button.back {
+    font-size: 1.3em;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   .button.edit {
