@@ -37,7 +37,7 @@
     "svelte-dnd-action": "^0.9.79",
     "svelte-outclick": "^4.2.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.67.0",
+    "typescript-eslint": "^8.69.0",
     "uuid": "^14.0.2",
     "vite": "^8.2.2",
     "vitest": "^4.1.11",
