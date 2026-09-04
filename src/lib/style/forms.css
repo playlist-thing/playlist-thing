@@ -107,10 +107,20 @@
   background-color: #fff;
   color: #000;
 
+  font-family: inherit;
   font-size: 1em;
-  padding: 0.3em;
+  padding: 0.6em 0.75em;
 
   border: 1px solid;
-  border-color: #777;
-  border-radius: 3px;
+  border-color: #999;
+  border-radius: 6px;
+}
+
+.input-text:hover {
+  border-color: #222;
+}
+
+.input-text:focus-visible {
+  outline: 2px solid #222;
+  outline-offset: -2px;
 }
