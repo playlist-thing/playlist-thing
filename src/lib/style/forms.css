@@ -18,6 +18,14 @@
 }
 
 .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  line-height: 1.25;
+  gap: 0.35em;
+
   background-color: #eee;
   color: #000;
 
@@ -47,7 +55,7 @@
 }
 
 .button.align-left {
-  text-align: left;
+  justify-content: start;
 }
 
 /* extra visual cues */

@@ -60,6 +60,8 @@
     display: flex;
     justify-content: space-between;
 
+    width: 100%;
+
     padding-left: 4px;
     padding-right: 4px;
     padding-top: 6px;
