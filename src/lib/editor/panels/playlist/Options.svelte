@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { apiToken } from '$lib/auth/api';
   import ConfirmDeleteModal from './ConfirmDeleteModal.svelte';
 
   let showConfirmDeleteModal = $state(false);
@@ -55,10 +56,20 @@
 
         <div class="input-block-item">
           <label class="label" for={`visibility-${componentId}`}>Visibility</label>
-          <select class="button" id={`visibility-${componentId}`} bind:value={isPublic}>
+          <select
+            class="button"
+            id={`visibility-${componentId}`}
+            bind:value={isPublic}
+            class:disabled={!$apiToken}
+            disabled={!$apiToken}
+          >
             <option value={false}>Private</option>
             <option value={true}>Public</option>
           </select>
+
+          {#if !$apiToken}
+            <p class="hint">Sign in to publish playlists</p>
+          {/if}
         </div>
       </div>
     </section>
@@ -112,5 +123,13 @@
 
   .input-block-item:not(:last-child) {
     padding-bottom: 7px;
+  }
+
+  .hint {
+    margin: 0px;
+    padding-top: 5px;
+
+    font-size: 0.85em;
+    color: #666;
   }
 </style>
