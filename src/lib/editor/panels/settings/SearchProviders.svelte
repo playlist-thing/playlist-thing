@@ -60,12 +60,9 @@
 
   .controls-bottom {
     display: flex;
+    gap: 4px;
 
     padding-top: 5px;
-  }
-
-  .controls-bottom > :not(:last-child) {
-    margin-right: 4px;
   }
 
   .controls-bottom > .button {

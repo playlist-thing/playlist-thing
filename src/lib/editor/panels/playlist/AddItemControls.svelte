@@ -101,12 +101,9 @@
 
   .add-item-buttons {
     display: flex;
+    gap: 4px;
 
     padding: 6px;
-  }
-
-  .add-item-buttons > :not(:last-child) {
-    margin-right: 4px;
   }
 
   .add-item-buttons > .button-group {
