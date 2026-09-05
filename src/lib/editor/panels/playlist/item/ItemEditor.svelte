@@ -1,6 +1,6 @@
 <script lang="ts">
-  import LinkAttribute from './edit/LinkAttribute.svelte';
-  import FileAttribute from './edit/FileAttribute.svelte';
+  import LinkAttribute from './editor/LinkAttribute.svelte';
+  import FileAttribute from './editor/FileAttribute.svelte';
 
   import type { PlaylistItem } from '$lib/schema/playlist';
   import { emptySongMetadata } from '$lib/schema/playlist';
