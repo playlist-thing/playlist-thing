@@ -107,6 +107,27 @@ export const PlaylistSchema = z.object({
 
 export type Playlist = z.infer<typeof PlaylistSchema>;
 
+// A file matches the title when its filename contains the song title
+// (case-insensitive). Missing file or title can't be compared, so it
+// trivially matches and no warning is shown.
+export function fileMatchesTitle(item: PlaylistItem): boolean {
+  if (item.tag !== 'Song' && item.tag !== 'AirBreakWithBackgroundMusic') {
+    return true;
+  }
+
+  const file = item.content.attributes['file'];
+  if (!file) {
+    return true;
+  }
+
+  const title = item.content.title.trim();
+  if (!title) {
+    return true;
+  }
+
+  return file.trim().toLowerCase().includes(title.toLowerCase());
+}
+
 export const emptyPlaylist: Playlist = {
   id: '',
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PlaylistItem } from '$lib/schema/playlist';
+  import { type PlaylistItem, fileMatchesTitle } from '$lib/schema/playlist';
 
   interface Props {
     item: PlaylistItem;
@@ -57,7 +57,13 @@
           <i class="bi-sticky"></i>
         {/if}
         {#if 'file' in item.content.attributes}
-          <i class="bi-file-earmark"></i>
+          {#if fileMatchesTitle(item)}
+            <i class="bi-file-earmark"></i>
+          {:else}
+            <span class="file-indicator warning">
+              <i class="bi-file-earmark"></i>
+            </span>
+          {/if}
         {/if}
         {#if 'spotify.com' in item.content.attributes}
           <i class="bi-spotify"></i>
@@ -94,5 +100,12 @@
 
   .metadata-row.bottom {
     font-size: 0.85em;
+  }
+
+  .file-indicator.warning {
+    color: #fff;
+    background-color: var(--danger);
+    border-radius: 1em;
+    padding: 0px 10px;
   }
 </style>
