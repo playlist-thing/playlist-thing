@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="metadata">
         {#if item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
           <div
             class="metadata-row"
@@ -187,7 +187,7 @@
           </div>
         {/if}
         {#if item.tag === 'Song' || item.tag === 'AirBreakWithBackgroundMusic'}
-          <div class="metadata-row top">
+          <div class="metadata-row">
             <div>
               <i class="bi bi-music-note"></i>
               {#if item.content.title}
@@ -321,21 +321,22 @@
     width: 60px;
   }
 
+  .metadata {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
   .metadata-row {
     display: flex;
     flex-wrap: wrap;
+
+    column-gap: 1em;
+    row-gap: 4px;
   }
 
-  .metadata-row > :first-child {
-    padding-right: 1em;
-  }
-
-  .metadata-row.top > div {
-    padding-bottom: 6px;
-  }
-
-  .metadata-row.air-break-with-bg > div {
-    padding-bottom: 10px;
+  .metadata-row.air-break-with-bg {
+    padding-bottom: 4px;
   }
 
   .metadata-row.bottom {
