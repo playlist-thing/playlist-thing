@@ -35,7 +35,7 @@
       if (item.tag === 'AirBreak') {
         return 'pause';
       } else {
-        if (!item.content.artist || !item.content.title) {
+        if (!item.content.title) {
           return 'missing-info';
         } else {
           if (item.tag === 'AirBreakWithBackgroundMusic') {
