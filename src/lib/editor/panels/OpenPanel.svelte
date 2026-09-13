@@ -7,6 +7,7 @@
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
   import PlaylistListItem from './open/PlaylistListItem.svelte';
+  import ConfirmDeleteModal from '$lib/editor/modals/ConfirmDeleteModal.svelte';
 
   interface Props {
     openPlaylist: (playlistId: string) => void;
@@ -18,6 +19,9 @@
   let files: FileList | undefined = $state();
 
   let localPlaylists: Promise<Playlist[]> = $state(new Promise(() => {}));
+
+  let pendingDeleteId: string | null = $state(null);
+  let showConfirmDeleteModal = $state(false);
 
   let componentId = $props.id();
 
@@ -123,6 +127,19 @@
     );
   }
 
+  function requestDeletePlaylist(id: string) {
+    pendingDeleteId = id;
+    showConfirmDeleteModal = true;
+  }
+
+  async function confirmDeletePlaylist() {
+    showConfirmDeleteModal = false;
+    if (pendingDeleteId !== null) {
+      await deletePlaylist(pendingDeleteId);
+    }
+    pendingDeleteId = null;
+  }
+
   function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
     ev.dataTransfer!.dropEffect = 'copy';
@@ -199,7 +216,7 @@
               playlistNotOpenable={playlistNotOpenable(playlist.id)}
               openPlaylist={() => openPlaylist(playlist.id)}
               duplicatePlaylist={() => duplicatePlaylist(playlist.id)}
-              deletePlaylist={() => deletePlaylist(playlist.id)}
+              deletePlaylist={() => requestDeletePlaylist(playlist.id)}
             />
           {/each}
         </ol>
@@ -209,6 +226,8 @@
     {/await}
   </div>
 </div>
+
+<ConfirmDeleteModal bind:showModal={showConfirmDeleteModal} onOk={confirmDeletePlaylist} />
 
 <style>
   .outer-container {
