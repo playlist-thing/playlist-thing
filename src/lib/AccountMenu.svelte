@@ -12,7 +12,11 @@
 
   let showMenu = $state(false);
   let accountButton: HTMLButtonElement | null = $state(null);
-  let username = $derived($apiTokenClaims && $apiTokenClaims.preferred_username);
+  let username = $derived(
+    typeof $apiTokenClaims?.preferred_username === 'string'
+      ? $apiTokenClaims.preferred_username
+      : 'Account'
+  );
 
   function toggleMenu() {
     showMenu = !showMenu;
@@ -27,7 +31,10 @@
       onclick={toggleMenu}
       bind:this={accountButton}
     >
-      <i class="bi-person" aria-hidden="true"></i> Account
+      <div class="small-avatar">
+        {username.slice(0, 1).toUpperCase()}
+      </div>
+      Account
     </button>
 
     {#if showMenu}
@@ -63,6 +70,19 @@
 <style>
   .dropdown-menu {
     min-width: 200px;
+  }
+
+  .small-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+
+    background-color: #333;
+    color: #fff;
   }
 
   .avatar {
