@@ -29,22 +29,10 @@
   let draggingOverDepth = $state(0);
 
   function rowClass(item: PlaylistItem) {
-    if (!item.seconds) {
-      return 'missing-info';
+    if (item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic') {
+      return 'pause';
     } else {
-      if (item.tag === 'AirBreak') {
-        return 'pause';
-      } else {
-        if (!item.content.title) {
-          return 'missing-info';
-        } else {
-          if (item.tag === 'AirBreakWithBackgroundMusic') {
-            return 'pause';
-          } else if (item.tag === 'Song') {
-            return '';
-          }
-        }
-      }
+      return '';
     }
   }
 
@@ -166,7 +154,7 @@
       {/if}
 
       <div class="time-info">
-        <div>
+        <div class={{ 'duration-warning': item.seconds === 0 }}>
           {formatSeconds(timeInfo)}
         </div>
       </div>
@@ -256,13 +244,16 @@
     width: 60px;
   }
 
+  .duration-warning {
+    color: #000;
+    background-color: var(--warning);
+    border-radius: 1em;
+    padding: 0px 10px;
+  }
+
   .pause {
     color: #fff;
     background-color: #000;
-  }
-
-  .missing-info {
-    background-color: #fe755f;
   }
 
   .missing-file {

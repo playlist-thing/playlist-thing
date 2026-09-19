@@ -28,7 +28,9 @@
         {#if item.content.title}
           {item.content.title}
         {:else}
-          <i>No title</i>
+          <span class="title-warning">
+            <i>No title</i>
+          </span>
         {/if}
       </div>
 
@@ -103,8 +105,15 @@
   }
 
   .file-indicator.warning {
-    color: #fff;
-    background-color: var(--danger);
+    color: #000;
+    background-color: var(--warning);
+    border-radius: 1em;
+    padding: 0px 10px;
+  }
+
+  .title-warning {
+    color: #000;
+    background-color: var(--warning);
     border-radius: 1em;
     padding: 0px 10px;
   }
