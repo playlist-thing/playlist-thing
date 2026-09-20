@@ -1,8 +1,8 @@
 import { parseBlob } from 'music-metadata';
 
-import type { PlaylistItem } from '$lib/schema/playlist';
+import type { SongDetails, SongMetadata } from '$lib/schema/playlist';
 
-export async function getFile(file: File): Promise<PlaylistItem> {
+export async function fetchFileMetadata(file: File): Promise<SongDetails> {
   const metadata = await parseBlob(file, {
     duration: true,
     skipCovers: true
@@ -13,23 +13,17 @@ export async function getFile(file: File): Promise<PlaylistItem> {
   const title = metadata.common.title;
   const album = metadata.common.album;
 
-  return {
-    id: 0,
-    seconds: seconds,
-    internalNotes: '',
-    publicNotes: '',
+  const content: SongMetadata = {
+    artist: artist ? artist : '',
+    title: title ? title : file.name,
+    album: album ? album : '',
+    released: '',
+    label: '',
 
-    tag: 'Song',
-    content: {
-      artist: artist ? artist : '',
-      title: title ? title : file.name,
-      album: album ? album : '',
-      released: '',
-      label: '',
-
-      attributes: {
-        file: file.name
-      }
+    attributes: {
+      file: file.name
     }
   };
+
+  return { seconds, content };
 }

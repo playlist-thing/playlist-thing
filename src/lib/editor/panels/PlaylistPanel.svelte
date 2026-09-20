@@ -11,15 +11,21 @@
   import AddItemControls from './playlist/AddItemControls.svelte';
 
   import type { PlaylistItem, Broadcast, Playlist } from '$lib/schema/playlist';
-  import { emptySong, emptyAirBreak } from '$lib/schema/playlist';
+  import {
+    emptySong,
+    emptyAirBreak,
+    emptySongMetadata,
+    applySongDetails
+  } from '$lib/schema/playlist';
+  import type { SongDetails, SongWithDetails } from '$lib/schema/playlist';
   import {
     PlaylistStorageSchema,
     type PlaylistItemStorage,
     type PlaylistStorage
   } from '$lib/schema/storage/playlist';
-  import { spotifyTrackIdFromUrl, getSpotifyTrack } from '$lib/editor/external/spotify';
+  import { spotifyTrackIdFromUrl, fetchSpotifyMetadata } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
-  import { getFile } from '$lib/editor/external/file';
+  import { fetchFileMetadata } from '$lib/editor/external/file';
   import { withFreshIds, modals } from '$lib/editor/state.svelte';
   import { exportNotes } from '$lib/editor/export';
   import { airBreakDurationSeconds } from '$lib/editor/settings';
@@ -198,10 +204,28 @@
   }
 
   async function addItemsToQueue(newItems: PlaylistItemStorage[]) {
-    queue.push(...withFreshIds(newItems));
+    const added = withFreshIds(newItems);
+    queue.push(...added);
 
     await tick();
     playlistContainer!.scrollTo(0, playlistContainer!.scrollHeight);
+
+    // return the proxied items that live in the queue, so later in-place
+    // mutations (e.g. filling in metadata) trigger reactivity
+    return queue.slice(-added.length) as PlaylistItem[];
+  }
+
+  async function fillFromProvider(
+    item: SongWithDetails,
+    provider: () => Promise<SongDetails>,
+    onError?: () => void
+  ) {
+    try {
+      applySongDetails(item, await provider());
+    } catch (e) {
+      console.log(e);
+      onError?.();
+    }
   }
 
   async function addEmpty() {
@@ -219,22 +243,30 @@
       return;
     }
 
-    try {
-      const track = await getSpotifyTrack(spotifyTrackId);
-      await addItemsToQueue([track]);
-    } catch (e) {
-      console.log(e);
-    }
+    const song = {
+      ...emptySong,
+      content: { ...emptySongMetadata, attributes: { 'spotify.com': spotifyTrackId } }
+    };
+
+    const [track] = await addItemsToQueue([song]);
+    await fillFromProvider(track as SongWithDetails, () => fetchSpotifyMetadata(spotifyTrackId));
   }
 
   async function addSongFile(file: File) {
-    try {
-      const track = await getFile(file);
-      await addItemsToQueue([track]);
-    } catch (e) {
-      modals.showAddFileErrorModal = true;
-      console.log(e);
-    }
+    const song = {
+      ...emptySong,
+      content: { ...emptySongMetadata, title: file.name, attributes: { file: file.name } }
+    };
+
+    const [track] = await addItemsToQueue([song]);
+    await fillFromProvider(
+      track as SongWithDetails,
+      () => fetchFileMetadata(file),
+      () => {
+        queue = queue.filter((queuedItem) => queuedItem.id !== track.id);
+        modals.showAddFileErrorModal = true;
+      }
+    );
   }
 
   async function addPlaylistFile(file: File) {

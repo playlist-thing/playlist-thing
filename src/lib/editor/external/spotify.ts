@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 
 import { spotifyToken, tokenNeedsRefresh, refreshToken } from '$lib/auth/spotify';
 
-import type { PlaylistItem } from '$lib/schema/playlist';
+import type { SongDetails, SongMetadata } from '$lib/schema/playlist';
 
 export function spotifyTrackIdFromUrl(url: string) {
   const pattern = /https:\/\/(open|play).spotify.com\/track\/([a-zA-Z0-9]+)/;
@@ -16,7 +16,7 @@ export function urlFromSpotifyTrackId(spotifyTrackId: string) {
   return `https://open.spotify.com/track/${spotifyTrackId}`;
 }
 
-export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistItem> {
+export async function fetchSpotifyMetadata(spotifyTrackId: string): Promise<SongDetails> {
   if (tokenNeedsRefresh()) {
     await refreshToken();
   }
@@ -40,23 +40,17 @@ export async function getSpotifyTrack(spotifyTrackId: string): Promise<PlaylistI
   const seconds = Math.ceil(json.duration_ms / 1000);
   const released = json.album.release_date;
 
-  return {
-    id: 0,
-    seconds: seconds,
-    internalNotes: '',
-    publicNotes: '',
+  const content: SongMetadata = {
+    artist,
+    title,
+    album,
+    released,
+    label: '',
 
-    tag: 'Song',
-    content: {
-      artist,
-      title,
-      album,
-      released,
-      label: '',
-
-      attributes: {
-        'spotify.com': spotifyTrackId
-      }
+    attributes: {
+      'spotify.com': spotifyTrackId
     }
   };
+
+  return { seconds, content };
 }

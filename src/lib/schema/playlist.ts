@@ -44,6 +44,18 @@ export const PlaylistItemSchema = z.discriminatedUnion('tag', [
 
 export type PlaylistItem = z.infer<typeof PlaylistItemSchema>;
 
+export type SongDetails = {
+  seconds: number;
+  content: SongMetadata;
+};
+
+export type SongWithDetails = Extract<PlaylistItem, { content: SongMetadata }>;
+
+export function applySongDetails(item: SongWithDetails, details: SongDetails) {
+  item.seconds = details.seconds;
+  item.content = details.content;
+}
+
 export const emptySongMetadata: SongMetadata = {
   artist: '',
   title: '',

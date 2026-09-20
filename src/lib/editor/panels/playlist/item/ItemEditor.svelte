@@ -3,7 +3,7 @@
   import FileAttribute from './editor/FileAttribute.svelte';
 
   import type { PlaylistItem } from '$lib/schema/playlist';
-  import { emptySongMetadata } from '$lib/schema/playlist';
+  import { emptySongMetadata, applySongDetails } from '$lib/schema/playlist';
   import { formatSeconds, parseDuration } from '$lib/format';
   import { spotifyToken } from '$lib/auth/spotify';
 
@@ -14,7 +14,7 @@
   import {
     spotifyTrackIdFromUrl,
     urlFromSpotifyTrackId,
-    getSpotifyTrack
+    fetchSpotifyMetadata
   } from '$lib/editor/external/spotify';
   import { youtubeIdFromUrl, urlFromYoutubeId } from '$lib/editor/external/youtube';
   import { appleMusicTrackIdFromUrl, urlFromAppleMusicId } from '$lib/editor/external/appleMusic';
@@ -65,8 +65,8 @@
         return;
       }
 
-      const spotifyItem = await getSpotifyTrack(item.content.attributes['spotify.com']);
-      item = { ...item, ...spotifyItem, id: item.id };
+      const details = await fetchSpotifyMetadata(item.content.attributes['spotify.com']);
+      applySongDetails(item, details);
     }
   }
 
