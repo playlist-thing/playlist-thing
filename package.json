@@ -28,7 +28,7 @@
     "fake-indexeddb": "^6.2.5",
     "globals": "^17.12.0",
     "idb": "^8.0.3",
-    "music-metadata": "^11.15.0",
+    "music-metadata": "^11.16.1",
     "openid-client": "^6.8.8",
     "prettier": "^3.9.8",
     "prettier-plugin-svelte": "^4.1.1",
