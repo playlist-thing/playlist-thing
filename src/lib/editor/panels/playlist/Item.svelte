@@ -30,7 +30,7 @@
 
   function rowClass(item: PlaylistItem) {
     if (item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic') {
-      return 'pause';
+      return 'air-break';
     } else {
       return '';
     }
@@ -246,12 +246,12 @@
 
   .duration-warning {
     color: #000;
-    background-color: var(--warning);
+    background-color: var(--warning-color);
     border-radius: 1em;
     padding: 0px 10px;
   }
 
-  .pause {
+  .air-break {
     color: #fff;
     background-color: #000;
   }

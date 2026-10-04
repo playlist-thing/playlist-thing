@@ -106,14 +106,14 @@
 
   .file-indicator.warning {
     color: #000;
-    background-color: var(--warning);
+    background-color: var(--warning-color);
     border-radius: 1em;
     padding: 0px 10px;
   }
 
   .title-warning {
     color: #000;
-    background-color: var(--warning);
+    background-color: var(--warning-color);
     border-radius: 1em;
     padding: 0px 10px;
   }

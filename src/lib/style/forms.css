@@ -1,20 +1,24 @@
+:root {
+  --button-border-radius: 3px;
+}
+
 .button-group {
   display: flex;
   align-items: stretch;
 }
 
+.button-group > .button {
+  border-radius: 0px;
+}
+
 .button-group > .button:first-child {
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-top-left-radius: var(--button-border-radius);
+  border-bottom-left-radius: var(--button-border-radius);
 }
 
 .button-group > .button:last-child {
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-
-.button-group > .button:not(:last-child):not(:first-child) {
-  border-radius: 0px;
+  border-top-right-radius: var(--button-border-radius);
+  border-bottom-right-radius: var(--button-border-radius);
 }
 
 .button {
@@ -27,7 +31,7 @@
   gap: 0.35em;
 
   background-color: #eee;
-  color: #000;
+  color: var(--text-color);
 
   font-family: inherit;
   font-size: 1em;
@@ -37,7 +41,7 @@
 
   padding: 0.6em 0.6em;
   border: 0;
-  border-radius: 3px;
+  border-radius: var(--button-border-radius);
 
   cursor: pointer;
 }
@@ -87,16 +91,16 @@
 }
 
 .button.danger {
-  background-color: var(--danger);
+  background-color: var(--danger-color);
   color: #fff;
 }
 
 .button.danger:hover:not(:disabled) {
-  background-color: hsl(from var(--danger) h s 65%);
+  background-color: hsl(from var(--danger-color) h s 65%);
 }
 
 .button.danger:active:not(:disabled) {
-  background-color: hsl(from var(--danger) h s 40%);
+  background-color: hsl(from var(--danger-color) h s 40%);
 }
 
 .label {
@@ -105,7 +109,7 @@
 
 .input-text {
   background-color: #fff;
-  color: #000;
+  color: var(--text-color);
 
   font-family: inherit;
   font-size: 1em;
