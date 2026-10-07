@@ -167,6 +167,9 @@
   }
 </script>
 
+<!-- before panel so that CSS rule for single-panel view works -->
+<ConfirmDeleteModal bind:showModal={showConfirmDeleteModal} onOk={confirmDeletePlaylist} />
+
 <div class="outer-container">
   <div
     class="inner-container overflow"
@@ -226,8 +229,6 @@
     {/await}
   </div>
 </div>
-
-<ConfirmDeleteModal bind:showModal={showConfirmDeleteModal} onOk={confirmDeletePlaylist} />
 
 <style>
   .outer-container {
