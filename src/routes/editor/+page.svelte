@@ -15,7 +15,7 @@
   import { openDatabase } from '$lib/db';
   import { displaySizeMedium } from '$lib/editor/state.svelte';
   import { withFreshIds } from '$lib/editor/state.svelte';
-  import { PlaylistStorageSchema } from '$lib/schema/storage/playlist';
+  import { PlaylistExportSchema } from '$lib/schema/export/playlist';
   import localStorageStore from '$lib/localStorageStore';
   import { v4 as uuidv4 } from 'uuid';
   import { onMount } from 'svelte';
@@ -89,7 +89,7 @@
         return;
       }
 
-      const result = PlaylistStorageSchema.safeParse(parsed);
+      const result = PlaylistExportSchema.safeParse(parsed);
       if (!result.success) {
         console.log(result.error);
         localStorage.removeItem(storageKey);

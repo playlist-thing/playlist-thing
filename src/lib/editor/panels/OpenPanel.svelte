@@ -3,7 +3,7 @@
 
   import { openDatabase } from '$lib/db';
   import { emptyPlaylist, type Playlist } from '$lib/schema/playlist';
-  import { PlaylistStorageSchema } from '$lib/schema/storage/playlist';
+  import { PlaylistExportSchema } from '$lib/schema/export/playlist';
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
   import PlaylistListItem from './open/PlaylistListItem.svelte';
@@ -77,7 +77,7 @@
       return;
     }
 
-    const result = PlaylistStorageSchema.safeParse(parsed);
+    const result = PlaylistExportSchema.safeParse(parsed);
     if (!result.success) {
       modals.showOpenPlaylistErrorModal = true;
       console.log(result.error);

@@ -20,10 +20,10 @@
   } from '$lib/schema/playlist';
   import type { SongDetails, SongWithDetails } from '$lib/schema/playlist';
   import {
-    PlaylistStorageSchema,
-    type PlaylistItemStorage,
-    type PlaylistStorage
-  } from '$lib/schema/storage/playlist';
+    PlaylistExportSchema,
+    type PlaylistItemExport,
+    type PlaylistExport
+  } from '$lib/schema/export/playlist';
   import { spotifyTrackIdFromUrl, fetchSpotifyMetadata } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { fetchFileMetadata } from '$lib/editor/external/file';
@@ -154,7 +154,7 @@
   }
 
   function toJson() {
-    const data: PlaylistStorage = {
+    const data: PlaylistExport = {
       name,
       slug,
       description,
@@ -198,7 +198,7 @@
     playlistId = null;
   }
 
-  async function addItemsToQueue(newItems: PlaylistItemStorage[]) {
+  async function addItemsToQueue(newItems: PlaylistItemExport[]) {
     const added = withFreshIds(newItems);
     queue.push(...added);
 
@@ -276,7 +276,7 @@
       return;
     }
 
-    const result = PlaylistStorageSchema.safeParse(parsed);
+    const result = PlaylistExportSchema.safeParse(parsed);
     if (!result.success) {
       modals.showAddFileErrorModal = true;
       console.log(result.error);

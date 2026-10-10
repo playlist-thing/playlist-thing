@@ -1,6 +1,6 @@
 import { MediaQuery } from 'svelte/reactivity';
 import type { PlaylistItem } from '$lib/schema/playlist';
-import type { PlaylistItemStorage } from '$lib/schema/storage/playlist';
+import type { PlaylistItemExport } from '$lib/schema/export/playlist';
 
 /**
  * Storage of temporary state (not lasting beyond this browser tab/window)
@@ -20,7 +20,7 @@ export const modals = $state({
   showOpenPlaylistErrorModal: false
 });
 
-export function withFreshIds(items: PlaylistItemStorage[]) {
+export function withFreshIds(items: PlaylistItemExport[]) {
   const result: PlaylistItem[] = [];
 
   for (const item of items) {

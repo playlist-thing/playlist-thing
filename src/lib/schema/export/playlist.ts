@@ -7,21 +7,21 @@ import {
   SongSchema
 } from '../playlist';
 
-export const PlaylistItemStorageSchema = z.discriminatedUnion('tag', [
+export const PlaylistItemExportSchema = z.discriminatedUnion('tag', [
   SongSchema.partial({ id: true }),
   AirBreakSchema.partial({ id: true }),
   AirBreakWithBackgroundMusicSchema.partial({ id: true })
 ]);
 
-export type PlaylistItemStorage = z.infer<typeof PlaylistItemStorageSchema>;
+export type PlaylistItemExport = z.infer<typeof PlaylistItemExportSchema>;
 
-export const PlaylistStorageSchema = z
+export const PlaylistExportSchema = z
   .object({
     ...PlaylistSchema.shape,
 
-    items: z.array(PlaylistItemStorageSchema),
-    queue: z.array(PlaylistItemStorageSchema)
+    items: z.array(PlaylistItemExportSchema),
+    queue: z.array(PlaylistItemExportSchema)
   })
   .partial({ id: true });
 
-export type PlaylistStorage = z.infer<typeof PlaylistStorageSchema>;
+export type PlaylistExport = z.infer<typeof PlaylistExportSchema>;
