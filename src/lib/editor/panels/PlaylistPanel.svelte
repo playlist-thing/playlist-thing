@@ -11,7 +11,7 @@
   import Options from './playlist/Options.svelte';
   import AddItemControls from './playlist/AddItemControls.svelte';
 
-  import type { PlaylistItem, Broadcast } from '$lib/schema/playlist';
+  import type { Playlist, PlaylistItem, Broadcast } from '$lib/schema/playlist';
   import type { PlaylistLocal } from '$lib/schema/local/playlist';
   import {
     emptySong,
@@ -58,18 +58,13 @@
 
   let playlistContainer: HTMLElement | undefined = $state();
 
-  type PlaylistSnapshot = Omit<PlaylistLocal, 'lastModifiedAt'>;
-
   function snapshot() {
-    const playlistSnapshot: PlaylistSnapshot = {
-      id: playlistId!,
-
+    const playlistSnapshot: Playlist = {
       name: $state.snapshot(name),
       slug: $state.snapshot(slug),
       description: $state.snapshot(description),
       public: $state.snapshot(isPublic),
       broadcasts: $state.snapshot(broadcasts),
-      createdAt: $state.snapshot(createdAt),
 
       items: $state.snapshot(items),
       queue: $state.snapshot(queue),
@@ -104,6 +99,8 @@
 
       saveLocal({
         ...$state.snapshot(playlistSnapshot),
+        id: playlistId!,
+        createdAt: $state.snapshot(createdAt),
         lastModifiedAt: $state.snapshot(lastModifiedAt)
       });
     }
