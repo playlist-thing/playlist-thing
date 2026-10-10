@@ -148,18 +148,16 @@
   async function dropHandler(ev: DragEvent) {
     ev.preventDefault();
 
-    const dataTransferItems = ev.dataTransfer!.items;
-    if (!dataTransferItems || dataTransferItems.length !== 1) {
-      return;
-    }
-
-    const item = dataTransferItems[0];
-    if (item.kind === 'file') {
-      const file = item.getAsFile()!;
-      if (file.name.endsWith('.json')) {
-        openPlaylistFile(file);
+    for (const dataTransferItem of ev.dataTransfer!.items) {
+      if (dataTransferItem.kind === 'file') {
+        openPlaylistFile(dataTransferItem.getAsFile()!);
+        return;
       }
     }
+
+    modals.showOpenPlaylistErrorModal = true;
+    console.error('No file found to open');
+    return;
   }
 
   function playlistNotOpenable(id: string) {
