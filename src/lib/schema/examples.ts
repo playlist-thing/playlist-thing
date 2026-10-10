@@ -1,4 +1,5 @@
 import type { DJ } from './dj';
+import type { PlaylistLocal } from './local/playlist';
 import type { Playlist, PlaylistItem, SongMetadata } from './playlist';
 import type { Show } from './show';
 import type { Station } from './station';
@@ -30,18 +31,22 @@ export const validAirBreak: PlaylistItem = {
 };
 
 export const validPlaylist: Playlist = {
-  id: '416556a8-98b0-4ffc-9b5f-62cc591c37ad',
   name: 'Test Playlist',
   slug: 'test-playlist',
   description: 'A test playlist',
   public: true,
   broadcasts: [{ start: 1234567890, duration: 3600000 }],
-  createdAt: 1234567890,
-  lastModifiedAt: 1234567890,
   items: [validSong, validAirBreak],
   queue: [],
   showIds: ['c11e083e-773d-43fe-be2a-162310928c01'],
   djIds: ['6ceea514-1b68-41ee-b9ab-4f0a0e4089c8']
+};
+
+export const validPlaylistLocal: PlaylistLocal = {
+  ...validPlaylist,
+  id: '416556a8-98b0-4ffc-9b5f-62cc591c37ad',
+  createdAt: 1234567890,
+  lastModifiedAt: 1234567890
 };
 
 export const validShow: Show = {

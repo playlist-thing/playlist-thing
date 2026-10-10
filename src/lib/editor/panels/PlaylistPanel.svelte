@@ -11,7 +11,8 @@
   import Options from './playlist/Options.svelte';
   import AddItemControls from './playlist/AddItemControls.svelte';
 
-  import type { PlaylistItem, Broadcast, Playlist } from '$lib/schema/playlist';
+  import type { PlaylistItem, Broadcast } from '$lib/schema/playlist';
+  import type { PlaylistLocal } from '$lib/schema/local/playlist';
   import {
     emptySong,
     emptyAirBreak,
@@ -57,7 +58,7 @@
 
   let playlistContainer: HTMLElement | undefined = $state();
 
-  type PlaylistSnapshot = Omit<Playlist, 'lastModifiedAt'>;
+  type PlaylistSnapshot = Omit<PlaylistLocal, 'lastModifiedAt'>;
 
   function snapshot() {
     const playlistSnapshot: PlaylistSnapshot = {
@@ -117,7 +118,7 @@
     await debouncedSnapshot.updateImmediately();
   });
 
-  async function saveLocal(playlist: Playlist) {
+  async function saveLocal(playlist: PlaylistLocal) {
     const db = await openDatabase();
 
     await db.put('playlists', playlist);

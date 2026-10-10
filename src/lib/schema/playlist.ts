@@ -95,15 +95,11 @@ export const BroadcastSchema = z.object({
 export type Broadcast = z.infer<typeof BroadcastSchema>;
 
 export const PlaylistSchema = z.object({
-  id: z.uuid(),
-
   name: z.string(),
   slug: z.string(),
   description: z.string(),
   public: z.boolean(),
   broadcasts: z.array(BroadcastSchema),
-  createdAt: z.number(),
-  lastModifiedAt: z.number(),
 
   items: z.array(PlaylistItemSchema),
   queue: z.array(PlaylistItemSchema),
@@ -141,15 +137,11 @@ export function fileMatchesTitle(item: PlaylistItem): boolean {
 }
 
 export const emptyPlaylist: Playlist = {
-  id: '',
-
   name: '',
   slug: '',
   description: '',
   public: false,
   broadcasts: [],
-  createdAt: 0,
-  lastModifiedAt: 0,
 
   items: [],
   queue: [],

@@ -24,11 +24,6 @@ test('valid playlist passes validation', () => {
   expect(PlaylistSchema.safeParse(validPlaylist).success).toBe(true);
 });
 
-test('invalid UUID fails validation', () => {
-  const invalidPlaylist = { ...validPlaylist, id: 'not-a-uuid' };
-  expect(PlaylistSchema.safeParse(invalidPlaylist).success).toBe(false);
-});
-
 test('invalid playlist item tag fails validation', () => {
   const invalidItem = {
     id: 1,

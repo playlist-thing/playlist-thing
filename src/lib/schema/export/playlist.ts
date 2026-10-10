@@ -1,11 +1,7 @@
 import { z } from 'zod';
 
-import {
-  AirBreakSchema,
-  AirBreakWithBackgroundMusicSchema,
-  PlaylistSchema,
-  SongSchema
-} from '../playlist';
+import { PlaylistLocalSchema } from '../local/playlist';
+import { AirBreakSchema, AirBreakWithBackgroundMusicSchema, SongSchema } from '../playlist';
 
 export const PlaylistItemExportSchema = z.discriminatedUnion('tag', [
   SongSchema.partial({ id: true }),
@@ -17,7 +13,7 @@ export type PlaylistItemExport = z.infer<typeof PlaylistItemExportSchema>;
 
 export const PlaylistExportSchema = z
   .object({
-    ...PlaylistSchema.shape,
+    ...PlaylistLocalSchema.shape,
 
     items: z.array(PlaylistItemExportSchema),
     queue: z.array(PlaylistItemExportSchema)

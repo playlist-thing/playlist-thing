@@ -2,7 +2,8 @@
   import { v4 as uuidv4 } from 'uuid';
 
   import { openDatabase } from '$lib/db';
-  import { emptyPlaylist, type Playlist } from '$lib/schema/playlist';
+  import { emptyPlaylist } from '$lib/schema/playlist';
+  import type { PlaylistLocal } from '$lib/schema/local/playlist';
   import { PlaylistExportSchema } from '$lib/schema/export/playlist';
   import { onMount } from 'svelte';
   import { modals, withFreshIds } from '../state.svelte';
@@ -18,7 +19,7 @@
 
   let files: FileList | undefined = $state();
 
-  let localPlaylists: Promise<Playlist[]> = $state(new Promise(() => {}));
+  let localPlaylists: Promise<PlaylistLocal[]> = $state(new Promise(() => {}));
 
   let pendingDeleteId: string | null = $state(null);
   let showConfirmDeleteModal = $state(false);

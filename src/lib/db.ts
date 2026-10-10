@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
 import type { DBSchema } from 'idb';
 
-import type { Playlist } from '$lib/schema/playlist';
+import type { PlaylistLocal } from '$lib/schema/local/playlist';
 import type { Show } from '$lib/schema/show';
 import type { Station } from '$lib/schema/station';
 import type { DJ } from '$lib/schema/dj';
@@ -9,7 +9,7 @@ import type { DJ } from '$lib/schema/dj';
 interface DBv1 extends DBSchema {
   playlists: {
     key: string;
-    value: Playlist;
+    value: PlaylistLocal;
     indexes: {
       slug: string;
       createdAt: number;

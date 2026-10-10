@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Playlist } from '$lib/schema/playlist';
+  import type { PlaylistLocal } from '$lib/schema/local/playlist';
   import Dropdown from './Dropdown.svelte';
 
   interface Props {
-    playlist: Playlist;
+    playlist: PlaylistLocal;
     playlistNotOpenable: boolean;
     openPlaylist: () => void;
     duplicatePlaylist: () => void;
