@@ -52,7 +52,7 @@
   let showIds: string[] = $state([]);
   let djIds: string[] = $state([]);
 
-  let justLoaded = true;
+  let loaded = false;
   let showOptions = $state(false);
 
   let playlistContainer: HTMLElement | undefined = $state();
@@ -85,9 +85,9 @@
   watch(
     () => debouncedSnapshot.current,
     (playlistSnapshot) => {
-      // don't save when playlist was just loaded from db (and thus modified)
-      if (justLoaded) {
-        justLoaded = false;
+      // don't save when playlist is not loaded from db
+      if (!loaded) {
+        loaded = false;
         return;
       }
 
@@ -150,7 +150,13 @@
     items = withFreshIds(playlist.items);
     queue = withFreshIds(playlist.queue);
 
-    justLoaded = true;
+    loaded = true;
+
+    // Wait for debouncedSnapshot to receive change and then cancel
+    // so that the playlist just loaded does not get saved without
+    // changes. Any further changes will then be registered.
+    await tick();
+    debouncedSnapshot.cancel();
   }
 
   function toJson() {
