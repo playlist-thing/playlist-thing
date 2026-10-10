@@ -22,6 +22,7 @@
   import type { SongDetails, SongWithDetails } from '$lib/schema/playlist';
   import {
     PlaylistExportSchema,
+    PlaylistItemExportSchema,
     type PlaylistItemExport,
     type PlaylistExport
   } from '$lib/schema/export/playlist';
@@ -341,7 +342,25 @@
               }
             });
           } else if (item.type === 'application/x.playlist-json') {
-            item.getAsString((json) => addItemsToQueue(JSON.parse(json)));
+            item.getAsString((json) => {
+              let parsed;
+              try {
+                parsed = JSON.parse(json);
+              } catch (e) {
+                modals.showAddFileErrorModal = true;
+                console.log(e);
+                return;
+              }
+
+              const result = PlaylistItemExportSchema.array().safeParse(parsed);
+              if (!result.success) {
+                modals.showAddFileErrorModal = true;
+                console.log(result.error);
+                return;
+              }
+
+              addItemsToQueue(result.data);
+            });
           }
         }
       }
