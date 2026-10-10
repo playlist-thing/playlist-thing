@@ -4,6 +4,7 @@
   import { fileSave } from 'browser-fs-access';
   import toSlug from 'slug';
   import { SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
+  import { Debounced, watch } from 'runed';
 
   import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
@@ -51,55 +52,15 @@
   let showIds: string[] = $state([]);
   let djIds: string[] = $state([]);
 
-  let autosaveCallback: number | null;
-  let autosaved = $state(false);
-  let justLoaded = false;
+  let justLoaded = true;
   let showOptions = $state(false);
 
   let playlistContainer: HTMLElement | undefined = $state();
 
-  $effect(() => {
-    // this makes us "track" all relevant information and call this
-    // function again when anything inside the data touched by toJson
-    // changes
-    toJson();
+  type PlaylistSnapshot = Omit<Playlist, 'lastModifiedAt'>;
 
-    // don't save when playlist was just loaded from db (and thus modified)
-    if (justLoaded) {
-      autosaved = true;
-      justLoaded = false;
-      return;
-    }
-
-    // don't save when currently in a drag and drop operation
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (items.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (queue.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME])) return;
-
-    lastModifiedAt = Date.now();
-    autosaved = false;
-  });
-
-  onMount(async () => {
-    await loadLocal();
-    autosaveCallback = window.setTimeout(autosave, 1000);
-  });
-  onDestroy(async () => {
-    if (!browser) return;
-
-    window.clearTimeout(autosaveCallback!);
-    await saveLocal();
-  });
-
-  async function saveLocal() {
-    if (playlistId === null) {
-      return;
-    }
-
-    const db = await openDatabase();
-
-    const playlist: Playlist = {
+  function snapshot() {
+    const playlistSnapshot: PlaylistSnapshot = {
       id: playlistId!,
 
       name: $state.snapshot(name),
@@ -108,7 +69,6 @@
       public: $state.snapshot(isPublic),
       broadcasts: $state.snapshot(broadcasts),
       createdAt: $state.snapshot(createdAt),
-      lastModifiedAt: $state.snapshot(lastModifiedAt),
 
       items: $state.snapshot(items),
       queue: $state.snapshot(queue),
@@ -116,6 +76,50 @@
       showIds: $state.snapshot(showIds),
       djIds: $state.snapshot(djIds)
     };
+
+    return playlistSnapshot;
+  }
+
+  const debouncedSnapshot = new Debounced(() => snapshot(), 1000);
+
+  watch(
+    () => debouncedSnapshot.current,
+    (playlistSnapshot) => {
+      // don't save when playlist was just loaded from db (and thus modified)
+      if (justLoaded) {
+        justLoaded = false;
+        return;
+      }
+
+      // don't save when currently in a drag and drop operation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (playlistSnapshot.items.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME]))
+        return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (playlistSnapshot.queue.some((item) => (item as any)[SHADOW_ITEM_MARKER_PROPERTY_NAME]))
+        return;
+
+      lastModifiedAt = Date.now();
+
+      saveLocal({
+        ...$state.snapshot(playlistSnapshot),
+        lastModifiedAt: $state.snapshot(lastModifiedAt)
+      });
+    }
+  );
+
+  onMount(async () => {
+    await loadLocal();
+  });
+  onDestroy(async () => {
+    if (!browser) return;
+
+    await debouncedSnapshot.updateImmediately();
+  });
+
+  async function saveLocal(playlist: Playlist) {
+    const db = await openDatabase();
+
     await db.put('playlists', playlist);
   }
 
@@ -147,15 +151,6 @@
     queue = withFreshIds(playlist.queue);
 
     justLoaded = true;
-  }
-
-  async function autosave() {
-    if (!autosaved) {
-      await saveLocal();
-      autosaved = true;
-    }
-
-    autosaveCallback = window.setTimeout(autosave, 1000);
   }
 
   function toJson() {
@@ -191,7 +186,7 @@
   }
 
   async function closePlaylist() {
-    await saveLocal();
+    await debouncedSnapshot.updateImmediately();
     playlistId = null;
   }
 
@@ -352,7 +347,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop bind:name bind:showOptions {autosaved} {closePlaylist} />
+    <ControlsTop bind:name bind:showOptions {closePlaylist} />
     {#if showOptions}
       <Options
         bind:name

@@ -1,5 +1,11 @@
 <script lang="ts">
-  let { name = $bindable(), showOptions = $bindable(), autosaved, closePlaylist } = $props();
+  interface Props {
+    name: string;
+    showOptions: boolean;
+    closePlaylist: () => void;
+  }
+
+  let { name = $bindable(), showOptions = $bindable(), closePlaylist }: Props = $props();
 
   let editingName = $state(false);
 
@@ -56,13 +62,7 @@
       {/if}
     </div>
 
-    <div>
-      <span class="autosave-indicator">
-        {#if autosaved}
-          autosaved
-        {/if}
-      </span>
-    </div>
+    <div></div>
   </div>
 </div>
 
@@ -104,14 +104,5 @@
 
   .input-text.name {
     padding: 0;
-  }
-
-  .autosave-indicator {
-    padding-right: 0.2em;
-
-    color: #666;
-
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
   }
 </style>
