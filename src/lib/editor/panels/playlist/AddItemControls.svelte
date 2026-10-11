@@ -37,7 +37,7 @@
 </script>
 
 <div
-  class="bottom"
+  class={['bottom', draggingOverDepth > 0 && 'dragging-over']}
   role="list"
   ondragenter={dragEnterHandler}
   ondragleave={dragLeaveHandler}
@@ -52,30 +52,28 @@
     {/if}
   </div>
 
-  <div>
-    <div class="add-item-buttons">
-      <div class="button-group">
-        <button class="button" onclick={addEmpty}>
-          <i class="bi bi-music-note" aria-hidden="true"></i>
-          Add song
-        </button>
-        <label class="button" for={`add-file-${componentId}`}>
-          <i class="bi bi-file-earmark-music" aria-hidden="true"></i>
-          From File
-        </label>
-        <input class="file-input" id={`add-file-${componentId}`} type="file" bind:files />
-        <button class="button" onclick={() => (showAddUrlModal = true)}>
-          <i class="bi bi-link-45deg" aria-hidden="true"></i>
-          From URL
-        </button>
-      </div>
+  <div class="add-item-buttons">
+    <div class="button-group">
+      <button class="button" onclick={addEmpty}>
+        <i class="bi bi-music-note" aria-hidden="true"></i>
+        Add song
+      </button>
+      <label class="button" for={`add-file-${componentId}`}>
+        <i class="bi bi-file-earmark-music" aria-hidden="true"></i>
+        From File
+      </label>
+      <input class="file-input" id={`add-file-${componentId}`} type="file" bind:files />
+      <button class="button" onclick={() => (showAddUrlModal = true)}>
+        <i class="bi bi-link-45deg" aria-hidden="true"></i>
+        From URL
+      </button>
+    </div>
 
-      <div class="button-group">
-        <button class="button" onclick={addAirBreak}>
-          <i class="bi bi-mic" aria-hidden="true"></i>
-          Add air break
-        </button>
-      </div>
+    <div class="button-group">
+      <button class="button" onclick={addAirBreak}>
+        <i class="bi bi-mic" aria-hidden="true"></i>
+        Add air break
+      </button>
     </div>
   </div>
 
@@ -88,13 +86,17 @@
   .bottom {
     display: flex;
     flex-direction: column;
+
+    padding: 3px;
+  }
+
+  .bottom.dragging-over {
+    border: 3px solid #666;
+    padding: 0px;
   }
 
   .bottom-header {
-    padding-top: 14px;
-    padding-bottom: 10px;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding: 14px 3px 10px;
 
     color: #666;
   }
@@ -103,7 +105,7 @@
     display: flex;
     gap: 4px;
 
-    padding: 6px;
+    padding: 6px 3px;
   }
 
   .add-item-buttons > .button-group {
@@ -119,7 +121,7 @@
   }
 
   .bottom-hint {
-    padding-left: 6px;
+    padding-left: 3px;
 
     color: #666;
     font-size: 0.85em;
