@@ -6,6 +6,7 @@
   import { SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
   import { Debounced, watch } from 'runed';
 
+  import BroadcastsControls from './playlist/BroadcastsControls.svelte';
   import List from './playlist/List.svelte';
   import ControlsTop from './playlist/ControlsTop.svelte';
   import Options from './playlist/Options.svelte';
@@ -383,6 +384,8 @@
       />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
+        <BroadcastsControls bind:broadcasts />
+
         <List name="Playlist" bind:items />
 
         <div role="list" ondragover={dragoverHandler} ondrop={dropHandler}>
