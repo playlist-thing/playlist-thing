@@ -94,6 +94,12 @@ export const BroadcastSchema = z.object({
 
 export type Broadcast = z.infer<typeof BroadcastSchema>;
 
+export function currentlyBroadcasting(broadcast: Broadcast) {
+  const currentDate = Date.now();
+  const broadcastEnd = broadcast.start + broadcast.duration;
+  return broadcast.start <= currentDate && currentDate < broadcastEnd;
+}
+
 export const PlaylistSchema = z.object({
   name: z.string(),
   slug: z.string(),
