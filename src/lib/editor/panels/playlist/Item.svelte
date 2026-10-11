@@ -205,7 +205,8 @@
 
 <style>
   .dragged-over {
-    padding: 10px;
+    border: 3px solid #666;
+    padding: 3px;
   }
 
   .drop-hint-top {
