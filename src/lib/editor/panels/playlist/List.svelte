@@ -114,8 +114,6 @@
   }
 
   .list-name {
-    display: flex;
-
     font-size: 1.3em;
     margin-top: 15px;
     margin-bottom: 15px;
