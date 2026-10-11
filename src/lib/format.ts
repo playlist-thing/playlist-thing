@@ -29,5 +29,7 @@ export function parseDuration(raw: string) {
   }
 
   if (Number.isNaN(result)) result = 0;
+  if (result < 0) result = 0;
+
   return result;
 }
