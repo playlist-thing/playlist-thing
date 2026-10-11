@@ -323,7 +323,7 @@
 
         <div class="input-block-header">Search this song</div>
         <div class="input-block-item">
-          <ul class="search-list">
+          <ol class="search-list">
             {#each $searchProviders as searchProvider (searchProvider.id)}
               <li class="search-list-item">
                 <a
@@ -336,7 +336,7 @@
                 </a>
               </li>
             {/each}
-          </ul>
+          </ol>
         </div>
       {/if}
     </div>
