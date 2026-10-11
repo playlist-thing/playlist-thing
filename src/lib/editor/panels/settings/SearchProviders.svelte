@@ -18,7 +18,7 @@
 
   function addSearchProvider() {
     const ids = $searchProviders.map((searchProvider) => searchProvider.id);
-    const nextId = Math.max(...ids) + 1;
+    const nextId = ids.length === 0 ? 0 : Math.max(...ids) + 1;
 
     $searchProviders = [...$searchProviders, { id: nextId, name: 'New search provider', url: '' }];
   }
