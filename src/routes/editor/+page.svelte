@@ -127,7 +127,7 @@
 
 <div class="app">
   <div class="controls-top">
-    <div class="controls-top-row">
+    <div class="controls-top-row left">
       <div class="logo-banner">
         <!-- TODO logo -->
         <a href={resolve('/')} class="button transparent">
@@ -157,13 +157,15 @@
       </div>
     </div>
 
-    {#if dev}
-      <div class="dev-mode-indicator">
-        <strong>DEV MODE</strong>
-      </div>
-    {/if}
+    <div class="controls-top-row middle">
+      {#if dev}
+        <div class="dev-mode-indicator">
+          <strong>DEV MODE</strong>
+        </div>
+      {/if}
+    </div>
 
-    <div class="controls-top-row">
+    <div class="controls-top-row right">
       <AccountMenu />
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
         <i class="bi-gear" aria-hidden="true"></i> Settings
@@ -198,7 +200,6 @@
 
   .controls-top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     padding: 6px;
@@ -207,6 +208,15 @@
   .controls-top-row {
     display: flex;
     align-items: center;
+  }
+
+  .controls-top-row.left,
+  .controls-top-row.right {
+    flex: 1;
+  }
+
+  .controls-top-row.right {
+    justify-content: flex-end;
   }
 
   .logo-banner {
