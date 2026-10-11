@@ -57,7 +57,24 @@
     />
   {:else}
     <div class="empty-item">
-      <i>Empty playlist</i>
+      {#if name === 'Playlist'}
+        <div class="empty-item-icon">
+          <i class="bi-music-note-list" aria-hidden="true"></i>
+        </div>
+
+        <p class="empty-item-text">
+          There are no items in the playlist yet. During a broadcast, you can move items from the
+          queue to the playlist.
+        </p>
+      {:else if name === 'Queue'}
+        <div class="empty-item-icon">
+          <i class="bi-collection-play" aria-hidden="true"></i>
+        </div>
+
+        <p class="empty-item-text">
+          Your queue is empty. Unlike the playlist, the queue is never published.
+        </p>
+      {/if}
     </div>
   {/each}
 {/snippet}
@@ -135,8 +152,8 @@
 
   .empty-item {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     padding: 20px;
 
@@ -144,5 +161,16 @@
 
     -webkit-user-select: none; /* Safari */
     user-select: none;
+  }
+
+  .empty-item-icon {
+    padding-bottom: 6px;
+
+    font-size: 1.5em;
+  }
+
+  .empty-item-text {
+    margin: 0px;
+    max-width: 500px;
   }
 </style>
