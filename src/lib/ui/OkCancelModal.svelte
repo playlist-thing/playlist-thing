@@ -51,7 +51,7 @@
 
     <div class="modal-footer">
       <!-- svelte-ignore a11y_autofocus -->
-      <button autofocus onclick={ok} class={['button ok', extraButtonOkClasses]}>
+      <button autofocus onclick={ok} class={['button', extraButtonOkClasses]}>
         {@render buttonOkContent()}
       </button>
       <button onclick={() => dialog!.close()} class="button">
@@ -60,9 +60,3 @@
     </div>
   </div>
 </dialog>
-
-<style>
-  .button.ok {
-    margin-right: 5px;
-  }
-</style>
