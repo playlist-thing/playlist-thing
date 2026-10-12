@@ -15,6 +15,16 @@ export function formatSeconds(seconds: number) {
   }
 }
 
+export function formatClockTime(date: Date) {
+  return [date.getHours(), date.getMinutes(), date.getSeconds()]
+    .map((part) => `${part}`.padStart(2, '0'))
+    .join(':');
+}
+
+export function formatClockDate(date: Date) {
+  return date.toLocaleDateString();
+}
+
 export function parseDuration(raw: string) {
   const split = raw.split(':');
   let result = 0;

@@ -4,6 +4,7 @@
 
   import AccountMenu from '$lib/AccountMenu.svelte';
 
+  import Clock from '$lib/editor/Clock.svelte';
   import EditorPanel from '$lib/editor/panels/EditorPanel.svelte';
   import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
 
@@ -163,6 +164,8 @@
           <strong>DEV MODE</strong>
         </div>
       {/if}
+
+      <Clock />
     </div>
 
     <div class="controls-top-row right">

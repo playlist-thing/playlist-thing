@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { formatSeconds, parseDuration } from './format';
+import { formatClockDate, formatClockTime, formatSeconds, parseDuration } from './format';
 
 test('formatSeconds', () => {
   expect(formatSeconds(0)).toEqual('0:00');
@@ -32,4 +32,16 @@ test('parseDuration valid durations', () => {
 test('parseDuration invalid durations', () => {
   expect(parseDuration('a')).toEqual(0);
   expect(parseDuration('1:00:00:00')).toEqual(0);
+});
+
+test('formatClockTime pads to 24-hour HH:MM:SS', () => {
+  expect(formatClockTime(new Date(2026, 0, 1, 0, 0, 0))).toEqual('00:00:00');
+  expect(formatClockTime(new Date(2026, 0, 1, 9, 5, 3))).toEqual('09:05:03');
+  expect(formatClockTime(new Date(2026, 0, 1, 13, 7, 42))).toEqual('13:07:42');
+  expect(formatClockTime(new Date(2026, 0, 1, 23, 59, 59))).toEqual('23:59:59');
+});
+
+test('formatClockDate uses the locale date format', () => {
+  const date = new Date(2026, 0, 1, 12, 0, 0);
+  expect(formatClockDate(date)).toEqual(date.toLocaleDateString());
 });
