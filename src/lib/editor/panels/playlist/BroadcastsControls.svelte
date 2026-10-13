@@ -42,6 +42,24 @@
   // only count down during the final hour before the broadcast starts
   let showTimeUntilNext = $derived(timeUntilNext > 0 && timeUntilNext < 60 * 60);
 
+  let pastBroadcastCount = $derived(
+    broadcasts.filter((broadcast) => broadcast.start + broadcast.duration <= clock.now).length
+  );
+  let futureBroadcastCount = $derived(
+    broadcasts.filter((broadcast) => broadcast.start > clock.now).length
+  );
+
+  let broadcastsSummary = $derived(
+    [
+      { count: pastBroadcastCount, label: 'past' },
+      { count: currentlyBroadcastingCount, label: 'current' },
+      { count: futureBroadcastCount, label: 'future' }
+    ]
+      .filter(({ count }) => count > 0)
+      .map(({ count, label }) => `${count} ${label}`)
+      .join(', ')
+  );
+
   function stopBroadcast() {
     const currentDate = Date.now();
 
@@ -63,6 +81,10 @@
       <div>
         <i class="bi bi-calendar" aria-hidden="true"></i>
         Change broadcasts
+      </div>
+
+      <div class="hint">
+        {broadcastsSummary}
       </div>
     {:else}
       <div>
