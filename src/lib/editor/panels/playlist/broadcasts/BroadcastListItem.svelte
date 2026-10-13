@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { clock } from '$lib/clock';
   import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
 
   import DurationInput from '$lib/ui/DurationInput.svelte';
@@ -10,7 +11,7 @@
 
   let { broadcast = $bindable(), deleteBroadcast }: Props = $props();
 
-  let currentlyBroadcastingThis = $derived(currentlyBroadcasting(broadcast));
+  let currentlyBroadcastingThis = $derived(currentlyBroadcasting(broadcast, clock.now));
 
   let componentId = $props.id();
 

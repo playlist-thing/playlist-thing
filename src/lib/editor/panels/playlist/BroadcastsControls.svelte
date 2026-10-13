@@ -17,7 +17,9 @@
   let showStopBroadcastModal = $state(false);
   let showStartBroadcastModal = $state(false);
 
-  let currentlyBroadcastingList = $derived(broadcasts.filter(currentlyBroadcasting));
+  let currentlyBroadcastingList = $derived(
+    broadcasts.filter((broadcast) => currentlyBroadcasting(broadcast, clock.now))
+  );
   let currentlyBroadcastingCount = $derived(currentlyBroadcastingList.length);
   let currentlyBroadcastingAny = $derived(currentlyBroadcastingCount > 0);
 
@@ -97,7 +99,7 @@
       {#if showTimeUntilNext}
         <div class="hint">
           <span class="hint-countdown">
-            in {formatSeconds(timeUntilNext)}
+            will start in {formatSeconds(timeUntilNext)}
           </span>
         </div>
       {/if}
