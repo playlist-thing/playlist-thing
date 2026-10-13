@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { clock } from '$lib/clock';
+  import { formatSeconds } from '$lib/format';
   import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
 
   import ManageBroadcastsModal from './broadcasts/ManageBroadcastsModal.svelte';
@@ -15,7 +17,28 @@
   let showStopBroadcastModal = $state(false);
   let showStartBroadcastModal = $state(false);
 
-  let currentlyBroadcastingAny = $derived(broadcasts.some(currentlyBroadcasting));
+  let currentlyBroadcastingList = $derived(broadcasts.filter(currentlyBroadcasting));
+  let currentlyBroadcastingCount = $derived(currentlyBroadcastingList.length);
+  let currentlyBroadcastingAny = $derived(currentlyBroadcastingCount > 0);
+
+  let timeLeft = $derived.by(() => {
+    const end = Math.min(
+      ...currentlyBroadcastingList.map((broadcast) => broadcast.start + broadcast.duration)
+    );
+    return Math.max(0, Math.ceil((end - clock.now) / 1000));
+  });
+
+  let nextBroadcastList = $derived(
+    broadcasts.filter((broadcast) => broadcast.start > clock.now).sort((a, b) => a.start - b.start)
+  );
+
+  let timeUntilNext = $derived.by(() => {
+    if (nextBroadcastList.length === 0) return 0;
+
+    return Math.max(0, Math.ceil((nextBroadcastList[0].start - clock.now) / 1000));
+  });
+  // only count down during the final hour before the broadcast starts
+  let showTimeUntilNext = $derived(timeUntilNext > 0 && timeUntilNext < 60 * 60);
 
   function stopBroadcast() {
     const currentDate = Date.now();
@@ -35,21 +58,49 @@
 <div class="control-buttons">
   <button class="button" onclick={() => (showManageBroadcastsModal = true)}>
     {#if broadcasts.length > 0}
-      <i class="bi bi-calendar" aria-hidden="true"></i>Change broadcasts
+      <div>
+        <i class="bi bi-calendar" aria-hidden="true"></i>
+        Change broadcasts
+      </div>
     {:else}
-      <i class="bi bi-calendar" aria-hidden="true"></i>Schedule broadcast
+      <div>
+        <i class="bi bi-calendar" aria-hidden="true"></i>
+        Schedule broadcast
+      </div>
     {/if}
   </button>
 
   {#if currentlyBroadcastingAny}
     <button class="button danger" onclick={() => (showStopBroadcastModal = true)}>
       <div>
-        <i class="bi bi-stop-fill" aria-hidden="true"></i>Stop broadcast now
+        <i class="bi bi-stop-fill" aria-hidden="true"></i>
+        Stop broadcast now
+      </div>
+
+      <div class="hint">
+        {#if currentlyBroadcastingCount > 1}
+          Multiple broadcasts
+        {:else}
+          <span class="hint-countdown">
+            {formatSeconds(timeLeft)} left
+          </span>
+        {/if}
       </div>
     </button>
   {:else}
     <button class="button" onclick={() => (showStartBroadcastModal = true)}>
-      <i class="bi bi-broadcast" aria-hidden="true"></i>Start broadcast now
+      <div>
+        <i class="bi bi-broadcast" aria-hidden="true"></i>
+        Start broadcast now
+      </div>
+
+      {#if showTimeUntilNext}
+        <div class="hint">
+          <span class="hint-countdown">
+            in {formatSeconds(timeUntilNext)}
+          </span>
+        </div>
+      {/if}
     </button>
   {/if}
 </div>
@@ -71,6 +122,17 @@
   }
 
   .control-buttons > .button {
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
+  }
+
+  .hint {
+    font-size: 0.8em;
+  }
+
+  .hint-countdown {
+    font-variant-numeric: tabular-nums;
   }
 </style>
