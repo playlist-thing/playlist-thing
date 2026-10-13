@@ -2,8 +2,6 @@
   import { dev } from '$app/environment';
   import { resolve } from '$app/paths';
 
-  import AccountMenu from '$lib/AccountMenu.svelte';
-
   import Clock from '$lib/editor/Clock.svelte';
   import EditorPanel from '$lib/editor/panels/EditorPanel.svelte';
   import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
@@ -14,6 +12,7 @@
   import OpenPlaylistErrorModal from '$lib/editor/modals/OpenPlaylistErrorModal.svelte';
 
   import { openDatabase } from '$lib/db';
+  import { apiToken, apiTokenClaims, redirectToSSOAuthorize } from '$lib/auth/api';
   import { displaySizeMedium } from '$lib/editor/state.svelte';
   import { withFreshIds } from '$lib/editor/state.svelte';
   import { PlaylistExportSchema } from '$lib/schema/export/playlist';
@@ -35,6 +34,11 @@
   let playlistAVisible = true;
   let playlistBVisible = $derived(displaySizeMedium.current && $doublePlaylistView);
   let currentlyOpenPlaylistIds = $derived([$playlistIdPanelA, $playlistIdPanelB]);
+  let usernameInitial = $derived(
+    typeof $apiTokenClaims?.preferred_username === 'string'
+      ? $apiTokenClaims.preferred_username.slice(0, 1).toUpperCase()
+      : ''
+  );
 
   $effect(() => {
     if (!playlistBVisible) {
@@ -169,9 +173,18 @@
     </div>
 
     <div class="controls-top-row right">
-      <AccountMenu />
+      {#if !$apiToken}
+        <button class="button transparent sm-hide" onclick={redirectToSSOAuthorize}>
+          <i class="bi-box-arrow-in-right" aria-hidden="true"></i>
+          <span class="sm-visually-hidden">Sign in</span>
+        </button>
+      {/if}
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
-        <i class="bi-gear" aria-hidden="true"></i>
+        {#if $apiToken}
+          <span class="setting-avatar">{usernameInitial}</span>
+        {:else}
+          <i class="bi-gear" aria-hidden="true"></i>
+        {/if}
         <span class="sm-visually-hidden">Settings</span>
       </button>
     </div>
@@ -242,6 +255,19 @@
     padding-bottom: 6px;
 
     overflow: auto;
+  }
+
+  .setting-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+
+    background-color: #333;
+    color: #fff;
   }
 
   .dev-mode-indicator {
