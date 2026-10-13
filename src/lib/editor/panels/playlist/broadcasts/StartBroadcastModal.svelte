@@ -1,6 +1,7 @@
 <script lang="ts">
   import DurationInput from '$lib/ui/DurationInput.svelte';
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import CurrentTimeInfo from './CurrentTimeInfo.svelte';
 
   interface Props {
     showModal: boolean;
@@ -20,12 +21,18 @@
   onOk={() => startBroadcast(durationSeconds * 1000)}
   extraButtonOkClasses="danger"
 >
-  <label class="label" for={`duration-${componentId}`}>Broadcast duration</label>
-  <DurationInput
-    value={durationSeconds}
-    onNewValue={(newDurationSeconds) => (durationSeconds = newDurationSeconds)}
-    id={`duration-${componentId}`}
-  />
+  <div class="content">
+    <CurrentTimeInfo />
+
+    <div class="flex-column">
+      <label class="label" for={`duration-${componentId}`}>Broadcast duration</label>
+      <DurationInput
+        value={durationSeconds}
+        onNewValue={(newDurationSeconds) => (durationSeconds = newDurationSeconds)}
+        id={`duration-${componentId}`}
+      />
+    </div>
+  </div>
 
   {#snippet buttonOkContent()}
     <i class="bi-broadcast" aria-hidden="true"></i>
@@ -37,3 +44,11 @@
     Cancel
   {/snippet}
 </OkCancelModal>
+
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+</style>

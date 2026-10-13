@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Broadcast } from '$lib/schema/playlist';
-  import { clock } from '$lib/clock';
 
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
   import BroadcastListItem from './BroadcastListItem.svelte';
+  import CurrentTimeInfo from './CurrentTimeInfo.svelte';
 
   interface Props {
     showModal: boolean;
@@ -57,15 +57,7 @@
 
 <OkCancelModal bind:showModal title="Edit broadcasts" onOk={finalizeAndSaveBroadcasts}>
   <div class="content">
-    <div>
-      Your current timezone is
-      <strong>{Intl.DateTimeFormat().resolvedOptions().timeZone}</strong>
-    </div>
-
-    <div>
-      Your current time is
-      <strong>{new Date(clock.now).toLocaleString()}</strong>
-    </div>
+    <CurrentTimeInfo />
 
     <ul class="broadcast-list">
       {#each editingBroadcasts as broadcast, idx (broadcast.id)}
