@@ -171,7 +171,8 @@
     <div class="controls-top-row right">
       <AccountMenu />
       <button class="button transparent" class:inverted={settingsVisible} onclick={toggleSettings}>
-        <i class="bi-gear" aria-hidden="true"></i> Settings
+        <i class="bi-gear" aria-hidden="true"></i>
+        <span class="sm-visually-hidden">Settings</span>
       </button>
     </div>
   </div>
