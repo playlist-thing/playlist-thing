@@ -55,10 +55,12 @@
   let showIds: string[] = $state([]);
   let djIds: string[] = $state([]);
 
-  let loaded = false;
   let showOptions = $state(false);
 
   let playlistContainer: HTMLElement | undefined = $state();
+
+  // true so autosave watch does not save on mount
+  let justLoaded = true;
 
   function snapshot() {
     const playlistSnapshot: Playlist = {
@@ -83,9 +85,9 @@
   watch(
     () => debouncedSnapshot.current,
     (playlistSnapshot) => {
-      // don't save when playlist is not loaded from db
-      if (!loaded) {
-        loaded = false;
+      // don't save when playlist was just loaded from db (and thus modified)
+      if (justLoaded) {
+        justLoaded = false;
         return;
       }
 
@@ -150,13 +152,7 @@
     items = withFreshIds(playlist.items);
     queue = withFreshIds(playlist.queue);
 
-    loaded = true;
-
-    // Wait for debouncedSnapshot to receive change and then cancel
-    // so that the playlist just loaded does not get saved without
-    // changes. Any further changes will then be registered.
-    await tick();
-    debouncedSnapshot.cancel();
+    justLoaded = true;
   }
 
   function toJson() {
