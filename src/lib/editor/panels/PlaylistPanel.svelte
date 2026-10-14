@@ -153,6 +153,10 @@
     queue = withFreshIds(playlist.queue);
 
     justLoaded = true;
+
+    // without this: when loading, quickly changing, and quickly unmounting,
+    // changes will not be saved
+    await debouncedSnapshot.updateImmediately();
   }
 
   function toJson() {
