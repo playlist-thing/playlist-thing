@@ -40,7 +40,7 @@
     return Math.max(0, Math.ceil((nextBroadcastList[0].start - clock.now) / 1000));
   });
   // only count down during the final hour before the broadcast starts
-  let showTimeUntilNext = $derived(timeUntilNext > 0 && timeUntilNext < 60 * 60);
+  let showCountdownUntilNextBroadcast = $derived(timeUntilNext > 0 && timeUntilNext < 60 * 60);
 
   let pastBroadcastCount = $derived(
     broadcasts.filter((broadcast) => broadcast.start + broadcast.duration <= clock.now).length
@@ -118,10 +118,14 @@
         Start broadcast now
       </div>
 
-      {#if showTimeUntilNext}
+      {#if timeUntilNext > 0}
         <div class="hint">
           <span class="hint-countdown">
-            will start in {formatSeconds(timeUntilNext)}
+            {#if showCountdownUntilNextBroadcast}
+              will start in {formatSeconds(timeUntilNext)}
+            {:else}
+              will start on {new Date(nextBroadcastList[0].start).toLocaleString()}
+            {/if}
           </span>
         </div>
       {/if}
