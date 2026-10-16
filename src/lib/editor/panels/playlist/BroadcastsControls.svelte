@@ -89,7 +89,7 @@
     {:else}
       <div>
         <i class="bi bi-calendar" aria-hidden="true"></i>
-        Schedule broadcast
+        Add broadcast
       </div>
     {/if}
   </button>
