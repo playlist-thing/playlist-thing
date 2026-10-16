@@ -25,6 +25,34 @@ export function formatClockDate(date: Date) {
   return date.toLocaleDateString();
 }
 
+const relativeTimeFormat = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+
+export function formatRelativeTime(epochMilliseconds: number, now: number = Date.now()) {
+  const seconds = (epochMilliseconds - now) / 1000;
+  const abs = Math.abs(seconds);
+
+  let value: number;
+  let unit: Intl.RelativeTimeFormatUnit;
+
+  if (abs < 60) {
+    [value, unit] = [seconds, 'second'];
+  } else if (abs < 60 * 60) {
+    [value, unit] = [seconds / 60, 'minute'];
+  } else if (abs < 24 * 60 * 60) {
+    [value, unit] = [seconds / (60 * 60), 'hour'];
+  } else if (abs < 7 * 24 * 60 * 60) {
+    [value, unit] = [seconds / (24 * 60 * 60), 'day'];
+  } else if (abs < 4.34524 * 7 * 24 * 60 * 60) {
+    [value, unit] = [seconds / (7 * 24 * 60 * 60), 'week'];
+  } else if (abs < 12 * 30.436875 * 24 * 60 * 60) {
+    [value, unit] = [seconds / (30.436875 * 24 * 60 * 60), 'month'];
+  } else {
+    [value, unit] = [seconds / (365.2425 * 24 * 60 * 60), 'year'];
+  }
+
+  return relativeTimeFormat.format(Math.round(value), unit);
+}
+
 export function parseDuration(raw: string) {
   const split = raw.split(':');
   let result = 0;

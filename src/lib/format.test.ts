@@ -1,5 +1,11 @@
 import { expect, test } from 'vitest';
-import { formatClockDate, formatClockTime, formatSeconds, parseDuration } from './format';
+import {
+  formatClockDate,
+  formatClockTime,
+  formatRelativeTime,
+  formatSeconds,
+  parseDuration
+} from './format';
 
 test('formatSeconds', () => {
   expect(formatSeconds(0)).toEqual('0:00');
@@ -44,4 +50,23 @@ test('formatClockTime pads to 24-hour HH:MM:SS', () => {
 test('formatClockDate uses the locale date format', () => {
   const date = new Date(2026, 0, 1, 12, 0, 0);
   expect(formatClockDate(date)).toEqual(date.toLocaleDateString());
+});
+
+test('formatRelativeTime picks the appropriate unit', () => {
+  const now = new Date(2026, 0, 1, 12, 0, 0).getTime();
+
+  expect(formatRelativeTime(now - 10 * 1000, now)).toEqual('10 seconds ago');
+  expect(formatRelativeTime(now - 5 * 60 * 1000, now)).toEqual('5 minutes ago');
+  expect(formatRelativeTime(now - 3 * 60 * 60 * 1000, now)).toEqual('3 hours ago');
+  expect(formatRelativeTime(now - 2 * 24 * 60 * 60 * 1000, now)).toEqual('2 days ago');
+  expect(formatRelativeTime(now - 60 * 24 * 60 * 60 * 1000, now)).toEqual('2 months ago');
+  expect(formatRelativeTime(now - 400 * 24 * 60 * 60 * 1000, now)).toEqual('last year');
+});
+
+test('formatRelativeTime handles past and future timestamps', () => {
+  const now = new Date(2026, 0, 1, 12, 0, 0).getTime();
+
+  expect(formatRelativeTime(now, now)).toEqual('now');
+  expect(formatRelativeTime(now + 60 * 1000, now)).toEqual('in 1 minute');
+  expect(formatRelativeTime(now - 60 * 1000, now)).toEqual('1 minute ago');
 });

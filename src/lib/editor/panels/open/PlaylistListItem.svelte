@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PlaylistLocal } from '$lib/schema/local/playlist';
+  import { formatRelativeTime } from '$lib/format';
   import Dropdown from './Dropdown.svelte';
 
   interface Props {
@@ -42,8 +43,9 @@
           {/if}
         </div>
 
-        <div>
-          {prettyDate(playlist.lastModifiedAt)}
+        <div class="date">
+          <span class="relative-time">{formatRelativeTime(playlist.lastModifiedAt)}</span>
+          <span class="absolute-time">{prettyDate(playlist.lastModifiedAt)}</span>
         </div>
       </div>
     </button>
@@ -54,6 +56,28 @@
 <style>
   .playlist-list-item {
     width: 100%;
+  }
+
+  .date {
+    position: relative;
+  }
+
+  .absolute-time {
+    visibility: hidden;
+
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    white-space: nowrap;
+  }
+
+  .playlist-list-item:hover .relative-time {
+    visibility: hidden;
+  }
+
+  .playlist-list-item:hover .absolute-time {
+    visibility: visible;
   }
 
   .row {
