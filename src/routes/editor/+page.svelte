@@ -89,14 +89,14 @@
       try {
         parsed = JSON.parse(storedPlaylist);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         localStorage.removeItem(storageKey);
         return;
       }
 
       const result = PlaylistExportSchema.safeParse(parsed);
       if (!result.success) {
-        console.log(result.error);
+        console.error(result.error);
         localStorage.removeItem(storageKey);
         return;
       }

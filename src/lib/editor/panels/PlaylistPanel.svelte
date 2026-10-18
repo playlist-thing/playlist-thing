@@ -223,7 +223,7 @@
     try {
       applySongDetails(item, await provider());
     } catch (e) {
-      console.log(e);
+      console.error(e);
       onError?.();
     }
   }
@@ -277,14 +277,14 @@
       parsed = JSON.parse(json);
     } catch (e) {
       modals.showAddFileErrorModal = true;
-      console.log(e);
+      console.error(e);
       return;
     }
 
     const result = PlaylistExportSchema.safeParse(parsed);
     if (!result.success) {
       modals.showAddFileErrorModal = true;
-      console.log(result.error);
+      console.error(result.error);
       return;
     }
 
@@ -337,7 +337,7 @@
                   await addUrl(line);
                 } catch (e) {
                   modals.showURLInvalidModal = true;
-                  console.log(e);
+                  console.error(e);
                 }
               }
             });
@@ -348,14 +348,14 @@
                 parsed = JSON.parse(json);
               } catch (e) {
                 modals.showAddFileErrorModal = true;
-                console.log(e);
+                console.error(e);
                 return;
               }
 
               const result = PlaylistItemExportSchema.array().safeParse(parsed);
               if (!result.success) {
                 modals.showAddFileErrorModal = true;
-                console.log(result.error);
+                console.error(result.error);
                 return;
               }
 

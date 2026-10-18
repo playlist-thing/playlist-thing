@@ -74,14 +74,14 @@
       parsed = JSON.parse(json);
     } catch (e) {
       modals.showOpenPlaylistErrorModal = true;
-      console.log(e);
+      console.error(e);
       return;
     }
 
     const result = PlaylistExportSchema.safeParse(parsed);
     if (!result.success) {
       modals.showOpenPlaylistErrorModal = true;
-      console.log(result.error);
+      console.error(result.error);
       return;
     }
 
@@ -106,7 +106,7 @@
 
     const playlist = await tx.store.get(id);
     if (!playlist) {
-      console.log(`playlist ${id} does not exist anymore`);
+      console.error(`playlist ${id} does not exist anymore`);
       return;
     }
 
