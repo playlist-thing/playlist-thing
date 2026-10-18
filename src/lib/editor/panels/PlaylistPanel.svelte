@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
-  import { fileSave } from 'browser-fs-access';
-  import toSlug from 'slug';
   import { SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
   import { Debounced, watch } from 'runed';
 
@@ -24,14 +22,13 @@
   import {
     PlaylistExportSchema,
     PlaylistItemExportSchema,
-    type PlaylistItemExport,
-    type PlaylistExport
+    type PlaylistItemExport
   } from '$lib/schema/export/playlist';
   import { spotifyTrackIdFromUrl, fetchSpotifyMetadata } from '$lib/editor/external/spotify';
   import { spotifyToken } from '$lib/auth/spotify';
   import { fetchFileMetadata } from '$lib/editor/external/file';
   import { withFreshIds, modals } from '$lib/editor/state.svelte';
-  import { exportNotes } from '$lib/editor/export';
+  import { exportNotes, exportJson } from '$lib/editor/export';
   import { airBreakDurationSeconds } from '$lib/editor/settings';
   import { openDatabase } from '$lib/db';
 
@@ -156,38 +153,6 @@
     debouncedSnapshot.cancel();
 
     loaded = true;
-  }
-
-  function toJson() {
-    const data: PlaylistExport = {
-      name,
-      slug,
-      description,
-      public: isPublic,
-      broadcasts,
-      createdAt,
-      lastModifiedAt,
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      items: items.map(({ id, ...item }) => item),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      queue: queue.map(({ id, ...item }) => item),
-
-      showIds,
-      djIds
-    };
-
-    return JSON.stringify(data);
-  }
-
-  async function downloadJson() {
-    const blob = new Blob([toJson()], {
-      type: 'application/json'
-    });
-
-    await fileSave(blob, {
-      fileName: toSlug(name)
-    });
   }
 
   async function closePlaylist() {
@@ -377,7 +342,7 @@
         bind:description
         bind:isPublic
         {deletePlaylist}
-        download={downloadJson}
+        download={() => exportJson(snapshot())}
         exportNotes={() => exportNotes(snapshot())}
         close={() => (showOptions = false)}
       />

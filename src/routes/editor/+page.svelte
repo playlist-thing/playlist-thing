@@ -102,9 +102,12 @@
       }
 
       const playlistId = uuidv4();
+      const now = Date.now();
       await db.add('playlists', {
         ...result.data,
         id: playlistId,
+        createdAt: now,
+        lastModifiedAt: now,
         items: withFreshIds(result.data.items),
         queue: withFreshIds(result.data.queue)
       });

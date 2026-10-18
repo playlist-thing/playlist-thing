@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
-import { PlaylistLocalSchema } from '../local/playlist';
-import { AirBreakSchema, AirBreakWithBackgroundMusicSchema, SongSchema } from '../playlist';
+import {
+  AirBreakSchema,
+  AirBreakWithBackgroundMusicSchema,
+  PlaylistSchema,
+  SongSchema
+} from '../playlist';
 
 export const PlaylistItemExportSchema = z.discriminatedUnion('tag', [
   SongSchema.partial({ id: true }),
@@ -11,13 +15,11 @@ export const PlaylistItemExportSchema = z.discriminatedUnion('tag', [
 
 export type PlaylistItemExport = z.infer<typeof PlaylistItemExportSchema>;
 
-export const PlaylistExportSchema = z
-  .object({
-    ...PlaylistLocalSchema.shape,
+export const PlaylistExportSchema = z.object({
+  ...PlaylistSchema.shape,
 
-    items: z.array(PlaylistItemExportSchema),
-    queue: z.array(PlaylistItemExportSchema)
-  })
-  .partial({ id: true });
+  items: z.array(PlaylistItemExportSchema),
+  queue: z.array(PlaylistItemExportSchema)
+});
 
 export type PlaylistExport = z.infer<typeof PlaylistExportSchema>;

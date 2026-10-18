@@ -2,6 +2,7 @@ import { fileSave } from 'browser-fs-access';
 import slug from 'slug';
 
 import type { Playlist } from '$lib/schema/playlist';
+import type { PlaylistExport } from '$lib/schema/export/playlist';
 
 export async function exportNotes(playlist: Playlist) {
   const output: string[] = [];
@@ -26,5 +27,24 @@ export async function exportNotes(playlist: Playlist) {
   const blob = new Blob(output);
   await fileSave(blob, {
     fileName: `${slug(playlist.name)}_notes.txt`
+  });
+}
+
+export async function exportJson(playlist: Playlist) {
+  const data: PlaylistExport = {
+    ...playlist,
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    items: playlist.items.map(({ id, ...item }) => item),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    queue: playlist.queue.map(({ id, ...item }) => item)
+  };
+
+  const blob = new Blob([JSON.stringify(data)], {
+    type: 'application/json'
+  });
+
+  await fileSave(blob, {
+    fileName: slug(playlist.name)
   });
 }

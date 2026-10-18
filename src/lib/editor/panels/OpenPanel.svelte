@@ -87,9 +87,12 @@
 
     const playlist = result.data;
 
+    const now = Date.now();
     await db.add('playlists', {
       ...playlist,
       id: newPlaylistId,
+      createdAt: now,
+      lastModifiedAt: now,
       items: withFreshIds(playlist.items),
       queue: withFreshIds(playlist.queue)
     });
