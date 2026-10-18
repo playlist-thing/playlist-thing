@@ -1,4 +1,6 @@
 <script lang="ts">
+  import SyncOptions from './SyncOptions.svelte';
+
   interface Props {
     name: string;
     showOptions: boolean;
@@ -62,7 +64,9 @@
       {/if}
     </div>
 
-    <div></div>
+    <div>
+      <SyncOptions />
+    </div>
   </div>
 </div>
 
