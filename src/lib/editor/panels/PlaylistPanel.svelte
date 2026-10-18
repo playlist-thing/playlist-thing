@@ -378,7 +378,7 @@
         bind:isPublic
         {deletePlaylist}
         download={downloadJson}
-        exportNotes={() => exportNotes(items, name)}
+        exportNotes={() => exportNotes(snapshot())}
         close={() => (showOptions = false)}
       />
     {:else}

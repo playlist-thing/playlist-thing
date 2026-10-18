@@ -1,12 +1,12 @@
 import { fileSave } from 'browser-fs-access';
 import slug from 'slug';
 
-import type { PlaylistItem } from '$lib/schema/playlist';
+import type { Playlist } from '$lib/schema/playlist';
 
-export async function exportNotes(items: PlaylistItem[], name: string) {
+export async function exportNotes(playlist: Playlist) {
   const output: string[] = [];
 
-  for (const item of items) {
+  for (const item of playlist.items) {
     if (item.tag === 'AirBreak') {
       output.push('--- AIR BREAK ---\n');
     } else {
@@ -25,6 +25,6 @@ export async function exportNotes(items: PlaylistItem[], name: string) {
 
   const blob = new Blob(output);
   await fileSave(blob, {
-    fileName: `${slug(name)}_notes.txt`
+    fileName: `${slug(playlist.name)}_notes.txt`
   });
 }
