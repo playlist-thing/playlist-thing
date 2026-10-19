@@ -1,6 +1,7 @@
 <script lang="ts">
   import { clock } from '$lib/clock';
-  import { formatSeconds } from '$lib/format';
+  import { timeZone } from '$lib/editor/settings';
+  import { formatDateTime, formatSeconds } from '$lib/format';
   import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
 
   import ManageBroadcastsModal from './broadcasts/ManageBroadcastsModal.svelte';
@@ -124,7 +125,7 @@
             {#if showCountdownUntilNextBroadcast}
               will start in {formatSeconds(timeUntilNext)}
             {:else}
-              will start on {new Date(nextBroadcastList[0].start).toLocaleString()}
+              will start on {formatDateTime(nextBroadcastList[0].start, $timeZone)}
             {/if}
           </span>
         </div>

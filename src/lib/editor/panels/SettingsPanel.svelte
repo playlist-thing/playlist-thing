@@ -6,6 +6,7 @@
   import SearchProviders from './settings/SearchProviders.svelte';
   import QuickSearchProvider from './settings/QuickSearchProvider.svelte';
   import Spotify from './settings/Spotify.svelte';
+  import Time from './settings/Time.svelte';
   import ExportImport from './settings/ExportImport.svelte';
 
   interface Props {
@@ -32,6 +33,14 @@
       <section>
         <h3>Account</h3>
         <Account />
+      </section>
+
+      <section>
+        <h3>Time</h3>
+
+        <p>Choose the timezone used for dates and times.</p>
+
+        <Time />
       </section>
 
       <section>

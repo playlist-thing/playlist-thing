@@ -2,6 +2,7 @@ import { expect, test } from 'vitest';
 import {
   formatClockDate,
   formatClockTime,
+  formatDateTime,
   formatRelativeTime,
   formatSeconds,
   parseDuration
@@ -41,15 +42,37 @@ test('parseDuration invalid durations', () => {
 });
 
 test('formatClockTime pads to 24-hour HH:MM:SS', () => {
-  expect(formatClockTime(new Date(2026, 0, 1, 0, 0, 0))).toEqual('00:00:00');
-  expect(formatClockTime(new Date(2026, 0, 1, 9, 5, 3))).toEqual('09:05:03');
-  expect(formatClockTime(new Date(2026, 0, 1, 13, 7, 42))).toEqual('13:07:42');
-  expect(formatClockTime(new Date(2026, 0, 1, 23, 59, 59))).toEqual('23:59:59');
+  expect(formatClockTime(new Date(2026, 0, 1, 0, 0, 0), null)).toEqual('00:00:00');
+  expect(formatClockTime(new Date(2026, 0, 1, 9, 5, 3), null)).toEqual('09:05:03');
+  expect(formatClockTime(new Date(2026, 0, 1, 13, 7, 42), null)).toEqual('13:07:42');
+  expect(formatClockTime(new Date(2026, 0, 1, 23, 59, 59), null)).toEqual('23:59:59');
 });
 
 test('formatClockDate uses the locale date format', () => {
   const date = new Date(2026, 0, 1, 12, 0, 0);
-  expect(formatClockDate(date)).toEqual(date.toLocaleDateString());
+  expect(formatClockDate(date, null)).toEqual(date.toLocaleDateString());
+});
+
+test('formatClockTime and formatClockDate respect the time zone', () => {
+  // 2026-01-01T23:30:00Z
+  const date = new Date(Date.UTC(2026, 0, 1, 23, 30, 0));
+
+  expect(formatClockTime(date, 'UTC')).toEqual('23:30:00');
+  expect(formatClockTime(date, 'Europe/Berlin')).toEqual('00:30:00');
+  expect(formatClockDate(date, 'Europe/Berlin')).toEqual(
+    new Date(Date.UTC(2026, 0, 2, 0, 30, 0)).toLocaleDateString(undefined, {
+      timeZone: 'Europe/Berlin'
+    })
+  );
+});
+
+test('formatDateTime respects the time zone', () => {
+  // 2026-01-01T23:30:00Z
+  const epochMilliseconds = Date.UTC(2026, 0, 1, 23, 30, 0);
+
+  expect(formatDateTime(epochMilliseconds, 'Europe/Berlin')).toEqual(
+    new Date(epochMilliseconds).toLocaleString(undefined, { timeZone: 'Europe/Berlin' })
+  );
 });
 
 test('formatRelativeTime picks the appropriate unit', () => {

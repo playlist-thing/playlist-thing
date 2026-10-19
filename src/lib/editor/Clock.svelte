@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   import { clock } from '$lib/clock';
+  import { timeZone } from '$lib/editor/settings';
   import { formatClockDate, formatClockTime } from '$lib/format';
 
   // prevent server-side rendering
@@ -11,8 +12,8 @@
   });
 
   const now = $derived(new Date(clock.now));
-  const time = $derived(formatClockTime(now));
-  const date = $derived(formatClockDate(now));
+  const time = $derived(formatClockTime(now, $timeZone));
+  const date = $derived(formatClockDate(now, $timeZone));
 </script>
 
 {#if mounted}

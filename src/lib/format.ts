@@ -15,14 +15,26 @@ export function formatSeconds(seconds: number) {
   }
 }
 
-export function formatClockTime(date: Date) {
-  return [date.getHours(), date.getMinutes(), date.getSeconds()]
-    .map((part) => `${part}`.padStart(2, '0'))
-    .join(':');
+export function formatClockTime(date: Date, timeZone: string | null) {
+  const format = new Intl.DateTimeFormat('en-GB', {
+    timeZone: timeZone ?? undefined,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  return format.format(date);
 }
 
-export function formatClockDate(date: Date) {
-  return date.toLocaleDateString();
+export function formatClockDate(date: Date, timeZone: string | null) {
+  return date.toLocaleDateString(undefined, { timeZone: timeZone ?? undefined });
+}
+
+export function formatDateTime(epochMilliseconds: number, timeZone: string | null) {
+  return new Date(epochMilliseconds).toLocaleString(undefined, {
+    timeZone: timeZone ?? undefined
+  });
 }
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });

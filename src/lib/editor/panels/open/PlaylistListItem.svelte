@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PlaylistLocal } from '$lib/schema/local/playlist';
-  import { formatRelativeTime } from '$lib/format';
+  import { timeZone } from '$lib/editor/settings';
+  import { formatDateTime, formatRelativeTime } from '$lib/format';
   import Dropdown from './Dropdown.svelte';
 
   interface Props {
@@ -22,7 +23,7 @@
   }
 
   function prettyDate(epochMilliseconds: number) {
-    return new Date(epochMilliseconds).toLocaleString();
+    return formatDateTime(epochMilliseconds, $timeZone);
   }
 </script>
 
