@@ -82,6 +82,9 @@
 <div class="row top">
   <h4 ondragstart={dragstartHandler} draggable="true" class="list-name">
     {name}
+    {#if items.length > 0}
+      <span class="name-badge">{items.length}</span>
+    {/if}
   </h4>
 </div>
 
@@ -131,6 +134,10 @@
   }
 
   .list-name {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+
     font-size: 1.3em;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -139,6 +146,18 @@
     user-select: none;
 
     cursor: grab;
+  }
+
+  .name-badge {
+    min-width: 1.4em;
+    padding: 0 5px;
+
+    background-color: #e2e2e2;
+    border-radius: 999px;
+
+    font-size: 0.75em;
+    font-weight: 600;
+    text-align: center;
   }
 
   .playlist {
