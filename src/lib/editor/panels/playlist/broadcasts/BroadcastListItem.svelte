@@ -1,5 +1,7 @@
 <script lang="ts">
   import { clock } from '$lib/clock';
+  import { formatInputDateTime, parseInputDateTime } from '$lib/format';
+  import { timeZone } from '$lib/editor/settings';
   import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
 
   interface Props {
@@ -15,21 +17,6 @@
   );
 
   let componentId = $props.id();
-
-  // epoch ms -> "YYYY-MM-DDTHH:mm" in local time
-  function toLocalInput(epochOffsetMs: number) {
-    const d = new Date(epochOffsetMs);
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return (
-      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
-      `T${pad(d.getHours())}:${pad(d.getMinutes())}`
-    );
-  }
-
-  // "YYYY-MM-DDTHH:mm" (local) -> epoch ms
-  function fromLocalInput(localDateTimeString: string) {
-    return new Date(localDateTimeString).getTime(); // no "Z" => parsed as local time
-  }
 </script>
 
 <li class="broadcast-list-item">
@@ -49,9 +36,9 @@
           type="datetime-local"
           id={`start-${componentId}`}
           bind:value={
-            () => toLocalInput(broadcast.start),
+            () => formatInputDateTime(broadcast.start, $timeZone),
             (newValue) => {
-              const epochOffsetMs = fromLocalInput(newValue);
+              const epochOffsetMs = parseInputDateTime(newValue, $timeZone);
               if (!Number.isNaN(epochOffsetMs)) broadcast.start = epochOffsetMs;
             }
           }

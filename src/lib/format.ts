@@ -37,6 +37,59 @@ export function formatDateTime(epochMilliseconds: number, timeZone: string | nul
   });
 }
 
+function inputDateTimeParts(epochMilliseconds: number, timeZone: string | null) {
+  const format = new Intl.DateTimeFormat('en-GB', {
+    timeZone: timeZone ?? undefined,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+
+  const parts: Record<string, string> = {};
+  for (const { type, value } of format.formatToParts(epochMilliseconds)) {
+    parts[type] = value;
+  }
+
+  return parts;
+}
+
+// epoch ms -> "YYYY-MM-DDTHH:mm" in the given time zone, for a datetime-local input
+export function formatInputDateTime(epochMilliseconds: number, timeZone: string | null) {
+  const parts = inputDateTimeParts(epochMilliseconds, timeZone);
+  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+}
+
+// The offset (in ms) of the given time zone from UTC at the given instant.
+function timeZoneOffsetMs(epochMilliseconds: number, timeZone: string | null) {
+  const parts = inputDateTimeParts(epochMilliseconds, timeZone);
+  const asUtc = Date.UTC(
+    Number(parts.year),
+    Number(parts.month) - 1,
+    Number(parts.day),
+    Number(parts.hour),
+    Number(parts.minute)
+  );
+
+  // `asUtc` drops the seconds, so round the instant down to the minute as well.
+  return asUtc - Math.floor(epochMilliseconds / 60000) * 60000;
+}
+
+// "YYYY-MM-DDTHH:mm" interpreted in the given time zone -> epoch ms
+export function parseInputDateTime(value: string, timeZone: string | null) {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return NaN;
+
+  const asUtc = Date.parse(`${value}:00Z`);
+  if (Number.isNaN(asUtc)) return NaN;
+
+  // Recover the offset at this instant, then re-apply it to account for any DST
+  // transition between the first guess and the actual instant.
+  const offset = timeZoneOffsetMs(asUtc, timeZone);
+  return asUtc - timeZoneOffsetMs(asUtc - offset, timeZone);
+}
+
 const relativeTimeFormat = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
 
 export function formatRelativeTime(epochMilliseconds: number, now: number = Date.now()) {

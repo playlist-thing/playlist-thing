@@ -3,9 +3,11 @@ import {
   formatClockDate,
   formatClockTime,
   formatDateTime,
+  formatInputDateTime,
   formatRelativeTime,
   formatSeconds,
-  parseDuration
+  parseDuration,
+  parseInputDateTime
 } from './format';
 
 test('formatSeconds', () => {
@@ -73,6 +75,52 @@ test('formatDateTime respects the time zone', () => {
   expect(formatDateTime(epochMilliseconds, 'Europe/Berlin')).toEqual(
     new Date(epochMilliseconds).toLocaleString(undefined, { timeZone: 'Europe/Berlin' })
   );
+});
+
+test('formatInputDateTime formats for a datetime-local input in the given time zone', () => {
+  // 2026-01-01T23:30:00Z
+  const epochMilliseconds = Date.UTC(2026, 0, 1, 23, 30, 0);
+
+  expect(formatInputDateTime(epochMilliseconds, 'UTC')).toEqual('2026-01-01T23:30');
+  expect(formatInputDateTime(epochMilliseconds, 'Europe/Berlin')).toEqual('2026-01-02T00:30');
+});
+
+test('formatInputDateTime uses the local time zone when none is set', () => {
+  const epochMilliseconds = Date.UTC(2026, 0, 1, 23, 30, 0);
+  const date = new Date(epochMilliseconds);
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  expect(formatInputDateTime(epochMilliseconds, null)).toEqual(
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+      `T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  );
+});
+
+test('parseInputDateTime parses a datetime-local value in the given time zone', () => {
+  expect(parseInputDateTime('2026-01-01T23:30', 'UTC')).toEqual(Date.UTC(2026, 0, 1, 23, 30, 0));
+  expect(parseInputDateTime('2026-01-02T00:30', 'Europe/Berlin')).toEqual(
+    Date.UTC(2026, 0, 1, 23, 30, 0)
+  );
+});
+
+test('parseInputDateTime is the inverse of formatInputDateTime', () => {
+  for (const timeZone of ['UTC', 'Europe/Berlin', 'America/New_York', 'Asia/Kolkata']) {
+    // Instants spanning both DST transitions in the northern hemisphere.
+    for (const epochMilliseconds of [
+      Date.UTC(2026, 0, 15, 12, 34, 0),
+      Date.UTC(2026, 3, 15, 12, 34, 0),
+      Date.UTC(2026, 6, 15, 12, 34, 0),
+      Date.UTC(2026, 9, 15, 12, 34, 0)
+    ]) {
+      const value = formatInputDateTime(epochMilliseconds, timeZone);
+      expect(parseInputDateTime(value, timeZone)).toEqual(epochMilliseconds);
+    }
+  }
+});
+
+test('parseInputDateTime returns NaN for empty or invalid input', () => {
+  expect(parseInputDateTime('', 'UTC')).toBeNaN();
+  expect(parseInputDateTime('not a date', 'UTC')).toBeNaN();
 });
 
 test('formatRelativeTime picks the appropriate unit', () => {
