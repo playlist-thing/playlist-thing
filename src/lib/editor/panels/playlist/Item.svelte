@@ -240,6 +240,8 @@
   }
 
   .time-info {
+    font-variant-numeric: tabular-nums;
+
     flex-shrink: 0;
 
     width: 60px;
