@@ -1,8 +1,9 @@
 import { afterEach, expect, test } from 'vitest';
 import 'fake-indexeddb/auto';
 import { indexedDB } from 'fake-indexeddb';
+import { openDB } from 'idb';
 
-import { DATABASE_NAME, openDatabase } from './db';
+import { DATABASE_NAME, DATABASE_VERSION, openDatabase } from './db';
 import { validDJ, validPlaylistLocal, validShow, validStation } from './schema/examples';
 
 const playlist = {
@@ -50,6 +51,8 @@ async function openTestDatabase() {
 test('opens the database with the expected stores and indexes', async () => {
   const db = await openTestDatabase();
 
+  expect(db.version).toBe(DATABASE_VERSION);
+
   expect(Array.from(db.objectStoreNames)).toEqual(
     expect.arrayContaining(['djs', 'playlists', 'shows', 'stations'])
   );
@@ -78,6 +81,33 @@ test('opens the database with the expected stores and indexes', async () => {
 
   const djs = db.transaction('djs', 'readonly').objectStore('djs');
   expect(Array.from(djs.indexNames)).toEqual(['slug']);
+});
+
+test('migrates legacy broadcasts to a playlist-level broadcastDurationMs', async () => {
+  // create a v1 database and write a playlist whose broadcasts each carry a duration
+  const legacyDb = await openDB(DATABASE_NAME, 1, {
+    upgrade(db) {
+      db.createObjectStore('playlists', { keyPath: 'id' });
+    }
+  });
+
+  const legacyDuration = 1234000;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { broadcastDurationMs, ...playlistWithoutDuration } = validPlaylistLocal;
+  const legacyPlaylist = {
+    ...playlistWithoutDuration,
+    broadcasts: [{ start: 1000, duration: legacyDuration }]
+  };
+
+  await legacyDb.put('playlists', legacyPlaylist);
+  legacyDb.close();
+
+  // reopening with the current version triggers the migration
+  const db = await openTestDatabase();
+
+  const migrated = await db.get('playlists', validPlaylistLocal.id);
+  expect(migrated?.broadcastDurationMs).toBe(legacyDuration);
+  expect(migrated?.broadcasts).toEqual([{ start: 1000, stationId: null }]);
 });
 
 test('persists records and supports indexed lookups', async () => {

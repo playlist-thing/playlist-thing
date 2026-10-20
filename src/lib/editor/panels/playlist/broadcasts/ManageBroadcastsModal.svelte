@@ -3,23 +3,29 @@
 
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
   import BroadcastListItem from './BroadcastListItem.svelte';
+  import BroadcastDurationInput from './BroadcastDurationInput.svelte';
   import CurrentTimeInfo from './CurrentTimeInfo.svelte';
 
   interface Props {
     showModal: boolean;
     broadcasts: Broadcast[];
-    saveBroadcasts: (broadcasts: Broadcast[]) => void;
+    broadcastDurationMs: number;
+    saveBroadcasts: (broadcasts: Broadcast[], broadcastDurationMs: number) => void;
   }
 
-  let { showModal = $bindable(), broadcasts, saveBroadcasts }: Props = $props();
+  let {
+    showModal = $bindable(),
+    broadcasts,
+    broadcastDurationMs,
+    saveBroadcasts
+  }: Props = $props();
 
   interface EditingBroadcast extends Broadcast {
     id: number;
   }
 
   let editingBroadcasts: EditingBroadcast[] = $state([]);
-
-  const defaultBroadcastDuration = 3600 * 1000;
+  let editingBroadcastDurationMs = $state(0);
 
   $effect(() => {
     if (showModal) {
@@ -32,22 +38,23 @@
       }
 
       editingBroadcasts = newEditingBroadcasts;
+      editingBroadcastDurationMs = broadcastDurationMs;
     }
   });
 
   function finalizeAndSaveBroadcasts() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    saveBroadcasts(editingBroadcasts.map(({ id, ...broadcast }) => broadcast));
+    saveBroadcasts(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      editingBroadcasts.map(({ id, ...broadcast }) => broadcast),
+      editingBroadcastDurationMs
+    );
   }
 
   function addBroadcast() {
     const ids = editingBroadcasts.map((broadcast) => broadcast.id);
     const nextId = ids.length === 0 ? 0 : Math.max(...ids) + 1;
 
-    editingBroadcasts = [
-      ...editingBroadcasts,
-      { id: nextId, start: Date.now(), duration: defaultBroadcastDuration }
-    ];
+    editingBroadcasts = [...editingBroadcasts, { id: nextId, start: Date.now(), stationId: null }];
   }
 
   function deleteBroadcast(id: number) {
@@ -59,10 +66,16 @@
   <div class="content">
     <CurrentTimeInfo />
 
+    <BroadcastDurationInput
+      value={editingBroadcastDurationMs}
+      onNewValue={(v) => (editingBroadcastDurationMs = v)}
+    />
+
     <ul class="broadcast-list">
       {#each editingBroadcasts as broadcast, idx (broadcast.id)}
         <BroadcastListItem
           bind:broadcast={editingBroadcasts[idx]}
+          broadcastDurationMs={editingBroadcastDurationMs}
           deleteBroadcast={() => deleteBroadcast(broadcast.id)}
         />
       {/each}

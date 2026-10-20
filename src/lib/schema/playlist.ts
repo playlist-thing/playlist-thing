@@ -88,16 +88,24 @@ export const emptyAirBreak: PlaylistItem = {
 export const BroadcastSchema = z.object({
   // milliseconds since unix epoch (i.e. Date.getTime())
   start: z.number(),
-  // milliseconds
-  duration: z.number()
+
+  // the station this broadcast airs on
+  stationId: z.uuid().nullable()
 });
 
 export type Broadcast = z.infer<typeof BroadcastSchema>;
 
-export function currentlyBroadcasting(broadcast: Broadcast, now = Date.now()) {
-  const broadcastEnd = broadcast.start + broadcast.duration;
+export function currentlyBroadcasting(
+  broadcast: Broadcast,
+  broadcastDurationMs: number,
+  now = Date.now()
+) {
+  const broadcastEnd = broadcast.start + broadcastDurationMs;
   return broadcast.start <= now && now < broadcastEnd;
 }
+
+// Default broadcast duration in milliseconds.
+export const defaultBroadcastDurationMs = 3600 * 1000;
 
 export const PlaylistSchema = z.object({
   name: z.string(),
@@ -105,6 +113,9 @@ export const PlaylistSchema = z.object({
   description: z.string(),
   public: z.boolean(),
   broadcasts: z.array(BroadcastSchema),
+
+  // milliseconds, shared by all broadcasts
+  broadcastDurationMs: z.number(),
 
   items: z.array(PlaylistItemSchema),
   queue: z.array(PlaylistItemSchema),
@@ -147,6 +158,7 @@ export const emptyPlaylist: Playlist = {
   description: '',
   public: false,
   broadcasts: [],
+  broadcastDurationMs: defaultBroadcastDurationMs,
 
   items: [],
   queue: [],

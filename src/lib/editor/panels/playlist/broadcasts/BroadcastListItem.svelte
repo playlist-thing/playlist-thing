@@ -2,16 +2,17 @@
   import { clock } from '$lib/clock';
   import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
 
-  import DurationInput from '$lib/ui/DurationInput.svelte';
-
   interface Props {
     broadcast: Broadcast;
+    broadcastDurationMs: number;
     deleteBroadcast: () => void;
   }
 
-  let { broadcast = $bindable(), deleteBroadcast }: Props = $props();
+  let { broadcast = $bindable(), broadcastDurationMs, deleteBroadcast }: Props = $props();
 
-  let currentlyBroadcastingThis = $derived(currentlyBroadcasting(broadcast, clock.now));
+  let currentlyBroadcastingThis = $derived(
+    currentlyBroadcasting(broadcast, broadcastDurationMs, clock.now)
+  );
 
   let componentId = $props.id();
 
@@ -54,15 +55,6 @@
               if (!Number.isNaN(epochOffsetMs)) broadcast.start = epochOffsetMs;
             }
           }
-        />
-      </div>
-
-      <div class="flex-column">
-        <label class="label" for={`duration-${componentId}`}>Duration</label>
-        <DurationInput
-          value={broadcast.duration / 1000}
-          onNewValue={(newDurationSeconds) => (broadcast.duration = newDurationSeconds * 1000)}
-          id={`duration-${componentId}`}
         />
       </div>
     </div>

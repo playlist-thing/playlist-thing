@@ -1,37 +1,36 @@
 <script lang="ts">
-  import DurationInput from '$lib/ui/DurationInput.svelte';
   import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import BroadcastDurationInput from './BroadcastDurationInput.svelte';
   import CurrentTimeInfo from './CurrentTimeInfo.svelte';
 
   interface Props {
     showModal: boolean;
+    duration: number;
     startBroadcast: (duration: number) => void;
   }
 
-  let { showModal = $bindable(), startBroadcast }: Props = $props();
+  let { showModal = $bindable(), duration, startBroadcast }: Props = $props();
 
-  let durationSeconds = $state(3600);
+  let editingDuration = $state(0);
 
-  let componentId = $props.id();
+  // preload with the playlist's current broadcast duration each time the modal opens
+  $effect(() => {
+    if (showModal) {
+      editingDuration = duration;
+    }
+  });
 </script>
 
 <OkCancelModal
   bind:showModal
   title="Start broadcast"
-  onOk={() => startBroadcast(durationSeconds * 1000)}
+  onOk={() => startBroadcast(editingDuration)}
   extraButtonOkClasses="danger"
 >
   <div class="content">
     <CurrentTimeInfo />
 
-    <div class="flex-column">
-      <label class="label" for={`duration-${componentId}`}>Broadcast duration</label>
-      <DurationInput
-        value={durationSeconds}
-        onNewValue={(newDurationSeconds) => (durationSeconds = newDurationSeconds)}
-        id={`duration-${componentId}`}
-      />
-    </div>
+    <BroadcastDurationInput value={editingDuration} onNewValue={(v) => (editingDuration = v)} />
   </div>
 
   {#snippet buttonOkContent()}

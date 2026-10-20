@@ -16,7 +16,8 @@
     emptySong,
     emptyAirBreak,
     emptySongMetadata,
-    applySongDetails
+    applySongDetails,
+    defaultBroadcastDurationMs
   } from '$lib/schema/playlist';
   import type { SongDetails, SongWithDetails } from '$lib/schema/playlist';
   import {
@@ -43,6 +44,7 @@
   let description = $state('');
   let isPublic = $state(false);
   let broadcasts: Broadcast[] = $state([]);
+  let broadcastDurationMs = $state(defaultBroadcastDurationMs);
   let createdAt = $state(0);
   let lastModifiedAt = $state(0);
 
@@ -64,6 +66,7 @@
       description: $state.snapshot(description),
       public: $state.snapshot(isPublic),
       broadcasts: $state.snapshot(broadcasts),
+      broadcastDurationMs: $state.snapshot(broadcastDurationMs),
 
       items: $state.snapshot(items),
       queue: $state.snapshot(queue),
@@ -136,6 +139,7 @@
       description,
       public: isPublic,
       broadcasts,
+      broadcastDurationMs,
       createdAt,
       lastModifiedAt,
 
@@ -348,7 +352,7 @@
       />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
-        <BroadcastsControls bind:broadcasts />
+        <BroadcastsControls bind:broadcasts bind:broadcastDurationMs />
 
         <List name="Playlist" bind:items />
 

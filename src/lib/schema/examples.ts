@@ -1,6 +1,11 @@
 import type { DJ } from './dj';
 import type { PlaylistLocal } from './local/playlist';
-import type { Playlist, PlaylistItem, SongMetadata } from './playlist';
+import {
+  defaultBroadcastDurationMs,
+  type Playlist,
+  type PlaylistItem,
+  type SongMetadata
+} from './playlist';
 import type { Show } from './show';
 import type { Station } from './station';
 
@@ -35,7 +40,8 @@ export const validPlaylist: Playlist = {
   slug: 'test-playlist',
   description: 'A test playlist',
   public: true,
-  broadcasts: [{ start: 1234567890, duration: 3600000 }],
+  broadcasts: [{ start: 1234567890, stationId: 'c2cb2819-6a7f-43ca-9ebe-8e38781bf079' }],
+  broadcastDurationMs: defaultBroadcastDurationMs,
   items: [validSong, validAirBreak],
   queue: [],
   showIds: ['c11e083e-773d-43fe-be2a-162310928c01'],

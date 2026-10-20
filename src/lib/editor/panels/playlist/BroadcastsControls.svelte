@@ -10,23 +10,26 @@
 
   interface Props {
     broadcasts: Broadcast[];
+    broadcastDurationMs: number;
   }
 
-  let { broadcasts = $bindable() }: Props = $props();
+  let { broadcasts = $bindable(), broadcastDurationMs = $bindable() }: Props = $props();
 
   let showManageBroadcastsModal = $state(false);
   let showStopBroadcastModal = $state(false);
   let showStartBroadcastModal = $state(false);
 
   let currentlyBroadcastingList = $derived(
-    broadcasts.filter((broadcast) => currentlyBroadcasting(broadcast, clock.now))
+    broadcasts.filter((broadcast) =>
+      currentlyBroadcasting(broadcast, broadcastDurationMs, clock.now)
+    )
   );
   let currentlyBroadcastingCount = $derived(currentlyBroadcastingList.length);
   let currentlyBroadcastingAny = $derived(currentlyBroadcastingCount > 0);
 
   let timeLeft = $derived.by(() => {
     const end = Math.min(
-      ...currentlyBroadcastingList.map((broadcast) => broadcast.start + broadcast.duration)
+      ...currentlyBroadcastingList.map((broadcast) => broadcast.start + broadcastDurationMs)
     );
     return Math.max(0, Math.ceil((end - clock.now) / 1000));
   });
@@ -44,7 +47,7 @@
   let showCountdownUntilNextBroadcast = $derived(timeUntilNext > 0 && timeUntilNext < 60 * 60);
 
   let pastBroadcastCount = $derived(
-    broadcasts.filter((broadcast) => broadcast.start + broadcast.duration <= clock.now).length
+    broadcasts.filter((broadcast) => broadcast.start + broadcastDurationMs <= clock.now).length
   );
   let futureBroadcastCount = $derived(
     broadcasts.filter((broadcast) => broadcast.start > clock.now).length
@@ -64,15 +67,19 @@
   function stopBroadcast() {
     const currentDate = Date.now();
 
-    for (let broadcast of broadcasts) {
-      if (currentlyBroadcasting(broadcast)) {
-        broadcast.duration = currentDate - broadcast.start;
-      }
-    }
+    const activeStarts = broadcasts
+      .filter((broadcast) => currentlyBroadcasting(broadcast, broadcastDurationMs, currentDate))
+      .map((broadcast) => broadcast.start);
+
+    if (activeStarts.length === 0) return;
+
+    // shrink the shared duration so the earliest active broadcast ends now
+    broadcastDurationMs = currentDate - Math.min(...activeStarts);
   }
 
   function startBroadcast(duration: number) {
-    broadcasts.push({ start: Date.now(), duration });
+    broadcastDurationMs = duration;
+    broadcasts.push({ start: Date.now(), stationId: null });
   }
 </script>
 
@@ -137,10 +144,18 @@
 <ManageBroadcastsModal
   bind:showModal={showManageBroadcastsModal}
   {broadcasts}
-  saveBroadcasts={(newBroadcasts) => (broadcasts = newBroadcasts)}
+  {broadcastDurationMs}
+  saveBroadcasts={(newBroadcasts, newBroadcastDurationMs) => {
+    broadcasts = newBroadcasts;
+    broadcastDurationMs = newBroadcastDurationMs;
+  }}
 />
 <StopBroadcastModal bind:showModal={showStopBroadcastModal} {stopBroadcast} />
-<StartBroadcastModal bind:showModal={showStartBroadcastModal} {startBroadcast} />
+<StartBroadcastModal
+  bind:showModal={showStartBroadcastModal}
+  duration={broadcastDurationMs}
+  {startBroadcast}
+/>
 
 <style>
   .control-buttons {
