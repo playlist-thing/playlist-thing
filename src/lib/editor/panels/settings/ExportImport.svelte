@@ -19,7 +19,7 @@
   });
 </script>
 
-<h3>Export</h3>
+<h4>Export</h4>
 
 <div class="input-block">
   <button class="button" onclick={exportSettings}>
@@ -28,7 +28,7 @@
   </button>
 </div>
 
-<h3>Import</h3>
+<h4>Import</h4>
 
 <p><strong>Warning: this will overwrite all current settings.</strong></p>
 
