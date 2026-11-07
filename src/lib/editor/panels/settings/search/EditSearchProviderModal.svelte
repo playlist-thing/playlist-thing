@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { searchUrl, type SearchProvider } from '$lib/editor/search';
-  import type { SongMetadata } from '$lib/schema/playlist';
-  import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import { searchUrl, type SearchProvider } from '#lib/editor/search.js';
+  import type { SongMetadata } from '#lib/schema/playlist.js';
+  import OkCancelModal from '#lib/ui/OkCancelModal.svelte';
 
   let exampleSong: SongMetadata = {
     artist: 'The Beatles',

@@ -2,12 +2,12 @@
   import { dndzone, dragHandleZone, type DndEvent } from 'svelte-dnd-action';
 
   import Item from './Item.svelte';
-  import type { PlaylistItem } from '$lib/schema/playlist';
-  import { calculateTimeInfo, TimeInfoMode } from '$lib/timeInfo';
-  import { displaySizeMedium } from '$lib/editor/state.svelte';
-  import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '$lib/timeInfo';
-  import { formatSeconds } from '$lib/format';
-  import { withFreshIds } from '$lib/editor/state.svelte';
+  import type { PlaylistItem } from '#lib/schema/playlist.js';
+  import { calculateTimeInfo, TimeInfoMode } from '#lib/timeInfo.js';
+  import { displaySizeMedium } from '#lib/editor/state.svelte.js';
+  import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '#lib/timeInfo.js';
+  import { formatSeconds } from '#lib/format.js';
+  import { withFreshIds } from '#lib/editor/state.svelte.js';
 
   interface Props {
     name: 'Playlist' | 'Queue';

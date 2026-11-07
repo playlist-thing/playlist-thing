@@ -4,9 +4,9 @@
 
   import SearchProviderItem from './search/SearchProvider.svelte';
 
-  import { searchProviders } from '$lib/editor/settings';
-  import type { SearchProvider } from '$lib/editor/search';
-  import { defaultSearchProviders } from '$lib/editor/search';
+  import { searchProviders } from '#lib/editor/settings.js';
+  import type { SearchProvider } from '#lib/editor/search.js';
+  import { defaultSearchProviders } from '#lib/editor/search.js';
 
   function handleSort(e: CustomEvent<DndEvent>) {
     $searchProviders = e.detail.items as SearchProvider[];

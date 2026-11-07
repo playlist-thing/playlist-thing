@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { airBreakDurationSeconds } from '$lib/editor/settings';
-  import DurationInput from '$lib/ui/DurationInput.svelte';
+  import { airBreakDurationSeconds } from '#lib/editor/settings.js';
+  import DurationInput from '#lib/ui/DurationInput.svelte';
 
   let componentId = $props.id();
 </script>

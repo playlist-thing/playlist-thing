@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { env } from '$env/dynamic/public';
+  import {
+    PUBLIC_SPOTIFY_CLIENT_ID,
+    PUBLIC_PRIVACY_POLICY_URL,
+    PUBLIC_IMPRINT_URL
+  } from '$app/env/public';
 
   import Account from './settings/Account.svelte';
   import Playlists from './settings/Playlists.svelte';
@@ -29,7 +33,6 @@
       </div>
 
       <p>Settings are stored locally in your browser.</p>
-
       <section>
         <h3>Account</h3>
         <Account />
@@ -77,7 +80,7 @@
           metadata sources. The IDs can be found using search providers.
         </p>
 
-        {#if env.PUBLIC_SPOTIFY_CLIENT_ID}
+        {#if PUBLIC_SPOTIFY_CLIENT_ID}
           <h4>Spotify</h4>
           <Spotify />
         {/if}
@@ -116,18 +119,18 @@
             </a>
           </li>
 
-          {#if 'PUBLIC_PRIVACY_POLICY_URL' in env}
+          {#if PUBLIC_PRIVACY_POLICY_URL}
             <li class="links-bottom-item">
-              <a href={env.PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
+              <a href={PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
                 <i class="bi-lock" aria-hidden="true"></i>
                 Privacy policy
               </a>
             </li>
           {/if}
 
-          {#if 'PUBLIC_IMPRINT_URL' in env}
+          {#if PUBLIC_IMPRINT_URL}
             <li class="links-bottom-item">
-              <a href={env.PUBLIC_IMPRINT_URL} rel="external" target="_blank">
+              <a href={PUBLIC_IMPRINT_URL} rel="external" target="_blank">
                 <i class="bi-file-earmark-text" aria-hidden="true"></i>
                 Imprint
               </a>

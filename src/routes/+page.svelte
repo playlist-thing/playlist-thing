@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { env } from '$env/dynamic/public';
+  import { PUBLIC_PRIVACY_POLICY_URL, PUBLIC_IMPRINT_URL } from '$app/env/public';
 </script>
 
 <svelte:head>
@@ -68,7 +68,7 @@
     </ul>
 
     <div class="call-to-action">
-      <a class="button" href={resolve('/editor')}>
+      <a class="button" href={resolve('editor')}>
         <i class="bi-music-note-list" aria-hidden="true"></i>
         Open Editor
       </a>
@@ -93,18 +93,18 @@
         </a>
       </li>
 
-      {#if 'PUBLIC_PRIVACY_POLICY_URL' in env}
+      {#if PUBLIC_PRIVACY_POLICY_URL}
         <li class="links-bottom-item">
-          <a href={env.PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
+          <a href={PUBLIC_PRIVACY_POLICY_URL} rel="external" target="_blank">
             <i class="bi-lock" aria-hidden="true"></i>
             Privacy policy
           </a>
         </li>
       {/if}
 
-      {#if 'PUBLIC_IMPRINT_URL' in env}
+      {#if PUBLIC_IMPRINT_URL}
         <li class="links-bottom-item">
-          <a href={env.PUBLIC_IMPRINT_URL} rel="external" target="_blank">
+          <a href={PUBLIC_IMPRINT_URL} rel="external" target="_blank">
             <i class="bi-file-earmark-text" aria-hidden="true"></i>
             Imprint
           </a>

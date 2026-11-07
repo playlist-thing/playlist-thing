@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { clock } from '$lib/clock';
-  import { timeZone } from '$lib/editor/settings';
-  import { formatClockDate, formatClockTime } from '$lib/format';
+  import { clock } from '#lib/clock.js';
+  import { timeZone } from '#lib/editor/settings.js';
+  import { formatClockDate, formatClockTime } from '#lib/format.js';
 
   // prevent server-side rendering
   let mounted = $state(false);

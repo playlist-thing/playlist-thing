@@ -1,6 +1,6 @@
 import { MediaQuery } from 'svelte/reactivity';
-import type { PlaylistItem } from '$lib/schema/playlist';
-import type { PlaylistItemExport } from '$lib/schema/export/playlist';
+import type { PlaylistItem } from '#lib/schema/playlist.js';
+import type { PlaylistItemExport } from '#lib/schema/export/playlist.js';
 
 /**
  * Storage of temporary state (not lasting beyond this browser tab/window)

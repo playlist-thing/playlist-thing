@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Broadcast } from '$lib/schema/playlist';
+  import type { Broadcast } from '#lib/schema/playlist.js';
 
-  import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import OkCancelModal from '#lib/ui/OkCancelModal.svelte';
   import BroadcastListItem from './BroadcastListItem.svelte';
   import BroadcastDurationInput from './BroadcastDurationInput.svelte';
   import CurrentTimeInfo from './CurrentTimeInfo.svelte';

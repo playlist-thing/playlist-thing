@@ -1,8 +1,8 @@
 import { get } from 'svelte/store';
 
-import { spotifyToken, tokenNeedsRefresh, refreshToken } from '$lib/auth/spotify';
+import { spotifyToken, tokenNeedsRefresh, refreshToken } from '#lib/auth/spotify.js';
 
-import type { SongDetails, SongMetadata } from '$lib/schema/playlist';
+import type { SongDetails, SongMetadata } from '#lib/schema/playlist.js';
 
 export function spotifyTrackIdFromUrl(url: string) {
   const pattern = /https:\/\/(open|play).spotify.com\/track\/([a-zA-Z0-9]+)/;

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { clock } from '$lib/clock';
-  import { timeZone } from '$lib/editor/settings';
-  import { formatDateTime, formatSeconds } from '$lib/format';
-  import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
+  import { clock } from '#lib/clock.js';
+  import { timeZone } from '#lib/editor/settings.js';
+  import { formatDateTime, formatSeconds } from '#lib/format.js';
+  import { currentlyBroadcasting, type Broadcast } from '#lib/schema/playlist.js';
 
   import ManageBroadcastsModal from './broadcasts/ManageBroadcastsModal.svelte';
   import StartBroadcastModal from './broadcasts/StartBroadcastModal.svelte';

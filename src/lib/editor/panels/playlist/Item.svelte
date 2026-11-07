@@ -5,15 +5,15 @@
   import Dropdown from './item/Dropdown.svelte';
   import Metadata from './item/Metadata.svelte';
 
-  import { formatSeconds } from '$lib/format';
-  import { quickSearchUrl } from '$lib/editor/settings';
-  import { spotifyTrackIdFromUrl } from '$lib/editor/external/spotify';
-  import { youtubeIdFromUrl } from '$lib/editor/external/youtube';
-  import { appleMusicTrackIdFromUrl } from '$lib/editor/external/appleMusic';
-  import { validBandcampUrl } from '$lib/editor/external/bandcamp';
-  import { emptySong, type PlaylistItem } from '$lib/schema/playlist';
-  import { searchUrl } from '$lib/editor/search';
-  import { displaySizeMedium } from '$lib/editor/state.svelte';
+  import { formatSeconds } from '#lib/format.js';
+  import { quickSearchUrl } from '#lib/editor/settings.js';
+  import { spotifyTrackIdFromUrl } from '#lib/editor/external/spotify.js';
+  import { youtubeIdFromUrl } from '#lib/editor/external/youtube.js';
+  import { appleMusicTrackIdFromUrl } from '#lib/editor/external/appleMusic.js';
+  import { validBandcampUrl } from '#lib/editor/external/bandcamp.js';
+  import { emptySong, type PlaylistItem } from '#lib/schema/playlist.js';
+  import { searchUrl } from '#lib/editor/search.js';
+  import { displaySizeMedium } from '#lib/editor/state.svelte.js';
 
   interface Props {
     item: PlaylistItem;

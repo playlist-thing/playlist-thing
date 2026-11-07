@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { apiToken } from '$lib/auth/api';
-  import ConfirmDeleteModal from '$lib/editor/modals/ConfirmDeleteModal.svelte';
+  import { apiToken } from '#lib/auth/api.js';
+  import ConfirmDeleteModal from '#lib/editor/modals/ConfirmDeleteModal.svelte';
 
   let showConfirmDeleteModal = $state(false);
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { PlaylistLocal } from '$lib/schema/local/playlist';
-  import { timeZone } from '$lib/editor/settings';
-  import { formatDateTime, formatRelativeTime } from '$lib/format';
+  import type { PlaylistLocal } from '#lib/schema/local/playlist.js';
+  import { timeZone } from '#lib/editor/settings.js';
+  import { formatDateTime, formatRelativeTime } from '#lib/format.js';
   import Dropdown from './Dropdown.svelte';
 
   interface Props {

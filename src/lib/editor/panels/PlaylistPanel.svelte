@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
   import { Debounced, watch } from 'runed';
 
@@ -10,28 +10,28 @@
   import Options from './playlist/Options.svelte';
   import AddItemControls from './playlist/AddItemControls.svelte';
 
-  import type { Playlist, PlaylistItem, Broadcast } from '$lib/schema/playlist';
-  import type { PlaylistLocal } from '$lib/schema/local/playlist';
+  import type { Playlist, PlaylistItem, Broadcast } from '#lib/schema/playlist.js';
+  import type { PlaylistLocal } from '#lib/schema/local/playlist.js';
   import {
     emptySong,
     emptyAirBreak,
-    emptySongMetadata,
     applySongDetails,
-    defaultBroadcastDurationMs
-  } from '$lib/schema/playlist';
-  import type { SongDetails, SongWithDetails } from '$lib/schema/playlist';
+    defaultBroadcastDurationMs,
+    emptySongMetadata
+  } from '#lib/schema/playlist.js';
+  import type { SongDetails, SongWithDetails } from '#lib/schema/playlist.js';
   import {
     PlaylistExportSchema,
     PlaylistItemExportSchema,
     type PlaylistItemExport
-  } from '$lib/schema/export/playlist';
-  import { spotifyTrackIdFromUrl, fetchSpotifyMetadata } from '$lib/editor/external/spotify';
-  import { spotifyToken } from '$lib/auth/spotify';
-  import { fetchFileMetadata } from '$lib/editor/external/file';
-  import { withFreshIds, modals } from '$lib/editor/state.svelte';
-  import { exportNotes, exportJson } from '$lib/editor/export';
-  import { airBreakDurationSeconds } from '$lib/editor/settings';
-  import { openDatabase } from '$lib/db';
+  } from '#lib/schema/export/playlist.js';
+  import { spotifyTrackIdFromUrl, fetchSpotifyMetadata } from '#lib/editor/external/spotify.js';
+  import { spotifyToken } from '#lib/auth/spotify.js';
+  import { fetchFileMetadata } from '#lib/editor/external/file.js';
+  import { withFreshIds, modals } from '#lib/editor/state.svelte.js';
+  import { exportNotes, exportJson } from '#lib/editor/export.js';
+  import { airBreakDurationSeconds } from '#lib/editor/settings.js';
+  import { openDatabase } from '#lib/db.js';
 
   interface Props {
     playlistId: string | null;
@@ -340,6 +340,7 @@
 <div class="outer-container">
   <div class="inner-container">
     <ControlsTop bind:name bind:showOptions {closePlaylist} />
+
     {#if showOptions}
       <Options
         bind:name
@@ -358,6 +359,7 @@
 
         <div role="list" ondragover={dragoverHandler} ondrop={dropHandler}>
           <List name="Queue" bind:items={queue} />
+
           <AddItemControls {addEmpty} {addAirBreak} {addUrl} {addFile} />
         </div>
       </div>

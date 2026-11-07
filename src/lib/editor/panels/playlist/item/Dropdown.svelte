@@ -1,7 +1,7 @@
 <script lang="ts">
   import { OutClick } from 'svelte-outclick';
 
-  import { displaySizeMedium } from '$lib/editor/state.svelte';
+  import { displaySizeMedium } from '#lib/editor/state.svelte.js';
 
   interface Props {
     showMenu: boolean;

@@ -10,11 +10,7 @@
 <div class="content-container">
   <div class="content">
     <h1>Sorry, an error occurred</h1>
-
-    <p>
-      {page.error!.message}
-    </p>
-
+    <p>{page.error!.message}</p>
     <p>Try signing again. If an error still occurs, clear your browser cache and reload.</p>
 
     <p>
@@ -29,9 +25,7 @@
       with a detailed description of your problem and steps to reproduce it.
     </p>
 
-    <p>
-      <a href={resolve('/editor')}>Back to editor</a>
-    </p>
+    <p><a href={resolve('editor')}>Back to editor</a></p>
   </div>
 </div>
 

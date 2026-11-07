@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatSeconds, parseDuration } from '$lib/format';
+  import { formatSeconds, parseDuration } from '#lib/format.js';
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   interface Props extends HTMLInputAttributes {

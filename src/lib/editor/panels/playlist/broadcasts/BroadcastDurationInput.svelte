@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DurationInput from '$lib/ui/DurationInput.svelte';
+  import DurationInput from '#lib/ui/DurationInput.svelte';
 
   interface Props {
     value: number;

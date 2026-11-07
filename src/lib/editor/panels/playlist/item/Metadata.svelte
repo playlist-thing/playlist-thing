@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type PlaylistItem, fileMatchesTitle } from '$lib/schema/playlist';
+  import { type PlaylistItem, fileMatchesTitle } from '#lib/schema/playlist.js';
 
   interface Props {
     item: PlaylistItem;

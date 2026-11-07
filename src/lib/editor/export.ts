@@ -1,8 +1,8 @@
 import { fileSave } from 'browser-fs-access';
 import slug from 'slug';
 
-import type { Playlist } from '$lib/schema/playlist';
-import type { PlaylistExport } from '$lib/schema/export/playlist';
+import type { Playlist } from '#lib/schema/playlist.js';
+import type { PlaylistExport } from '#lib/schema/export/playlist.js';
 
 export async function exportNotes(playlist: Playlist) {
   const output: string[] = [];

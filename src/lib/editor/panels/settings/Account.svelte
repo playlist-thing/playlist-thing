@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { env } from '$env/dynamic/public';
+  import { PUBLIC_ACCOUNT_MANAGER_URL } from '$app/env/public';
 
   import {
     apiToken,
     apiTokenClaims,
     redirectToSSOAuthorize,
     redirectToSSOLogout
-  } from '$lib/auth/api';
+  } from '#lib/auth/api.js';
 
   let username = $derived(
     typeof $apiTokenClaims?.preferred_username === 'string'
@@ -26,7 +26,7 @@
   </div>
 
   <div class="actions">
-    <a href={env.PUBLIC_ACCOUNT_MANAGER_URL} rel="external" class="button">
+    <a href={PUBLIC_ACCOUNT_MANAGER_URL} rel="external" class="button">
       <i class="bi-person" aria-hidden="true"></i> Manage account
     </a>
     <button class="button" onclick={redirectToSSOLogout}>

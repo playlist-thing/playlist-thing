@@ -1,11 +1,11 @@
 import { openDB } from 'idb';
 import type { DBSchema } from 'idb';
 
-import type { PlaylistLocal } from '$lib/schema/local/playlist';
-import type { Show } from '$lib/schema/show';
-import type { Station } from '$lib/schema/station';
-import type { DJ } from '$lib/schema/dj';
-import { defaultBroadcastDurationMs } from '$lib/schema/playlist';
+import type { PlaylistLocal } from '#lib/schema/local/playlist.js';
+import type { Show } from '#lib/schema/show.js';
+import type { Station } from '#lib/schema/station.js';
+import type { DJ } from '#lib/schema/dj.js';
+import { defaultBroadcastDurationMs } from '#lib/schema/playlist.js';
 
 interface DBv1 extends DBSchema {
   playlists: {

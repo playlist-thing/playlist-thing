@@ -1,9 +1,9 @@
 import { get } from 'svelte/store';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_SPOTIFY_CLIENT_ID } from '$app/env/public';
 
 import * as openid from 'openid-client';
 
-import localStorageStore from '$lib/localStorageStore';
+import localStorageStore from '#lib/localStorageStore.js';
 
 const scope = '';
 
@@ -18,7 +18,7 @@ export function tokenNeedsRefresh() {
 }
 
 async function config() {
-  if (!env.PUBLIC_SPOTIFY_CLIENT_ID) {
+  if (!PUBLIC_SPOTIFY_CLIENT_ID) {
     throw new Error('Spotify client ID missing');
   }
 
@@ -28,7 +28,7 @@ async function config() {
       authorization_endpoint: 'https://accounts.spotify.com/authorize',
       token_endpoint: 'https://accounts.spotify.com/api/token'
     },
-    env.PUBLIC_SPOTIFY_CLIENT_ID
+    PUBLIC_SPOTIFY_CLIENT_ID
   );
 }
 
@@ -44,7 +44,7 @@ export async function redirectToSpotifyAuthorize() {
 
   const authUrl = openid.buildAuthorizationUrl(await config(), {
     redirect_uri: `${location.origin}/oauth2/spotify/callback`,
-    scope: scope,
+    scope,
     code_challenge_method: 'S256',
     code_challenge: await codeChallenge,
     state

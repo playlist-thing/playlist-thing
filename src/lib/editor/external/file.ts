@@ -1,6 +1,6 @@
 import { parseBlob } from 'music-metadata';
 
-import type { SongDetails, SongMetadata } from '$lib/schema/playlist';
+import type { SongDetails, SongMetadata } from '#lib/schema/playlist.js';
 
 export async function fetchFileMetadata(file: File): Promise<SongDetails> {
   const metadata = await parseBlob(file, {

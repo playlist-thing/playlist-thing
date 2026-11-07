@@ -1,5 +1,5 @@
 <script lang="ts">
-  import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import OkCancelModal from '#lib/ui/OkCancelModal.svelte';
   import BroadcastDurationInput from './BroadcastDurationInput.svelte';
   import CurrentTimeInfo from './CurrentTimeInfo.svelte';
 

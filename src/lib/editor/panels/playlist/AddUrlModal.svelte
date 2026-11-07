@@ -1,5 +1,5 @@
 <script lang="ts">
-  import OkCancelModal from '$lib/ui/OkCancelModal.svelte';
+  import OkCancelModal from '#lib/ui/OkCancelModal.svelte';
 
   interface Props {
     showModal: boolean;

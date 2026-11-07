@@ -1,7 +1,7 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-import { getToken } from '$lib/auth/spotify';
+import { getToken } from '#lib/auth/spotify.js';
 
 // We require access to sessionStorage for the code verifier and state
 export const ssr = false;

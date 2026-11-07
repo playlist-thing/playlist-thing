@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { searchProviders, quickSearchProviderId } from '$lib/editor/settings';
+  import { searchProviders, quickSearchProviderId } from '#lib/editor/settings.js';
 
   let componentId = $props.id();
 </script>

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { clock } from '$lib/clock';
-  import { timeZone } from '$lib/editor/settings';
-  import { formatDateTime } from '$lib/format';
+  import { clock } from '#lib/clock.js';
+  import { timeZone } from '#lib/editor/settings.js';
+  import { formatDateTime } from '#lib/format.js';
 
   const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

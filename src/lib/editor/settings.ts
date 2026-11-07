@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { fileSave } from 'browser-fs-access';
 
-import localStorageStore from '$lib/localStorageStore';
+import localStorageStore from '#lib/localStorageStore.js';
 
 import { defaultSearchProviders, SearchProviderSchema } from './search';
 

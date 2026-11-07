@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
+  import { dev } from '$app/env';
   import { resolve } from '$app/paths';
 
-  import Clock from '$lib/editor/Clock.svelte';
-  import EditorPanel from '$lib/editor/panels/EditorPanel.svelte';
-  import SettingsPanel from '$lib/editor/panels/SettingsPanel.svelte';
+  import Clock from '#lib/editor/Clock.svelte';
+  import EditorPanel from '#lib/editor/panels/EditorPanel.svelte';
+  import SettingsPanel from '#lib/editor/panels/SettingsPanel.svelte';
 
-  import URLInvalidModal from '$lib/editor/modals/URLInvalidModal.svelte';
-  import AddFileErrorModal from '$lib/editor/modals/AddFileErrorModal.svelte';
-  import SpotifyConnectModal from '$lib/editor/modals/SpotifyConnectModal.svelte';
-  import OpenPlaylistErrorModal from '$lib/editor/modals/OpenPlaylistErrorModal.svelte';
+  import URLInvalidModal from '#lib/editor/modals/URLInvalidModal.svelte';
+  import AddFileErrorModal from '#lib/editor/modals/AddFileErrorModal.svelte';
+  import SpotifyConnectModal from '#lib/editor/modals/SpotifyConnectModal.svelte';
+  import OpenPlaylistErrorModal from '#lib/editor/modals/OpenPlaylistErrorModal.svelte';
 
-  import { openDatabase } from '$lib/db';
-  import { apiToken, apiTokenClaims, redirectToSSOAuthorize } from '$lib/auth/api';
-  import { displaySizeMedium } from '$lib/editor/state.svelte';
-  import { withFreshIds } from '$lib/editor/state.svelte';
-  import { PlaylistExportSchema } from '$lib/schema/export/playlist';
-  import localStorageStore from '$lib/localStorageStore';
+  import { openDatabase } from '#lib/db.js';
+  import { apiToken, apiTokenClaims, redirectToSSOAuthorize } from '#lib/auth/api.js';
+  import { displaySizeMedium } from '#lib/editor/state.svelte.js';
+  import { withFreshIds } from '#lib/editor/state.svelte.js';
+  import { PlaylistExportSchema } from '#lib/schema/export/playlist.js';
+  import localStorageStore from '#lib/localStorageStore.js';
   import { v4 as uuidv4 } from 'uuid';
   import { onMount } from 'svelte';
 

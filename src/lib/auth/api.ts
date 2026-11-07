@@ -1,10 +1,10 @@
 import { get } from 'svelte/store';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_API_CLIENT_ID, PUBLIC_API_AUTH_METADATA_URL } from '$app/env/public';
 
 import * as openid from 'openid-client';
 import type { IDToken } from 'openid-client';
 
-import localStorageStore from '$lib/localStorageStore';
+import localStorageStore from '#lib/localStorageStore.js';
 
 const scope = 'openid playlist:read playlist:write';
 
@@ -20,20 +20,20 @@ export function tokenNeedsRefresh() {
 }
 
 async function config() {
-  if (!env.PUBLIC_API_CLIENT_ID) {
+  if (!PUBLIC_API_CLIENT_ID) {
     throw new Error('API client ID missing');
   }
 
-  if (!env.PUBLIC_API_AUTH_METADATA_URL) {
+  if (!PUBLIC_API_AUTH_METADATA_URL) {
     throw new Error('API metadata URL missing');
   }
 
-  const metadata_url = URL.parse(env.PUBLIC_API_AUTH_METADATA_URL);
+  const metadata_url = URL.parse(PUBLIC_API_AUTH_METADATA_URL);
   if (!metadata_url) {
     throw new Error('Invalid PUBLIC_API_AUTH_METADATA_URL');
   }
 
-  const configuration = await openid.discovery(metadata_url, env.PUBLIC_API_CLIENT_ID);
+  const configuration = await openid.discovery(metadata_url, PUBLIC_API_CLIENT_ID);
   return configuration;
 }
 
@@ -49,7 +49,7 @@ export async function redirectToSSOAuthorize() {
 
   const authUrl = openid.buildAuthorizationUrl(await config(), {
     redirect_uri: `${location.origin}/oauth2/api/callback`,
-    scope: scope,
+    scope,
     code_challenge_method: 'S256',
     code_challenge: await codeChallenge,
     state

@@ -2,21 +2,24 @@
   import FileAttribute from './editor/FileAttribute.svelte';
   import LinkAttribute from './editor/LinkAttribute.svelte';
 
-  import type { PlaylistItem } from '$lib/schema/playlist';
-  import { emptySongMetadata, applySongDetails } from '$lib/schema/playlist';
-  import DurationInput from '$lib/ui/DurationInput.svelte';
-  import { spotifyToken } from '$lib/auth/spotify';
-  import { searchProviders } from '$lib/editor/settings';
-  import { searchUrl } from '$lib/editor/search';
-  import { modals } from '$lib/editor/state.svelte';
+  import type { PlaylistItem } from '#lib/schema/playlist.js';
+  import { emptySongMetadata, applySongDetails } from '#lib/schema/playlist.js';
+  import DurationInput from '#lib/ui/DurationInput.svelte';
+  import { spotifyToken } from '#lib/auth/spotify.js';
+  import { searchProviders } from '#lib/editor/settings.js';
+  import { searchUrl } from '#lib/editor/search.js';
+  import { modals } from '#lib/editor/state.svelte.js';
   import {
     spotifyTrackIdFromUrl,
     urlFromSpotifyTrackId,
     fetchSpotifyMetadata
-  } from '$lib/editor/external/spotify';
-  import { youtubeIdFromUrl, urlFromYoutubeId } from '$lib/editor/external/youtube';
-  import { appleMusicTrackIdFromUrl, urlFromAppleMusicId } from '$lib/editor/external/appleMusic';
-  import { validBandcampUrl } from '$lib/editor/external/bandcamp';
+  } from '#lib/editor/external/spotify.js';
+  import { youtubeIdFromUrl, urlFromYoutubeId } from '#lib/editor/external/youtube.js';
+  import {
+    appleMusicTrackIdFromUrl,
+    urlFromAppleMusicId
+  } from '#lib/editor/external/appleMusic.js';
+  import { validBandcampUrl } from '#lib/editor/external/bandcamp.js';
 
   interface Props {
     item: PlaylistItem;

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { v4 as uuidv4 } from 'uuid';
 
-  import { openDatabase } from '$lib/db';
-  import { emptyPlaylist } from '$lib/schema/playlist';
-  import type { PlaylistLocal } from '$lib/schema/local/playlist';
-  import { PlaylistExportSchema } from '$lib/schema/export/playlist';
+  import { openDatabase } from '#lib/db.js';
+  import { emptyPlaylist } from '#lib/schema/playlist.js';
+  import type { PlaylistLocal } from '#lib/schema/local/playlist.js';
+  import { PlaylistExportSchema } from '#lib/schema/export/playlist.js';
   import { onMount } from 'svelte';
-  import { modals, withFreshIds } from '../state.svelte';
+  import { modals, withFreshIds } from '../state.svelte.js';
   import PlaylistListItem from './open/PlaylistListItem.svelte';
-  import ConfirmDeleteModal from '$lib/editor/modals/ConfirmDeleteModal.svelte';
+  import ConfirmDeleteModal from '#lib/editor/modals/ConfirmDeleteModal.svelte';
 
   interface Props {
     openPlaylist: (playlistId: string) => void;

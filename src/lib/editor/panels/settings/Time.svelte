@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { timeZone } from '$lib/editor/settings';
+  import { timeZone } from '#lib/editor/settings.js';
 
   let componentId = $props.id();
 

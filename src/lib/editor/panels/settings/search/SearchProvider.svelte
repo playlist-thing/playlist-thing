@@ -3,7 +3,7 @@
 
   import EditSearchProviderModal from './EditSearchProviderModal.svelte';
 
-  import type { SearchProvider } from '$lib/editor/search';
+  import type { SearchProvider } from '#lib/editor/search.js';
 
   interface Props {
     searchProvider: SearchProvider;

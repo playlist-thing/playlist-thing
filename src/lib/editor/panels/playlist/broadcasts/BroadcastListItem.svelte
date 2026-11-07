@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { clock } from '$lib/clock';
-  import { formatInputDateTime, parseInputDateTime } from '$lib/format';
-  import { timeZone } from '$lib/editor/settings';
-  import { currentlyBroadcasting, type Broadcast } from '$lib/schema/playlist';
-
+  import { clock } from '#lib/clock.js';
+  import { formatInputDateTime, parseInputDateTime } from '#lib/format.js';
+  import { timeZone } from '#lib/editor/settings.js';
+  import { currentlyBroadcasting, type Broadcast } from '#lib/schema/playlist.js';
   interface Props {
     broadcast: Broadcast;
     broadcastDurationMs: number;

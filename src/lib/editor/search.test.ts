@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { searchUrl } from './search';
-import type { SongMetadata } from '$lib/schema/playlist';
+import type { SongMetadata } from '#lib/schema/playlist.js';
 
 const cloudbusting: SongMetadata = {
   title: 'Cloudbusting',

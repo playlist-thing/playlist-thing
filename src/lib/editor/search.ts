@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { SongMetadata } from '$lib/schema/playlist';
+import type { SongMetadata } from '#lib/schema/playlist.js';
 
 export const SearchProviderSchema = z.object({
   id: z.number(),
