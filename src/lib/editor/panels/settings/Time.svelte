@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  import { clockSyncEnabled } from '#lib/clock.js';
   import { timeZone } from '#lib/editor/settings.js';
 
   let componentId = $props.id();
@@ -27,3 +28,25 @@
     <option value={zone}>{zone}</option>
   {/each}
 </select>
+
+<div class="checkbox">
+  <input
+    id={`clock-sync-enabled-${componentId}`}
+    type="checkbox"
+    checked={$clockSyncEnabled}
+    onchange={(event) => ($clockSyncEnabled = event.currentTarget.checked)}
+  />
+  <label class="label" for={`clock-sync-enabled-${componentId}`}>
+    Keep time in sync with playlist-thing servers
+  </label>
+</div>
+
+<style>
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    padding-top: 10px;
+  }
+</style>

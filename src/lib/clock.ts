@@ -1,5 +1,9 @@
 import { createSubscriber } from 'svelte/reactivity';
 
+import localStorageStore from '#lib/localStorageStore.js';
+
+export const clockSyncEnabled = localStorageStore('clockSyncEnabled', true);
+
 /**
  * Reactive clock. `now` is milliseconds since the epoch, floored to the
  * current second, and updates exactly when the system second changes.
