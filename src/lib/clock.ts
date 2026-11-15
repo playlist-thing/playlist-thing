@@ -1,9 +1,13 @@
 import { createSubscriber } from 'svelte/reactivity';
 import { get } from 'svelte/store';
 
+import { browser } from '$app/env';
 import { PUBLIC_TIME_SYNC_URL } from '$app/env/public';
 
 import localStorageStore from '#lib/localStorageStore.js';
+
+/** How often the clock re-syncs with the time sync API. */
+const SYNC_INTERVAL = 5 * 60 * 1000;
 
 export const clockSyncEnabled = localStorageStore('clockSyncEnabled', true);
 
@@ -72,6 +76,19 @@ export class Clock {
     };
     clockOffset.subscribe(onClockChange);
     clockSyncEnabled.subscribe(onClockChange);
+
+    if (browser) {
+      const requestSync = () => {
+        this.sync().catch((error) => console.error('Clock sync failed', error));
+      };
+
+      // Sync now if the last sync is stale, then keep it fresh on an interval.
+      const lastSync = get(clockLastSync);
+      if (lastSync === null || Date.now() - lastSync >= SYNC_INTERVAL) {
+        requestSync();
+      }
+      setInterval(requestSync, SYNC_INTERVAL);
+    }
   }
 
   /** Corrective offset in milliseconds added to the system clock. */
@@ -94,6 +111,8 @@ export class Clock {
    * reports the server's time.
    */
   async sync(): Promise<void> {
+    if (!get(clockSyncEnabled)) return;
+
     if (!PUBLIC_TIME_SYNC_URL) {
       throw new Error('Time sync URL missing');
     }
