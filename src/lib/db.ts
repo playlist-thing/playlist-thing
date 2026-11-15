@@ -46,7 +46,7 @@ interface DBv1 extends DBSchema {
 }
 
 export const DATABASE_NAME = 'playlist-thing';
-export const DATABASE_VERSION = 2;
+export const DATABASE_VERSION = 3;
 
 export async function openDatabase() {
   const db = await openDB<DBv1>(DATABASE_NAME, DATABASE_VERSION, {
@@ -105,6 +105,24 @@ export async function openDatabase() {
               broadcastDurationMs: legacyDuration ?? defaultBroadcastDurationMs
             });
           }
+
+          cursor = await cursor.continue();
+        }
+      }
+
+      if (oldVersion < 3) {
+        // Add local sync metadata to existing playlists.
+        const playlists = transaction.objectStore('playlists');
+        let cursor = await playlists.openCursor();
+
+        while (cursor) {
+          const playlist = cursor.value;
+
+          await cursor.update({
+            ...playlist,
+            syncEnabled: playlist.syncEnabled ?? false,
+            lastSyncFingerprint: playlist.lastSyncFingerprint ?? null
+          });
 
           cursor = await cursor.continue();
         }

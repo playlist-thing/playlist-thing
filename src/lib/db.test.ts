@@ -93,7 +93,8 @@ test('migrates legacy broadcasts to a playlist-level broadcastDurationMs', async
 
   const legacyDuration = 1234000;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { broadcastDurationMs, ...playlistWithoutDuration } = validPlaylistLocal;
+  const { broadcastDurationMs, syncEnabled, lastSyncFingerprint, ...playlistWithoutDuration } =
+    validPlaylistLocal;
   const legacyPlaylist = {
     ...playlistWithoutDuration,
     broadcasts: [{ start: 1000, duration: legacyDuration }]
@@ -108,6 +109,27 @@ test('migrates legacy broadcasts to a playlist-level broadcastDurationMs', async
   const migrated = await db.get('playlists', validPlaylistLocal.id);
   expect(migrated?.broadcastDurationMs).toBe(legacyDuration);
   expect(migrated?.broadcasts).toEqual([{ start: 1000, stationId: null }]);
+  expect(migrated?.syncEnabled).toBe(false);
+  expect(migrated?.lastSyncFingerprint).toBeNull();
+});
+
+test('migrates v2 playlists with sync metadata', async () => {
+  const legacyDb = await openDB(DATABASE_NAME, 2, {
+    upgrade(db) {
+      db.createObjectStore('playlists', { keyPath: 'id' });
+    }
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { syncEnabled, lastSyncFingerprint, ...legacyPlaylist } = validPlaylistLocal;
+  await legacyDb.put('playlists', legacyPlaylist);
+  legacyDb.close();
+
+  const db = await openTestDatabase();
+
+  const migrated = await db.get('playlists', validPlaylistLocal.id);
+  expect(migrated?.syncEnabled).toBe(false);
+  expect(migrated?.lastSyncFingerprint).toBeNull();
 });
 
 test('persists records and supports indexed lookups', async () => {

@@ -56,7 +56,9 @@
       ...emptyPlaylist,
       id: newPlaylistId,
       createdAt: now,
-      lastModifiedAt: now
+      lastModifiedAt: now,
+      syncEnabled: false,
+      lastSyncFingerprint: null
     });
 
     openPlaylist(newPlaylistId);
@@ -93,6 +95,8 @@
       id: newPlaylistId,
       createdAt: now,
       lastModifiedAt: now,
+      syncEnabled: false,
+      lastSyncFingerprint: null,
       items: withFreshIds(playlist.items),
       queue: withFreshIds(playlist.queue)
     });
@@ -113,7 +117,12 @@
       return;
     }
 
-    const newPlaylist = { ...playlist, id: newPlaylistId };
+    const newPlaylist = {
+      ...playlist,
+      id: newPlaylistId,
+      syncEnabled: false,
+      lastSyncFingerprint: null
+    };
     await tx.store.add(newPlaylist);
 
     await tx.done;

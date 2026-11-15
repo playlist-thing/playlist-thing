@@ -47,6 +47,8 @@
   let broadcastDurationMs = $state(defaultBroadcastDurationMs);
   let createdAt = $state(0);
   let lastModifiedAt = $state(0);
+  let syncEnabled = $state(false);
+  let lastSyncFingerprint = $state<string | null>(null);
 
   let items: PlaylistItem[] = $state([]);
   let queue: PlaylistItem[] = $state([]);
@@ -102,7 +104,9 @@
         ...$state.snapshot(playlistSnapshot),
         id: playlistId!,
         createdAt: $state.snapshot(createdAt),
-        lastModifiedAt: $state.snapshot(lastModifiedAt)
+        lastModifiedAt: $state.snapshot(lastModifiedAt),
+        syncEnabled: $state.snapshot(syncEnabled),
+        lastSyncFingerprint: $state.snapshot(lastSyncFingerprint)
       });
     }
   );
@@ -142,6 +146,8 @@
       broadcastDurationMs,
       createdAt,
       lastModifiedAt,
+      syncEnabled,
+      lastSyncFingerprint,
 
       showIds,
       djIds

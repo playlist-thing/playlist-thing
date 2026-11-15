@@ -52,7 +52,9 @@ export const validPlaylistLocal: PlaylistLocal = {
   ...validPlaylist,
   id: '416556a8-98b0-4ffc-9b5f-62cc591c37ad',
   createdAt: 1234567890,
-  lastModifiedAt: 1234567890
+  lastModifiedAt: 1234567890,
+  syncEnabled: false,
+  lastSyncFingerprint: null
 };
 
 export const validShow: Show = {

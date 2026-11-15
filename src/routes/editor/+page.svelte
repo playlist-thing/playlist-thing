@@ -108,6 +108,8 @@
         id: playlistId,
         createdAt: now,
         lastModifiedAt: now,
+        syncEnabled: false,
+        lastSyncFingerprint: null,
         items: withFreshIds(result.data.items),
         queue: withFreshIds(result.data.queue)
       });
