@@ -1,12 +1,17 @@
 import { createSubscriber } from 'svelte/reactivity';
 import { get } from 'svelte/store';
 
+import { PUBLIC_TIME_SYNC_URL } from '$app/env/public';
+
 import localStorageStore from '#lib/localStorageStore.js';
 
 export const clockSyncEnabled = localStorageStore('clockSyncEnabled', true);
 
 /** Corrective offset in milliseconds added to the system clock. */
 export const clockOffset = localStorageStore('clockOffset', 0);
+
+/** Browser `Date.now()` of the last successful sync, or null if never synced. */
+export const clockLastSync = localStorageStore<number | null>('clockLastSync', null);
 
 /**
  * Reactive clock. `now` is milliseconds since the epoch, floored to the
@@ -59,11 +64,14 @@ export class Clock {
       };
     });
 
-    // React to offset changes, including ones from other browsing contexts.
-    clockOffset.subscribe(() => {
+    // React to offset or sync toggle changes, including ones from other
+    // browsing contexts.
+    const onClockChange = () => {
       this.#reschedule?.();
       this.#update?.();
-    });
+    };
+    clockOffset.subscribe(onClockChange);
+    clockSyncEnabled.subscribe(onClockChange);
   }
 
   /** Corrective offset in milliseconds added to the system clock. */
@@ -71,12 +79,47 @@ export class Clock {
     return get(clockOffset);
   }
 
+  /** Browser `Date.now()` of the last successful sync, or null if never synced. */
+  get lastSync(): number | null {
+    return get(clockLastSync);
+  }
+
   set offset(value: number) {
     clockOffset.set(value);
   }
 
-  /** The given system timestamp shifted by the corrective offset. */
+  /**
+   * Sync the clock against the time sync API, which returns the current
+   * time as milliseconds since the epoch, and set the offset so `now`
+   * reports the server's time.
+   */
+  async sync(): Promise<void> {
+    if (!PUBLIC_TIME_SYNC_URL) {
+      throw new Error('Time sync URL missing');
+    }
+
+    const requestStart = Date.now();
+    const response = await fetch(PUBLIC_TIME_SYNC_URL);
+    if (!response.ok) {
+      throw new Error('Time sync failed');
+    }
+
+    const serverNow = Number(await response.text());
+    if (!Number.isFinite(serverNow)) {
+      throw new Error('Time sync returned an invalid time');
+    }
+
+    const requestEnd = Date.now();
+
+    // Assume the request and response took equally long, so the server's
+    // timestamp corresponds to the midpoint of the round trip.
+    this.offset = Math.round(serverNow - (requestStart + requestEnd) / 2);
+    clockLastSync.set(Date.now());
+  }
+
+  /** The given system timestamp shifted by the corrective offset, when enabled. */
   #corrected(timestamp: number): number {
+    if (!get(clockSyncEnabled)) return timestamp;
     return timestamp + get(clockOffset);
   }
 
