@@ -29,7 +29,7 @@
 
   let componentId = $props.id();
 
-  let activeTab = $state<'details' | 'links' | 'notes' | 'search'>('details');
+  let activeTab = $state<'details' | 'links' | 'tags' | 'notes' | 'search'>('details');
 
   // Song and background music share the same metadata fields.
   let contentItem = $derived(
@@ -227,6 +227,16 @@
 
       <button
         class="tab"
+        class:active={activeTab === 'tags'}
+        role="tab"
+        aria-selected={activeTab === 'tags'}
+        onclick={() => (activeTab = 'tags')}
+      >
+        Tags
+      </button>
+
+      <button
+        class="tab"
         class:active={activeTab === 'notes'}
         role="tab"
         aria-selected={activeTab === 'notes'}
@@ -298,15 +308,6 @@
       {:else if activeTab === 'links'}
         <div class="links">
           <div class="attributes">
-            <FileAttribute
-              attribute={contentItem.content.attributes.file}
-              onadd={addFile}
-              onremove={removeFile}
-            >
-              <i class="bi-file-earmark" aria-hidden="true"></i>
-              Audio file
-            </FileAttribute>
-
             <LinkAttribute
               attribute={contentItem.content.attributes['spotify.com']}
               urlFromAttribute={urlFromSpotifyTrackId}
@@ -345,6 +346,19 @@
             >
               Bandcamp link
             </LinkAttribute>
+          </div>
+        </div>
+      {:else if activeTab === 'tags'}
+        <div class="tags">
+          <div class="attributes">
+            <FileAttribute
+              attribute={contentItem.content.attributes.file}
+              onadd={addFile}
+              onremove={removeFile}
+            >
+              <i class="bi-file-earmark" aria-hidden="true"></i>
+              Audio file
+            </FileAttribute>
           </div>
         </div>
       {:else if activeTab === 'notes'}
@@ -551,7 +565,8 @@
     color: #666;
   }
 
-  .links {
+  .links,
+  .tags {
     display: flex;
     flex-direction: column;
     gap: 16px;
