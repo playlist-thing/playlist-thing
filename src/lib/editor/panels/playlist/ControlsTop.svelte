@@ -1,13 +1,20 @@
 <script lang="ts">
   import SyncOptions from './SyncOptions.svelte';
+  import ReadonlyOptions from './ReadonlyOptions.svelte';
 
   interface Props {
     name: string;
     showOptions: boolean;
+    readonly: boolean;
     closePlaylist: () => void;
   }
 
-  let { name = $bindable(), showOptions = $bindable(), closePlaylist }: Props = $props();
+  let {
+    name = $bindable(),
+    showOptions = $bindable(),
+    readonly = $bindable(),
+    closePlaylist
+  }: Props = $props();
 
   let editingName = $state(false);
 
@@ -64,7 +71,8 @@
       {/if}
     </div>
 
-    <div>
+    <div class="controls-right">
+      <ReadonlyOptions bind:readonly />
       <SyncOptions />
     </div>
   </div>
@@ -89,6 +97,12 @@
   }
 
   .row-left {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .controls-right {
     display: flex;
     align-items: center;
     gap: 3px;

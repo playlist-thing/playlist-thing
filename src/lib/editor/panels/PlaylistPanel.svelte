@@ -58,6 +58,7 @@
 
   let loaded = false;
   let showOptions = $state(false);
+  let readonly = $state(false);
 
   let playlistContainer: HTMLElement | undefined = $state();
 
@@ -345,7 +346,7 @@
 
 <div class="outer-container">
   <div class="inner-container">
-    <ControlsTop bind:name bind:showOptions {closePlaylist} />
+    <ControlsTop bind:name bind:showOptions bind:readonly {closePlaylist} />
 
     {#if showOptions}
       <Options
