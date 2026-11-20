@@ -132,7 +132,11 @@
 </script>
 
 <svelte:head>
-  <title>Playlist Editor</title>
+  {#if dev}
+    <title>[DEV] Playlist Editor</title>
+  {:else}
+    <title>Playlist Editor</title>
+  {/if}
 </svelte:head>
 
 <div class="app">
