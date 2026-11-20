@@ -46,16 +46,16 @@
   cursor: pointer;
 }
 
-.button:hover:not(:disabled) {
+.button:hover:not(:disabled):not(.disabled) {
   background-color: #ddd;
 }
 
-.button:active:not(:disabled) {
+.button:active:not(:disabled):not(.disabled) {
   background-color: #bbb;
 }
 
 .button:disabled {
-  cursor: inherit;
+  cursor: default;
 }
 
 .button.align-left {
@@ -66,6 +66,7 @@
 .button.disabled {
   background-color: #fff;
   color: #666;
+  cursor: default;
 }
 
 .button.inverted {
@@ -73,11 +74,11 @@
   color: #fff;
 }
 
-.button.inverted:hover:not(:disabled) {
+.button.inverted:hover:not(:disabled):not(.disabled) {
   background-color: #444;
 }
 
-.button.inverted:active:not(:disabled) {
+.button.inverted:active:not(:disabled):not(.disabled) {
   background-color: #000;
 }
 
@@ -95,12 +96,17 @@
   color: #fff;
 }
 
-.button.danger:hover:not(:disabled) {
+.button.danger:hover:not(:disabled):not(.disabled) {
   background-color: hsl(from var(--danger-color) h s 65%);
 }
 
-.button.danger:active:not(:disabled) {
+.button.danger:active:not(:disabled):not(.disabled) {
   background-color: hsl(from var(--danger-color) h s 40%);
+}
+
+.button.danger.disabled {
+  background-color: #fff;
+  color: #666;
 }
 
 .label {
@@ -120,8 +126,13 @@
   border-radius: 6px;
 }
 
-.input-text:hover {
+.input-text:hover:not(:disabled) {
   border-color: #222;
+}
+
+.input-text:disabled {
+  color: #666;
+  cursor: inherit;
 }
 
 .input-text:focus-visible {
