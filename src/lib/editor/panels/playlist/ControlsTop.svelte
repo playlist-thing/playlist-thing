@@ -18,6 +18,12 @@
 
   let editingName = $state(false);
 
+  $effect(() => {
+    if (readonly) {
+      editingName = false;
+    }
+  });
+
   function toggleEdit() {
     editingName = !editingName;
   }
@@ -55,7 +61,12 @@
           {/if}
         </span>
 
-        <button class="button transparent edit" onclick={toggleEdit}>
+        <button
+          class="button transparent edit"
+          class:disabled={readonly}
+          disabled={readonly}
+          onclick={toggleEdit}
+        >
           <i class="bi bi-pencil" aria-hidden="true"></i>
           <span class="visually-hidden">Save playlist name</span>
         </button>

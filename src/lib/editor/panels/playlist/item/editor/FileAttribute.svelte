@@ -6,9 +6,10 @@
     attribute: string;
     onadd: (files: FileList | undefined) => void;
     onremove: () => void;
+    readonly: boolean;
   }
 
-  let { children, attribute, onadd, onremove }: Props = $props();
+  let { children, attribute, onadd, onremove, readonly }: Props = $props();
 
   let files: FileList | undefined = $state();
 </script>
@@ -19,7 +20,12 @@
       {@render children()}
       {attribute}
 
-      <button class="button transparent" onclick={onremove}>
+      <button
+        class="button transparent"
+        class:disabled={readonly}
+        disabled={readonly}
+        onclick={onremove}
+      >
         <i class="bi-trash" aria-hidden="true"></i>
         <span class="visually-hidden">Delete</span>
       </button>
@@ -29,10 +35,16 @@
       <div>
         <label>
           {@render children()}
-          <input type="file" bind:files />
+          <input type="file" disabled={readonly} bind:files />
         </label>
 
-        <button type="submit" class="button" onclick={() => onadd(files)}>
+        <button
+          type="submit"
+          class="button"
+          class:disabled={readonly}
+          disabled={readonly}
+          onclick={() => onadd(files)}
+        >
           <i class="bi-plus-lg" aria-hidden="true"></i>
           Add
         </button>

@@ -289,11 +289,16 @@
 
   function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
+
+    if (readonly) return;
+
     ev.dataTransfer!.dropEffect = 'copy';
   }
 
   async function dropHandler(ev: DragEvent) {
     ev.preventDefault();
+
+    if (readonly) return;
 
     const dataTransferItems = ev.dataTransfer!.items;
     if (dataTransferItems) {
@@ -353,6 +358,7 @@
         bind:name
         bind:description
         bind:isPublic
+        {readonly}
         {deletePlaylist}
         download={() => exportJson(snapshot())}
         exportNotes={() => exportNotes(snapshot())}
@@ -360,14 +366,14 @@
       />
     {:else}
       <div bind:this={playlistContainer} class="playlist-container">
-        <BroadcastsControls bind:broadcasts bind:broadcastDurationMs />
+        <BroadcastsControls bind:broadcasts bind:broadcastDurationMs {readonly} />
 
-        <List name="Playlist" bind:items />
+        <List name="Playlist" bind:items {readonly} />
 
         <div role="list" ondragover={dragoverHandler} ondrop={dropHandler}>
-          <List name="Queue" bind:items={queue} />
+          <List name="Queue" bind:items={queue} {readonly} />
 
-          <AddItemControls {addEmpty} {addAirBreak} {addUrl} {addFile} />
+          <AddItemControls {readonly} {addEmpty} {addAirBreak} {addUrl} {addFile} />
         </div>
       </div>
 

@@ -8,6 +8,7 @@
     name: string;
     description: string;
     isPublic: boolean;
+    readonly: boolean;
     close: () => void;
     deletePlaylist: () => void;
     download: () => void;
@@ -18,6 +19,7 @@
     name = $bindable(),
     description = $bindable(),
     isPublic = $bindable(),
+    readonly,
     close,
     deletePlaylist,
     download,
@@ -42,7 +44,13 @@
       <div class="input-block">
         <div class="input-block-item">
           <label class="label" for={`name-${componentId}`}>Playlist name</label>
-          <input class="input-text" id={`name-${componentId}`} type="text" bind:value={name} />
+          <input
+            class="input-text"
+            id={`name-${componentId}`}
+            type="text"
+            disabled={readonly}
+            bind:value={name}
+          />
         </div>
 
         <div class="input-block-item">
@@ -51,6 +59,7 @@
             class="input-text"
             id={`description-${componentId}`}
             rows="5"
+            disabled={readonly}
             bind:value={description}></textarea>
         </div>
 
@@ -60,8 +69,8 @@
             class="button"
             id={`visibility-${componentId}`}
             bind:value={isPublic}
-            class:disabled={!$apiToken}
-            disabled={!$apiToken}
+            class:disabled={readonly || !$apiToken}
+            disabled={readonly || !$apiToken}
           >
             <option value={false}>Private</option>
             <option value={true}>Public</option>
@@ -89,7 +98,12 @@
     <section>
       <h3>Danger Zone</h3>
 
-      <button class="button danger" onclick={() => (showConfirmDeleteModal = true)}>
+      <button
+        class="button danger"
+        class:disabled={readonly}
+        disabled={readonly}
+        onclick={() => (showConfirmDeleteModal = true)}
+      >
         <i class="bi-trash" aria-hidden="true"></i> Delete playlist
       </button>
     </section>

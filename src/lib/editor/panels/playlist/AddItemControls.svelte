@@ -6,9 +6,10 @@
     addAirBreak: () => void;
     addUrl: (url: string) => void;
     addFile: (file: File) => void;
+    readonly: boolean;
   }
 
-  let { addEmpty, addAirBreak, addUrl, addFile }: Props = $props();
+  let { addEmpty, addAirBreak, addUrl, addFile, readonly }: Props = $props();
 
   let files: FileList | undefined = $state();
   let showAddUrlModal = $state(false);
@@ -23,14 +24,20 @@
   });
 
   function dragEnterHandler() {
+    if (readonly) return;
+
     draggingOverDepth += 1;
   }
 
   function dragLeaveHandler() {
+    if (readonly) return;
+
     draggingOverDepth -= 1;
   }
 
   function dropHandler() {
+    if (readonly) return;
+
     // event will bubble up and will be handled by parent component(s)
     draggingOverDepth -= 1;
   }
@@ -54,23 +61,34 @@
 
   <div class="add-item-buttons">
     <div class="button-group">
-      <button class="button" onclick={addEmpty}>
+      <button class="button" class:disabled={readonly} disabled={readonly} onclick={addEmpty}>
         <i class="bi bi-music-note" aria-hidden="true"></i>
         Add song
       </button>
-      <label class="button" for={`add-file-${componentId}`}>
+      <label class="button" class:disabled={readonly} for={`add-file-${componentId}`}>
         <i class="bi bi-file-earmark-music" aria-hidden="true"></i>
         From File
       </label>
-      <input class="file-input" id={`add-file-${componentId}`} type="file" bind:files />
-      <button class="button" onclick={() => (showAddUrlModal = true)}>
+      <input
+        class="file-input"
+        id={`add-file-${componentId}`}
+        type="file"
+        disabled={readonly}
+        bind:files
+      />
+      <button
+        class="button"
+        class:disabled={readonly}
+        disabled={readonly}
+        onclick={() => (showAddUrlModal = true)}
+      >
         <i class="bi bi-link-45deg" aria-hidden="true"></i>
         From URL
       </button>
     </div>
 
     <div class="button-group">
-      <button class="button" onclick={addAirBreak}>
+      <button class="button" class:disabled={readonly} disabled={readonly} onclick={addAirBreak}>
         <i class="bi bi-mic" aria-hidden="true"></i>
         Add air break
       </button>

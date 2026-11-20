@@ -12,9 +12,10 @@
   interface Props {
     name: 'Playlist' | 'Queue';
     items: PlaylistItem[];
+    readonly: boolean;
   }
 
-  let { name, items = $bindable() }: Props = $props();
+  let { name, items = $bindable(), readonly }: Props = $props();
 
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
 
@@ -22,7 +23,12 @@
   let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(items));
   let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
 
-  let dndOptions = $derived({ items, dragDisabled: items.length === 0, type: 'playlist' });
+  let dndOptions = $derived({
+    items,
+    dragDisabled: readonly || items.length === 0,
+    dropFromOthersDisabled: readonly,
+    type: 'playlist'
+  });
 
   function deleteItem(id: number) {
     items = items.filter((item) => item.id !== id);
@@ -37,6 +43,11 @@
   }
 
   function dragstartHandler(ev: DragEvent) {
+    if (readonly) {
+      ev.preventDefault();
+      return;
+    }
+
     const json = JSON.stringify(items);
 
     // The property can be null when the event is created using the
@@ -54,6 +65,7 @@
       timeInfo={timeInfo[idx]}
       deleteItem={() => deleteItem(item.id)}
       insertItems={(items) => insertItems(items, idx)}
+      {readonly}
     />
   {:else}
     <div class="empty-item">
@@ -80,7 +92,12 @@
 {/snippet}
 
 <div class="row top">
-  <h4 ondragstart={dragstartHandler} draggable="true" class="list-name">
+  <h4
+    ondragstart={dragstartHandler}
+    draggable={!readonly}
+    class="list-name"
+    class:disabled={readonly}
+  >
     {name}
     {#if items.length > 0}
       <span class="name-badge">{items.length}</span>
@@ -146,6 +163,10 @@
     user-select: none;
 
     cursor: grab;
+  }
+
+  .list-name.disabled {
+    cursor: default;
   }
 
   .name-badge {

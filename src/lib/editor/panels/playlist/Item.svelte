@@ -20,9 +20,10 @@
     timeInfo: number;
     deleteItem: () => void;
     insertItems: (items: PlaylistItem[]) => void;
+    readonly: boolean;
   }
 
-  let { item = $bindable(), timeInfo, deleteItem, insertItems }: Props = $props();
+  let { item = $bindable(), timeInfo, deleteItem, insertItems, readonly }: Props = $props();
 
   let editing = $state(false);
   let showMenu = $state(false);
@@ -69,12 +70,17 @@
 
   function dragoverHandler(ev: DragEvent) {
     ev.preventDefault();
+
+    if (readonly) return;
+
     ev.dataTransfer!.dropEffect = 'copy';
   }
 
   function dropHandler(ev: DragEvent) {
     ev.preventDefault();
     ev.stopPropagation();
+
+    if (readonly) return;
 
     draggingOverDepth = 0;
 
@@ -123,10 +129,14 @@
   }
 
   function dragEnterHandler() {
+    if (readonly) return;
+
     draggingOverDepth += 1;
   }
 
   function dragLeaveHandler() {
+    if (readonly) return;
+
     draggingOverDepth -= 1;
   }
 </script>
@@ -148,7 +158,12 @@
   <div class="row">
     <div class="time-and-metadata">
       {#if !displaySizeMedium.current}
-        <div use:dragHandle aria-label="drag-handle for {item.id}" class="drag-handle">
+        <div
+          use:dragHandle
+          aria-label="drag-handle for {item.id}"
+          class="drag-handle"
+          class:disabled={readonly}
+        >
           <i class="bi-list" aria-hidden="true"></i>
         </div>
       {/if}
@@ -181,7 +196,7 @@
           <span class="visually-hidden">Edit</span>
         </button>
         {#if displaySizeMedium.current}
-          <button class="button" onclick={deleteItem}>
+          <button class="button" class:disabled={readonly} disabled={readonly} onclick={deleteItem}>
             <i class="bi-trash" aria-hidden="true"></i>
             <span class="visually-hidden">Delete</span>
           </button>
@@ -193,13 +208,14 @@
           {convertToAirBreak}
           showConvertToSong={item.tag === 'AirBreak' || item.tag === 'AirBreakWithBackgroundMusic'}
           {convertToSong}
+          disabled={readonly}
           bind:showMenu
         />
       </div>
     </div>
   </div>
   {#if editing}
-    <ItemEditor bind:item />
+    <ItemEditor bind:item {readonly} />
   {/if}
 </li>
 
@@ -232,6 +248,10 @@
 
     padding-left: 5px;
     padding-right: 10px;
+  }
+
+  .drag-handle.disabled {
+    cursor: default;
   }
 
   .time-and-metadata {

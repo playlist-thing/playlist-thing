@@ -23,9 +23,10 @@
 
   interface Props {
     item: PlaylistItem;
+    readonly: boolean;
   }
 
-  let { item = $bindable() }: Props = $props();
+  let { item = $bindable(), readonly }: Props = $props();
 
   let componentId = $props.id();
 
@@ -38,6 +39,10 @@
 
   let attributesCount = $derived(
     contentItem ? Object.keys(contentItem.content.attributes).length : 0
+  );
+
+  let hasSpotifyAttribute = $derived(
+    contentItem !== null && 'spotify.com' in contentItem.content.attributes
   );
 
   function addBackgroundMusic() {
@@ -153,7 +158,12 @@
   {#if item.tag === 'AirBreakWithBackgroundMusic'}
     <div class="background-music-header">
       <span class="background-music-title">Background music</span>
-      <button class="button transparent" onclick={removeBackgroundMusic}>
+      <button
+        class="button transparent"
+        class:disabled={readonly}
+        disabled={readonly}
+        onclick={removeBackgroundMusic}
+      >
         <i class="bi-trash" aria-hidden="true"></i>
         Remove
       </button>
@@ -166,6 +176,7 @@
       <DurationInput
         id={`duration-${componentId}`}
         value={item.seconds}
+        disabled={readonly}
         onNewValue={(seconds) => (item.seconds = seconds)}
       />
     </div>
@@ -177,6 +188,7 @@
           class="input-text"
           id={`title-${componentId}`}
           type="text"
+          disabled={readonly}
           bind:value={contentItem.content.title}
         />
       </div>
@@ -187,12 +199,18 @@
           class="input-text"
           id={`artist-${componentId}`}
           type="text"
+          disabled={readonly}
           bind:value={contentItem.content.artist}
         />
       </div>
     {:else}
       <div class="core-action">
-        <button class="button" onclick={addBackgroundMusic}>
+        <button
+          class="button"
+          class:disabled={readonly}
+          disabled={readonly}
+          onclick={addBackgroundMusic}
+        >
           <i class="bi-music-note" aria-hidden="true"></i>
           Add background music
         </button>
@@ -265,6 +283,7 @@
               class="input-text"
               id={`album-${componentId}`}
               type="text"
+              disabled={readonly}
               bind:value={contentItem.content.album}
             />
           </div>
@@ -276,6 +295,7 @@
                 class="input-text"
                 id={`released-${componentId}`}
                 type="text"
+                disabled={readonly}
                 bind:value={contentItem.content.released}
               />
             </div>
@@ -286,6 +306,7 @@
                 class="input-text"
                 id={`label-${componentId}`}
                 type="text"
+                disabled={readonly}
                 bind:value={contentItem.content.label}
               />
             </div>
@@ -293,15 +314,15 @@
 
           <button
             class="button align-left"
-            class:disabled={!('spotify.com' in contentItem.content.attributes)}
-            disabled={!('spotify.com' in contentItem.content.attributes)}
+            class:disabled={!hasSpotifyAttribute || readonly}
+            disabled={!hasSpotifyAttribute || readonly}
             onclick={fillFromSpotify}
           >
             <i class="bi-spotify" aria-hidden="true"></i>
             Get metadata from Spotify
           </button>
 
-          {#if !('spotify.com' in contentItem.content.attributes)}
+          {#if !hasSpotifyAttribute}
             <p class="hint">Add a Spotify track link in the Links tab to enable</p>
           {/if}
         </div>
@@ -313,6 +334,7 @@
               urlFromAttribute={urlFromSpotifyTrackId}
               onadd={addSpotify}
               onremove={removeSpotify}
+              {readonly}
             >
               <i class="bi-spotify" aria-hidden="true"></i>
               Spotify track link
@@ -323,6 +345,7 @@
               urlFromAttribute={urlFromAppleMusicId}
               onadd={addAppleMusic}
               onremove={removeAppleMusic}
+              {readonly}
             >
               <i class="bi-apple" aria-hidden="true"></i>
               Apple Music track link
@@ -333,6 +356,7 @@
               urlFromAttribute={urlFromYoutubeId}
               onadd={addYoutube}
               onremove={removeYoutube}
+              {readonly}
             >
               <i class="bi-youtube" aria-hidden="true"></i>
               YouTube link
@@ -343,6 +367,7 @@
               urlFromAttribute={(x: string) => x}
               onadd={addBandcamp}
               onremove={removeBandcamp}
+              {readonly}
             >
               Bandcamp link
             </LinkAttribute>
@@ -355,6 +380,7 @@
               attribute={contentItem.content.attributes.file}
               onadd={addFile}
               onremove={removeFile}
+              {readonly}
             >
               <i class="bi-file-earmark" aria-hidden="true"></i>
               Audio file
@@ -369,6 +395,7 @@
               class="input-text"
               id={`internal-notes-${componentId}`}
               rows="3"
+              disabled={readonly}
               bind:value={item.internalNotes}></textarea>
           </div>
 
@@ -378,6 +405,7 @@
               class="input-text"
               id={`public-notes-${componentId}`}
               rows="3"
+              disabled={readonly}
               bind:value={item.publicNotes}></textarea>
           </div>
         </div>
@@ -410,6 +438,7 @@
           class="input-text"
           id={`internal-notes-${componentId}`}
           rows="3"
+          disabled={readonly}
           bind:value={item.internalNotes}></textarea>
       </div>
 
@@ -419,6 +448,7 @@
           class="input-text"
           id={`public-notes-${componentId}`}
           rows="3"
+          disabled={readonly}
           bind:value={item.publicNotes}></textarea>
       </div>
     </div>

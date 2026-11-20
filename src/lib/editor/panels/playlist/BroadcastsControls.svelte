@@ -11,9 +11,10 @@
   interface Props {
     broadcasts: Broadcast[];
     broadcastDurationMs: number;
+    readonly: boolean;
   }
 
-  let { broadcasts = $bindable(), broadcastDurationMs = $bindable() }: Props = $props();
+  let { broadcasts = $bindable(), broadcastDurationMs = $bindable(), readonly }: Props = $props();
 
   let showManageBroadcastsModal = $state(false);
   let showStopBroadcastModal = $state(false);
@@ -84,7 +85,12 @@
 </script>
 
 <div class="control-buttons">
-  <button class="button" onclick={() => (showManageBroadcastsModal = true)}>
+  <button
+    class="button"
+    class:disabled={readonly}
+    disabled={readonly}
+    onclick={() => (showManageBroadcastsModal = true)}
+  >
     {#if broadcasts.length > 0}
       <div>
         <i class="bi bi-calendar" aria-hidden="true"></i>
@@ -103,7 +109,12 @@
   </button>
 
   {#if currentlyBroadcastingAny}
-    <button class="button danger" onclick={() => (showStopBroadcastModal = true)}>
+    <button
+      class="button danger"
+      class:disabled={readonly}
+      disabled={readonly}
+      onclick={() => (showStopBroadcastModal = true)}
+    >
       <div>
         <i class="bi bi-stop-fill" aria-hidden="true"></i>
         Stop broadcast now
@@ -120,7 +131,12 @@
       </div>
     </button>
   {:else}
-    <button class="button" onclick={() => (showStartBroadcastModal = true)}>
+    <button
+      class="button"
+      class:disabled={readonly}
+      disabled={readonly}
+      onclick={() => (showStartBroadcastModal = true)}
+    >
       <div>
         <i class="bi bi-broadcast" aria-hidden="true"></i>
         Start broadcast now

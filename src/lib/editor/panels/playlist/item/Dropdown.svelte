@@ -11,6 +11,7 @@
     convertToSong: () => void;
     showConvertToSong: boolean;
     deleteItem: () => void;
+    disabled: boolean;
   }
 
   let {
@@ -20,7 +21,8 @@
     showConvertToAirBreak,
     convertToAirBreak,
     showConvertToSong,
-    convertToSong
+    convertToSong,
+    disabled
   }: Props = $props();
 
   let dropdownButton: HTMLButtonElement | null = $state(null);
@@ -34,6 +36,8 @@
   <button
     class="button button-toggle-menu"
     class:inverted={showMenu}
+    class:disabled
+    {disabled}
     onclick={toggleMenu}
     bind:this={dropdownButton}
   >

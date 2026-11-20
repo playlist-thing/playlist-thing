@@ -7,9 +7,10 @@
     urlFromAttribute: (attribute: string) => string;
     onadd: (input: string) => void;
     onremove: () => void;
+    readonly: boolean;
   }
 
-  let { children, attribute, urlFromAttribute, onadd, onremove }: Props = $props();
+  let { children, attribute, urlFromAttribute, onadd, onremove, readonly }: Props = $props();
 
   let input = $state('');
 </script>
@@ -21,7 +22,12 @@
         {@render children()}
       </a>
 
-      <button class="button transparent" onclick={onremove}>
+      <button
+        class="button transparent"
+        class:disabled={readonly}
+        disabled={readonly}
+        onclick={onremove}
+      >
         <i class="bi-trash" aria-hidden="true"></i>
         <span class="visually-hidden">Delete</span>
       </button>
@@ -31,10 +37,22 @@
       <div>
         <label>
           {@render children()}
-          <input type="text" class="input-text" bind:value={input} />
+          <input
+            type="text"
+            class="input-text"
+            class:disabled={readonly}
+            disabled={readonly}
+            bind:value={input}
+          />
         </label>
 
-        <button type="submit" class="button" onclick={() => onadd(input)}>
+        <button
+          type="submit"
+          class="button"
+          class:disabled={readonly}
+          disabled={readonly}
+          onclick={() => onadd(input)}
+        >
           <i class="bi-plus-lg" aria-hidden="true"></i>
           Add
         </button>
