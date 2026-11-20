@@ -30,7 +30,7 @@
     "globals": "^17.14.0",
     "idb": "^8.0.3",
     "music-metadata": "^12.3.3",
-    "openid-client": "^6.8.9",
+    "openid-client": "^6.9.0",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "runed": "^0.38.0",
