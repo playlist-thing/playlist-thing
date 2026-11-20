@@ -1,13 +1,19 @@
 <script lang="ts">
-  import { dndzone, dragHandleZone, type DndEvent } from 'svelte-dnd-action';
+  import {
+    dndzone,
+    dragHandleZone,
+    SHADOW_ITEM_MARKER_PROPERTY_NAME,
+    SOURCES,
+    TRIGGERS,
+    type DndEvent
+  } from 'svelte-dnd-action';
 
   import Item from './Item.svelte';
   import type { PlaylistItem } from '#lib/schema/playlist.js';
   import { calculateTimeInfo, TimeInfoMode } from '#lib/timeInfo.js';
-  import { displaySizeMedium } from '#lib/editor/state.svelte.js';
+  import { displaySizeMedium, readonlyDrag, withFreshIds } from '#lib/editor/state.svelte.js';
   import { calculateTotalDuration, calculateTotalDurationSongsOnly } from '#lib/timeInfo.js';
   import { formatSeconds } from '#lib/format.js';
-  import { withFreshIds } from '#lib/editor/state.svelte.js';
 
   interface Props {
     name: 'Playlist' | 'Queue';
@@ -19,16 +25,122 @@
 
   let timeInfoMode: TimeInfoMode = $state(TimeInfoMode.Duration);
 
-  let totalDuration = $derived(calculateTotalDuration(items));
-  let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(items));
-  let timeInfo = $derived(calculateTimeInfo(items, timeInfoMode));
+  let dragDisplayItems = $state<PlaylistItem[] | null>(null);
+  let renderItems = $derived(dragDisplayItems ?? items);
+
+  let totalDuration = $derived(calculateTotalDuration(renderItems));
+  let totalDurationSongsOnly = $derived(calculateTotalDurationSongsOnly(renderItems));
+  let timeInfo = $derived(calculateTimeInfo(renderItems, timeInfoMode));
 
   let dndOptions = $derived({
-    items,
-    dragDisabled: readonly || items.length === 0,
+    items: renderItems,
+    dragDisabled: renderItems.length === 0,
     dropFromOthersDisabled: readonly,
     type: 'playlist'
   });
+
+  function finishReadonlyDrag() {
+    // Restore the real (untouched) read-only list.
+    dragDisplayItems = null;
+
+    // Let all finalize handlers run first: on keyboard drags the source may
+    // finalize before the target does.
+    queueMicrotask(() => {
+      readonlyDrag.sourceItemId = null;
+    });
+  }
+
+  function isShadowItem(item: PlaylistItem) {
+    return SHADOW_ITEM_MARKER_PROPERTY_NAME in item;
+  }
+
+  function startReadonlyDrag(e: CustomEvent<DndEvent>, draggedId: number) {
+    const sourceItems = $state.snapshot(items) as PlaylistItem[];
+    const index = sourceItems.findIndex((item) => item.id === draggedId);
+
+    if (index === -1) {
+      return;
+    }
+
+    // Display a copy in place of the dragged item without touching the real
+    // read-only list. The copy keeps the dnd zone valid while the original is
+    // dragged away.
+    const copy = withFreshIds([sourceItems[index]])[0];
+    const displayItems = (e.detail.items as PlaylistItem[]).filter((item) => !isShadowItem(item));
+    displayItems.splice(index, 0, copy);
+
+    dragDisplayItems = displayItems;
+    readonlyDrag.sourceItemId = draggedId;
+  }
+
+  function withFreshIdForCopy(incomingItems: PlaylistItem[]) {
+    const sourceItemId = readonlyDrag.sourceItemId;
+
+    if (sourceItemId === null) {
+      return incomingItems;
+    }
+
+    const index = incomingItems.findIndex((item) => item.id === sourceItemId);
+    if (index === -1) {
+      return incomingItems;
+    }
+
+    readonlyDrag.sourceItemId = null;
+
+    // Give the dragged copy a new id, leaving the item in the read-only source
+    // list untouched.
+    return incomingItems.toSpliced(index, 1, withFreshIds([incomingItems[index]])[0]);
+  }
+
+  function handleDndConsider(e: CustomEvent<DndEvent>) {
+    const info = e.detail.info;
+
+    if (!readonly) {
+      if (info.trigger === TRIGGERS.DRAG_STARTED) {
+        readonlyDrag.sourceItemId = null;
+      }
+
+      items = e.detail.items as PlaylistItem[];
+      return;
+    }
+
+    if (info.trigger === TRIGGERS.DRAG_STARTED) {
+      startReadonlyDrag(e, Number(info.id));
+      return;
+    }
+
+    if (info.trigger === TRIGGERS.DRAG_STOPPED) {
+      finishReadonlyDrag();
+      return;
+    }
+
+    // Dragula-like: keep the display stable while dragging so the read-only
+    // list does not make space for the dragged item.
+    if (dragDisplayItems !== null) {
+      dragDisplayItems = [...dragDisplayItems];
+    }
+  }
+
+  function handleDndFinalize(e: CustomEvent<DndEvent>) {
+    const info = e.detail.info;
+
+    if (!readonly) {
+      items = withFreshIdForCopy(e.detail.items as PlaylistItem[]);
+      return;
+    }
+
+    // Keyboard drags finalize on every intermediate move within the source.
+    if (info.source === SOURCES.KEYBOARD && info.trigger !== TRIGGERS.DROPPED_INTO_ANOTHER) {
+      if (dragDisplayItems !== null) {
+        dragDisplayItems = [...dragDisplayItems];
+      }
+      return;
+    }
+
+    // Restore the untouched read-only list. Only the dropped copy gets a new
+    // id in the editable list.
+    finishReadonlyDrag();
+  }
 
   function deleteItem(id: number) {
     items = items.filter((item) => item.id !== id);
@@ -36,10 +148,6 @@
 
   function insertItems(newItems: PlaylistItem[], atIndex: number) {
     items = items.toSpliced(atIndex, 0, ...withFreshIds(newItems));
-  }
-
-  function handleSort(e: CustomEvent<DndEvent>) {
-    items = e.detail.items as PlaylistItem[];
   }
 
   function dragstartHandler(ev: DragEvent) {
@@ -91,6 +199,18 @@
   {/each}
 {/snippet}
 
+{#snippet dragPlaylistItems(dragItems: PlaylistItem[])}
+  {#each dragItems as item, idx (item.id)}
+    <Item
+      item={dragItems[idx]}
+      timeInfo={timeInfo[idx]}
+      deleteItem={() => deleteItem(item.id)}
+      insertItems={(newItems) => insertItems(newItems, idx)}
+      {readonly}
+    />
+  {/each}
+{/snippet}
+
 <div class="row top">
   <h4
     ondragstart={dragstartHandler}
@@ -99,13 +219,13 @@
     class:disabled={readonly}
   >
     {name}
-    {#if items.length > 0}
-      <span class="name-badge">{items.length}</span>
+    {#if renderItems.length > 0}
+      <span class="name-badge">{renderItems.length}</span>
     {/if}
   </h4>
 </div>
 
-{#if items.length > 0}
+{#if renderItems.length > 0}
   <div class="row duration-info">
     <div>
       <select bind:value={timeInfoMode}>
@@ -123,17 +243,30 @@
 {/if}
 
 {#if displaySizeMedium.current}
-  <ol class="playlist" use:dndzone={dndOptions} onconsider={handleSort} onfinalize={handleSort}>
-    {@render playlistItems(items)}
+  <ol
+    class="playlist"
+    use:dndzone={dndOptions}
+    onconsider={handleDndConsider}
+    onfinalize={handleDndFinalize}
+  >
+    {#if dragDisplayItems !== null}
+      {@render dragPlaylistItems(dragDisplayItems)}
+    {:else}
+      {@render playlistItems(items)}
+    {/if}
   </ol>
 {:else}
   <ol
     class="playlist"
     use:dragHandleZone={dndOptions}
-    onconsider={handleSort}
-    onfinalize={handleSort}
+    onconsider={handleDndConsider}
+    onfinalize={handleDndFinalize}
   >
-    {@render playlistItems(items)}
+    {#if dragDisplayItems !== null}
+      {@render dragPlaylistItems(dragDisplayItems)}
+    {:else}
+      {@render playlistItems(items)}
+    {/if}
   </ol>
 {/if}
 

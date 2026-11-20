@@ -158,12 +158,7 @@
   <div class="row">
     <div class="time-and-metadata">
       {#if !displaySizeMedium.current}
-        <div
-          use:dragHandle
-          aria-label="drag-handle for {item.id}"
-          class="drag-handle"
-          class:disabled={readonly}
-        >
+        <div use:dragHandle aria-label="drag-handle for {item.id}" class="drag-handle">
           <i class="bi-list" aria-hidden="true"></i>
         </div>
       {/if}
@@ -248,10 +243,6 @@
 
     padding-left: 5px;
     padding-right: 10px;
-  }
-
-  .drag-handle.disabled {
-    cursor: default;
   }
 
   .time-and-metadata {

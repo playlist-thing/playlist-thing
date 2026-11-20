@@ -9,6 +9,14 @@ import type { PlaylistItemExport } from '#lib/schema/export/playlist.js';
 /** next id assigned to an item */
 let nextId = $state(0);
 
+/**
+ * The id of an item currently being dragged from a read-only list. Editable
+ * lists use this to give the copied item a fresh id when it is dropped.
+ */
+export const readonlyDrag = {
+  sourceItemId: null as number | null
+};
+
 /** medium-sized display active */
 export const displaySizeMedium = new MediaQuery('min-width: 768px', false);
 
