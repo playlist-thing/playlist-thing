@@ -46,7 +46,7 @@ interface DBv1 extends DBSchema {
 }
 
 export const DATABASE_NAME = 'playlist-thing';
-export const DATABASE_VERSION = 3;
+export const DATABASE_VERSION = 4;
 
 export async function openDatabase() {
   const db = await openDB<DBv1>(DATABASE_NAME, DATABASE_VERSION, {
@@ -122,6 +122,23 @@ export async function openDatabase() {
             ...playlist,
             syncEnabled: playlist.syncEnabled ?? false,
             lastSyncFingerprint: playlist.lastSyncFingerprint ?? null
+          });
+
+          cursor = await cursor.continue();
+        }
+      }
+
+      if (oldVersion < 4) {
+        // Add the readonly flag to existing playlists.
+        const playlists = transaction.objectStore('playlists');
+        let cursor = await playlists.openCursor();
+
+        while (cursor) {
+          const playlist = cursor.value;
+
+          await cursor.update({
+            ...playlist,
+            readonly: playlist.readonly ?? false
           });
 
           cursor = await cursor.continue();

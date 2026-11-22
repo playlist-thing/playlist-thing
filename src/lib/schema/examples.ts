@@ -54,7 +54,8 @@ export const validPlaylistLocal: PlaylistLocal = {
   createdAt: 1234567890,
   lastModifiedAt: 1234567890,
   syncEnabled: false,
-  lastSyncFingerprint: null
+  lastSyncFingerprint: null,
+  readonly: false
 };
 
 export const validShow: Show = {

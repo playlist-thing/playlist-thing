@@ -92,9 +92,15 @@ test('migrates legacy broadcasts to a playlist-level broadcastDurationMs', async
   });
 
   const legacyDuration = 1234000;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { broadcastDurationMs, syncEnabled, lastSyncFingerprint, ...playlistWithoutDuration } =
-    validPlaylistLocal;
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const {
+    broadcastDurationMs,
+    syncEnabled,
+    lastSyncFingerprint,
+    readonly,
+    ...playlistWithoutDuration
+  } = validPlaylistLocal;
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   const legacyPlaylist = {
     ...playlistWithoutDuration,
     broadcasts: [{ start: 1000, duration: legacyDuration }]
@@ -111,6 +117,7 @@ test('migrates legacy broadcasts to a playlist-level broadcastDurationMs', async
   expect(migrated?.broadcasts).toEqual([{ start: 1000, stationId: null }]);
   expect(migrated?.syncEnabled).toBe(false);
   expect(migrated?.lastSyncFingerprint).toBeNull();
+  expect(migrated?.readonly).toBe(false);
 });
 
 test('migrates v2 playlists with sync metadata', async () => {
@@ -121,7 +128,7 @@ test('migrates v2 playlists with sync metadata', async () => {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { syncEnabled, lastSyncFingerprint, ...legacyPlaylist } = validPlaylistLocal;
+  const { syncEnabled, lastSyncFingerprint, readonly, ...legacyPlaylist } = validPlaylistLocal;
   await legacyDb.put('playlists', legacyPlaylist);
   legacyDb.close();
 
@@ -130,6 +137,25 @@ test('migrates v2 playlists with sync metadata', async () => {
   const migrated = await db.get('playlists', validPlaylistLocal.id);
   expect(migrated?.syncEnabled).toBe(false);
   expect(migrated?.lastSyncFingerprint).toBeNull();
+  expect(migrated?.readonly).toBe(false);
+});
+
+test('migrates v3 playlists with the readonly flag', async () => {
+  const legacyDb = await openDB(DATABASE_NAME, 3, {
+    upgrade(db) {
+      db.createObjectStore('playlists', { keyPath: 'id' });
+    }
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { readonly, ...legacyPlaylist } = validPlaylistLocal;
+  await legacyDb.put('playlists', legacyPlaylist);
+  legacyDb.close();
+
+  const db = await openTestDatabase();
+
+  const migrated = await db.get('playlists', validPlaylistLocal.id);
+  expect(migrated?.readonly).toBe(false);
 });
 
 test('persists records and supports indexed lookups', async () => {

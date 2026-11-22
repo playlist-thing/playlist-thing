@@ -58,7 +58,8 @@
       createdAt: now,
       lastModifiedAt: now,
       syncEnabled: false,
-      lastSyncFingerprint: null
+      lastSyncFingerprint: null,
+      readonly: false
     });
 
     openPlaylist(newPlaylistId);
@@ -97,6 +98,7 @@
       lastModifiedAt: now,
       syncEnabled: false,
       lastSyncFingerprint: null,
+      readonly: false,
       items: withFreshIds(playlist.items),
       queue: withFreshIds(playlist.queue)
     });

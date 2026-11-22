@@ -11,3 +11,9 @@ test('invalid UUID fails validation', () => {
   const invalidPlaylist = { ...validPlaylistLocal, id: 'not-a-uuid' };
   expect(PlaylistLocalSchema.safeParse(invalidPlaylist).success).toBe(false);
 });
+
+test('readonly defaults to false', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { readonly, ...playlistWithoutReadonly } = validPlaylistLocal;
+  expect(PlaylistLocalSchema.parse(playlistWithoutReadonly).readonly).toBe(false);
+});

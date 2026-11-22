@@ -13,7 +13,9 @@ export const PlaylistLocalSchema = z.object({
   syncEnabled: z.boolean().default(false),
 
   // null == never synced
-  lastSyncFingerprint: z.string().nullable().default(null)
+  lastSyncFingerprint: z.string().nullable().default(null),
+
+  readonly: z.boolean().default(false)
 });
 
 export type PlaylistLocal = z.infer<typeof PlaylistLocalSchema>;

@@ -81,7 +81,10 @@
     return playlistSnapshot;
   }
 
-  const debouncedSnapshot = new Debounced(() => snapshot(), 1000);
+  const debouncedSnapshot = new Debounced(
+    () => ({ ...snapshot(), readonly: $state.snapshot(readonly) }),
+    1000
+  );
 
   watch(
     () => debouncedSnapshot.current,
@@ -107,7 +110,8 @@
         createdAt: $state.snapshot(createdAt),
         lastModifiedAt: $state.snapshot(lastModifiedAt),
         syncEnabled: $state.snapshot(syncEnabled),
-        lastSyncFingerprint: $state.snapshot(lastSyncFingerprint)
+        lastSyncFingerprint: $state.snapshot(lastSyncFingerprint),
+        readonly: $state.snapshot(playlistSnapshot.readonly)
       });
     }
   );
@@ -149,6 +153,7 @@
       lastModifiedAt,
       syncEnabled,
       lastSyncFingerprint,
+      readonly,
 
       showIds,
       djIds

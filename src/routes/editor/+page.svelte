@@ -110,6 +110,7 @@
         lastModifiedAt: now,
         syncEnabled: false,
         lastSyncFingerprint: null,
+        readonly: false,
         items: withFreshIds(result.data.items),
         queue: withFreshIds(result.data.queue)
       });
