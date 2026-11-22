@@ -31,6 +31,26 @@ export function formatClockDate(date: Date, timeZone: string | null) {
   return date.toLocaleDateString(undefined, { timeZone: timeZone ?? undefined });
 }
 
+/**
+ * Seconds until the next full hour in the given time zone, so 0 at the hour
+ * itself and 3599 one second after it.
+ */
+export function secondsToNextHour(date: Date, timeZone: string | null) {
+  const format = new Intl.DateTimeFormat('en-GB', {
+    timeZone: timeZone ?? undefined,
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  let secondsIntoHour = 0;
+  for (const { type, value } of format.formatToParts(date)) {
+    if (type === 'minute') secondsIntoHour += Number(value) * 60;
+    if (type === 'second') secondsIntoHour += Number(value);
+  }
+
+  return (3600 - secondsIntoHour) % 3600;
+}
+
 export function formatDateTime(epochMilliseconds: number, timeZone: string | null) {
   return new Date(epochMilliseconds).toLocaleString(undefined, {
     timeZone: timeZone ?? undefined

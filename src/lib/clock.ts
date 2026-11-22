@@ -9,6 +9,11 @@ import localStorageStore from '#lib/localStorageStore.js';
 /** How often the clock re-syncs with the time sync API. */
 const SYNC_INTERVAL = 5 * 60 * 1000;
 
+/** What the clock shows: the current time or a countdown to the next full hour. */
+export type ClockMode = 'clock' | 'countdownToNextHour';
+
+export const clockMode = localStorageStore<ClockMode>('clockMode', 'clock');
+
 export const clockSyncEnabled = localStorageStore('clockSyncEnabled', true);
 
 /** Corrective offset in milliseconds added to the system clock. */

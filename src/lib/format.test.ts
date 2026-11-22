@@ -7,7 +7,8 @@ import {
   formatRelativeTime,
   formatSeconds,
   parseDuration,
-  parseInputDateTime
+  parseInputDateTime,
+  secondsToNextHour
 } from './format';
 
 test('formatSeconds', () => {
@@ -53,6 +54,21 @@ test('formatClockTime pads to 24-hour HH:MM:SS', () => {
 test('formatClockDate uses the locale date format', () => {
   const date = new Date(2026, 0, 1, 12, 0, 0);
   expect(formatClockDate(date, null)).toEqual(date.toLocaleDateString());
+});
+
+test('secondsToNextHour counts down to the next full hour', () => {
+  expect(secondsToNextHour(new Date(2026, 0, 1, 0, 0, 0), null)).toEqual(0);
+  expect(secondsToNextHour(new Date(2026, 0, 1, 0, 0, 1), null)).toEqual(3599);
+  expect(secondsToNextHour(new Date(2026, 0, 1, 13, 7, 42), null)).toEqual(60 * 60 - 7 * 60 - 42);
+  expect(secondsToNextHour(new Date(2026, 0, 1, 23, 59, 59), null)).toEqual(1);
+});
+
+test('secondsToNextHour respects the time zone', () => {
+  // 2026-01-01T23:15:00Z is 04:45:00 in Asia/Kolkata (UTC+5:30)
+  const date = new Date(Date.UTC(2026, 0, 1, 23, 15, 0));
+
+  expect(secondsToNextHour(date, 'UTC')).toEqual(45 * 60);
+  expect(secondsToNextHour(date, 'Asia/Kolkata')).toEqual(15 * 60);
 });
 
 test('formatClockTime and formatClockDate respect the time zone', () => {
