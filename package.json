@@ -22,7 +22,7 @@
     "@types/node": "^26.6.6",
     "@types/slug": "^5.0.9",
     "bootstrap-icons": "^1.13.2",
-    "browser-fs-access": "^0.38.0",
+    "browser-fs-access": "^0.39.0",
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.23.1",
