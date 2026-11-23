@@ -28,7 +28,7 @@
     "eslint-plugin-svelte": "^3.23.1",
     "fake-indexeddb": "^6.2.5",
     "globals": "^17.14.0",
-    "idb": "^8.0.3",
+    "idb": "^8.0.4",
     "music-metadata": "^12.3.3",
     "openid-client": "^6.9.0",
     "prettier": "^3.9.10",
