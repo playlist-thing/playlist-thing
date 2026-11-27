@@ -92,19 +92,19 @@
     onclick={() => (showManageBroadcastsModal = true)}
   >
     {#if broadcasts.length > 0}
-      <div>
+      <span>
         <i class="bi bi-calendar" aria-hidden="true"></i>
         Change broadcasts
-      </div>
+      </span>
 
-      <div class="hint">
+      <span class="hint">
         {broadcastsSummary}
-      </div>
+      </span>
     {:else}
-      <div>
+      <span>
         <i class="bi bi-calendar" aria-hidden="true"></i>
         Add broadcast
-      </div>
+      </span>
     {/if}
   </button>
 
@@ -115,12 +115,12 @@
       disabled={readonly}
       onclick={() => (showStopBroadcastModal = true)}
     >
-      <div>
+      <span>
         <i class="bi bi-stop-fill" aria-hidden="true"></i>
         Stop broadcast now
-      </div>
+      </span>
 
-      <div class="hint">
+      <span class="hint">
         {#if currentlyBroadcastingCount > 1}
           Multiple broadcasts
         {:else}
@@ -128,7 +128,7 @@
             {formatSeconds(timeLeft)} left
           </span>
         {/if}
-      </div>
+      </span>
     </button>
   {:else}
     <button
@@ -137,13 +137,13 @@
       disabled={readonly}
       onclick={() => (showStartBroadcastModal = true)}
     >
-      <div>
+      <span>
         <i class="bi bi-broadcast" aria-hidden="true"></i>
         Start broadcast now
-      </div>
+      </span>
 
       {#if timeUntilNext > 0}
-        <div class="hint">
+        <span class="hint">
           <span class="hint-countdown">
             {#if showCountdownUntilNextBroadcast}
               will start in {formatSeconds(timeUntilNext)}
@@ -151,7 +151,7 @@
               will start on {formatDateTime(nextBroadcastList[0].start, $timeZone)}
             {/if}
           </span>
-        </div>
+        </span>
       {/if}
     </button>
   {/if}

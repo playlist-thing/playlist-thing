@@ -35,20 +35,20 @@
       disabled={playlistNotOpenable}
       class:disabled={playlistNotOpenable}
     >
-      <div class="row">
-        <div>
+      <span class="row">
+        <span>
           {#if playlist.name}
             {playlist.name}
           {:else}
             <i>Untitled playlist</i>
           {/if}
-        </div>
+        </span>
 
-        <div class="date">
+        <span class="date">
           <span class="relative-time">{formatRelativeTime(playlist.lastModifiedAt)}</span>
           <span class="absolute-time">{prettyDate(playlist.lastModifiedAt)}</span>
-        </div>
-      </div>
+        </span>
+      </span>
     </button>
     <Dropdown bind:showMenu duplicatePlaylist={duplicate} {deletePlaylist} />
   </div>
