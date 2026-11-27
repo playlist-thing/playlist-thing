@@ -12,7 +12,8 @@ const SettingsSchema = z.object({
   airBreakDurationSeconds: z.number(),
   searchProviders: z.array(SearchProviderSchema),
   quickSearchProviderId: z.number(),
-  timeZone: z.string().nullable().default(null)
+  timeZone: z.string().nullable().default(null),
+  clockSyncEnabled: z.boolean().default(true)
 });
 
 type Settings = z.infer<typeof SettingsSchema>;
@@ -23,6 +24,7 @@ export const airBreakDurationSeconds = localStorageStore('airBreakDurationSecond
 export const searchProviders = localStorageStore('searchProviders', defaultSearchProviders);
 export const quickSearchProviderId = localStorageStore('quickSearchProviderId', 0);
 export const timeZone = localStorageStore<string | null>('timeZone', null);
+export const clockSyncEnabled = localStorageStore('clockSyncEnabled', true);
 
 // derived
 
@@ -50,7 +52,8 @@ export async function exportSettings() {
     airBreakDurationSeconds: get(airBreakDurationSeconds),
     searchProviders: get(searchProviders),
     quickSearchProviderId: get(quickSearchProviderId),
-    timeZone: get(timeZone)
+    timeZone: get(timeZone),
+    clockSyncEnabled: get(clockSyncEnabled)
   };
 
   const blob = new Blob([JSON.stringify(settings)], {
@@ -76,4 +79,5 @@ export async function importSettings(file: File) {
   searchProviders.set(settings.searchProviders);
   quickSearchProviderId.set(settings.quickSearchProviderId);
   timeZone.set(settings.timeZone);
+  clockSyncEnabled.set(settings.clockSyncEnabled);
 }

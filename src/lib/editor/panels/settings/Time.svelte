@@ -1,8 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { clockSyncEnabled } from '#lib/clock.js';
-  import { timeZone } from '#lib/editor/settings.js';
+  import { clockSyncEnabled, timeZone } from '#lib/editor/settings.js';
 
   let componentId = $props.id();
 
