@@ -20,33 +20,38 @@
   });
 </script>
 
-<label class="label" for={`time-zone-${componentId}`}>Timezone</label>
+<div class="input-block">
+  <div class="input-block-item">
+    <label class="label" for={`time-zone-${componentId}`}>Timezone</label>
 
-<select id={`time-zone-${componentId}`} bind:value={$timeZone}>
-  <option value={null}>Local ({localTimeZone})</option>
-  {#each timeZones as zone (zone)}
-    <option value={zone}>{zone}</option>
-  {/each}
-</select>
+    <select class="button" id={`time-zone-${componentId}`} bind:value={$timeZone}>
+      <option value={null}>Local ({localTimeZone})</option>
+      {#each timeZones as zone (zone)}
+        <option value={zone}>{zone}</option>
+      {/each}
+    </select>
+  </div>
 
-<div class="checkbox">
-  <input
-    id={`clock-sync-enabled-${componentId}`}
-    type="checkbox"
-    checked={$clockSyncEnabled}
-    onchange={(event) => ($clockSyncEnabled = event.currentTarget.checked)}
-  />
-  <label class="label" for={`clock-sync-enabled-${componentId}`}>
-    Keep time in sync with playlist-thing servers
-  </label>
+  <div class="input-block-item">
+    <label class="label" for={`time-source-${componentId}`}>Time source</label>
+
+    <select class="button" id={`time-source-${componentId}`} bind:value={$clockSyncEnabled}>
+      <option value={true}>playlist-thing servers</option>
+      <option value={false}>This device</option>
+    </select>
+  </div>
 </div>
 
 <style>
-  .checkbox {
+  .input-block {
     display: flex;
-    align-items: center;
-    gap: 0.5em;
+    flex-direction: column;
 
-    padding-top: 10px;
+    gap: 10px;
+  }
+
+  .input-block-item {
+    display: flex;
+    flex-direction: column;
   }
 </style>
